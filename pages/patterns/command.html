@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Command</p>
+    
+    <span class="badge">Behavioral Pattern</span>
+    <h1>Command</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/command/CommandPatternDemo.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CommandPatternDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Receivers</span>
+<span class="w">        </span><span class="n">Light</span><span class="w"> </span><span class="n">light</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Light</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Thermostat</span><span class="w"> </span><span class="n">thermostat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Thermostat</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Commands</span>
+<span class="w">        </span><span class="n">Command</span><span class="w"> </span><span class="n">lightOn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LightOnCommand</span><span class="p">(</span><span class="n">light</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Command</span><span class="w"> </span><span class="n">lightOff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LightOffCommand</span><span class="p">(</span><span class="n">light</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Command</span><span class="w"> </span><span class="n">setTemp22</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SetTemperatureCommand</span><span class="p">(</span><span class="n">thermostat</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Invoker</span>
+<span class="w">        </span><span class="n">SmartButton</span><span class="w"> </span><span class="n">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SmartButton</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Simulate usage</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"→ Pressing Light ON"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">setCommand</span><span class="p">(</span><span class="n">lightOn</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">press</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"→ Pressing Set Temp to 22°C"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">setCommand</span><span class="p">(</span><span class="n">setTemp22</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">press</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"→ Pressing Light OFF"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">setCommand</span><span class="p">(</span><span class="n">lightOff</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">press</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n🔁 Undo Last Action"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">undoLast</span><span class="p">();</span><span class="w"> </span><span class="c1">// Undo Light OFF</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"🔁 Undo Previous Action"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">undoLast</span><span class="p">();</span><span class="w"> </span><span class="c1">// Undo Set Temp</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"🔁 Undo Again"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">undoLast</span><span class="p">();</span><span class="w"> </span><span class="c1">// Undo Light ON</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"🔁 Undo Once More"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">undoLast</span><span class="p">();</span><span class="w"> </span><span class="c1">// No more actions</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/Command.java</summary><div class="highlight"><pre><span></span><span class="kd">interface</span> <span class="nc">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">execute</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/Light.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Light</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">on</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Light turned ON"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">off</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Light turned OFF"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/LightOffCommand.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LightOffCommand</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Light</span><span class="w"> </span><span class="n">light</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">LightOffCommand</span><span class="p">(</span><span class="n">Light</span><span class="w"> </span><span class="n">light</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">light</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">light</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">light</span><span class="p">.</span><span class="na">off</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">light</span><span class="p">.</span><span class="na">on</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/LightOnCommand.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LightOnCommand</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Light</span><span class="w"> </span><span class="n">light</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">LightOnCommand</span><span class="p">(</span><span class="n">Light</span><span class="w"> </span><span class="n">light</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">light</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">light</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">light</span><span class="p">.</span><span class="na">on</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">light</span><span class="p">.</span><span class="na">off</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/SetTemperatureCommand.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SetTemperatureCommand</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Thermostat</span><span class="w"> </span><span class="n">thermostat</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">newTemperature</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">previousTemperature</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">SetTemperatureCommand</span><span class="p">(</span><span class="n">Thermostat</span><span class="w"> </span><span class="n">thermostat</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">temperature</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">thermostat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thermostat</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">newTemperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temperature</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">previousTemperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thermostat</span><span class="p">.</span><span class="na">getCurrentTemperature</span><span class="p">();</span>
+<span class="w">        </span><span class="n">thermostat</span><span class="p">.</span><span class="na">setTemperature</span><span class="p">(</span><span class="n">newTemperature</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">thermostat</span><span class="p">.</span><span class="na">setTemperature</span><span class="p">(</span><span class="n">previousTemperature</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/SmartButton.java</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Stack</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SmartButton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Command</span><span class="w"> </span><span class="n">currentCommand</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="n">Command</span><span class="o">&gt;</span><span class="w"> </span><span class="n">history</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setCommand</span><span class="p">(</span><span class="n">Command</span><span class="w"> </span><span class="n">command</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">currentCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">command</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">press</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentCommand</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">currentCommand</span><span class="p">.</span><span class="na">execute</span><span class="p">();</span>
+<span class="w">            </span><span class="n">history</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="n">currentCommand</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"No command assigned."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">undoLast</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">history</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Command</span><span class="w"> </span><span class="n">lastCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">history</span><span class="p">.</span><span class="na">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="n">lastCommand</span><span class="p">.</span><span class="na">undo</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Nothing to undo."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/command/Thermostat.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Thermostat</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">currentTemperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="c1">// default</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setTemperature</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">temp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Thermostat set to "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"°C"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">currentTemperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">getCurrentTemperature</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">currentTemperature</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/command/command_pattern_demo.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.light</span><span class="w"> </span><span class="kn">import</span> <span class="n">Light</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.light_on_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightOnCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.light_off_command</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightOffCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.remote_control</span><span class="w"> </span><span class="kn">import</span> <span class="n">RemoteControl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.remote_control_with_undo</span><span class="w"> </span><span class="kn">import</span> <span class="n">RemoteControlWithUndo</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">command_pattern_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate Command pattern"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Command Pattern Demo ==="</span><span class="p">)</span>
+    
+    <span class="c1"># Create receivers</span>
+    <span class="n">living_room_light</span> <span class="o">=</span> <span class="n">Light</span><span class="p">(</span><span class="s2">"Living Room"</span><span class="p">)</span>
+    <span class="n">bedroom_light</span> <span class="o">=</span> <span class="n">Light</span><span class="p">(</span><span class="s2">"Bedroom"</span><span class="p">)</span>
+    
+    <span class="c1"># Create commands</span>
+    <span class="n">living_room_on</span> <span class="o">=</span> <span class="n">LightOnCommand</span><span class="p">(</span><span class="n">living_room_light</span><span class="p">)</span>
+    <span class="n">living_room_off</span> <span class="o">=</span> <span class="n">LightOffCommand</span><span class="p">(</span><span class="n">living_room_light</span><span class="p">)</span>
+    <span class="n">bedroom_on</span> <span class="o">=</span> <span class="n">LightOnCommand</span><span class="p">(</span><span class="n">bedroom_light</span><span class="p">)</span>
+    <span class="n">bedroom_off</span> <span class="o">=</span> <span class="n">LightOffCommand</span><span class="p">(</span><span class="n">bedroom_light</span><span class="p">)</span>
+    
+    <span class="c1"># Simple remote control demo</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Simple Remote Control ---"</span><span class="p">)</span>
+    <span class="n">remote</span> <span class="o">=</span> <span class="n">RemoteControl</span><span class="p">()</span>
+    
+    <span class="n">remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">living_room_on</span><span class="p">)</span>
+    <span class="n">remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="n">remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">living_room_off</span><span class="p">)</span>
+    <span class="n">remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="n">remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">bedroom_on</span><span class="p">)</span>
+    <span class="n">remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="c1"># Remote control with undo demo</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Remote Control with Undo ---"</span><span class="p">)</span>
+    <span class="n">undo_remote</span> <span class="o">=</span> <span class="n">RemoteControlWithUndo</span><span class="p">()</span>
+    
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">bedroom_on</span><span class="p">)</span>
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_undo</span><span class="p">()</span>  <span class="c1"># Should turn off the light</span>
+    
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">bedroom_off</span><span class="p">)</span>
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_undo</span><span class="p">()</span>  <span class="c1"># Should turn on the light</span>
+    
+    <span class="c1"># Demonstrate command switching</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Command Switching ---"</span><span class="p">)</span>
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">living_room_on</span><span class="p">)</span>
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">set_command</span><span class="p">(</span><span class="n">bedroom_off</span><span class="p">)</span>
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>
+    
+    <span class="n">undo_remote</span><span class="o">.</span><span class="n">press_undo</span><span class="p">()</span>  <span class="c1"># Should undo bedroom off (turn on bedroom)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">command_pattern_demo</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/__init__.py</summary><div class="highlight"><pre><span></span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/command.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Command</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Command interface"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/light.py</summary><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Light</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Receiver - The object that knows how to perform the operations"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="n">location</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_on</span> <span class="o">=</span> <span class="kc">False</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">turn_on</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_on</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="si">}</span><span class="s2"> light is ON"</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">turn_off</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_on</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_location</span><span class="si">}</span><span class="s2"> light is OFF"</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_on</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_on</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/light_off_command.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.light</span><span class="w"> </span><span class="kn">import</span> <span class="n">Light</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LightOffCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Command - Turn light off"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light</span><span class="p">:</span> <span class="n">Light</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_light</span> <span class="o">=</span> <span class="n">light</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_light</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_light</span><span class="o">.</span><span class="n">turn_on</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/light_on_command.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.light</span><span class="w"> </span><span class="kn">import</span> <span class="n">Light</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LightOnCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Command - Turn light on"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light</span><span class="p">:</span> <span class="n">Light</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_light</span> <span class="o">=</span> <span class="n">light</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_light</span><span class="o">.</span><span class="n">turn_on</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_light</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/remote_control.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RemoteControl</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Invoker - Simple remote control"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Command</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">Command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="n">command</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">press_button</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"No command set!"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/command/remote_control_with_undo.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RemoteControlWithUndo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Invoker - Remote control with undo functionality"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Command</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_command</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Command</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">Command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_command</span> <span class="o">=</span> <span class="n">command</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">press_button</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last_command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"No command set!"</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">press_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_command</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last_command</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Command undone"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"No command to undo!"</span><span class="p">)</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Behavioral Pattern/Command Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="c1">// Client code</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">LightOnCommand</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">LightOffCommand</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">FanOnCommand</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">FanOffCommand</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./command"</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="p">{</span><span class="nx">Light</span><span class="p">,</span><span class="w"> </span><span class="nx">Fan</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'./receiver'</span><span class="p">)</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="nx">RemoteControl</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="w"> </span><span class="p">(</span><span class="s1">'./invoker'</span><span class="p">)</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">light</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Light</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">fan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Fan</span><span class="p">();</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">lightOn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">LightOnCommand</span><span class="p">(</span><span class="nx">light</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">lightOff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">LightOffCommand</span><span class="p">(</span><span class="nx">light</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">fanOn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">FanOnCommand</span><span class="p">(</span><span class="nx">fan</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">fanOff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">FanOffCommand</span><span class="p">(</span><span class="nx">fan</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">remote</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">RemoteControl</span><span class="p">();</span>
+
+<span class="c1">// Turning on the light</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">setCommand</span><span class="p">(</span><span class="nx">lightOn</span><span class="p">);</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">pressButton</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: "The light is on."</span>
+
+<span class="c1">// Turning off the light</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">setCommand</span><span class="p">(</span><span class="nx">lightOff</span><span class="p">);</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">pressButton</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: "The light is off."</span>
+
+<span class="c1">// Turning on the fan</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">setCommand</span><span class="p">(</span><span class="nx">fanOn</span><span class="p">);</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">pressButton</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: "The fan is on."</span>
+
+<span class="c1">// Turning off the fan</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">setCommand</span><span class="p">(</span><span class="nx">fanOff</span><span class="p">);</span>
+<span class="nx">remote</span><span class="p">.</span><span class="nx">pressButton</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: "The fan is off."</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Command Design Pattern/command.js</summary><div class="highlight"><pre><span></span><span class="c1">// Abstract Command</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete Command</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">LightOnCommand</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">light</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">light</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">light</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">light</span><span class="p">.</span><span class="nx">turnOn</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">LightOffCommand</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">light</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">light</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">light</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">light</span><span class="p">.</span><span class="nx">turnOff</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete Command to turn on the fan</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">FanOnCommand</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">fan</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">fan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fan</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">fan</span><span class="p">.</span><span class="nx">turnOn</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete Command to turn off the fan</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">FanOffCommand</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Command</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">fan</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">fan</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fan</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">execute</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">fan</span><span class="p">.</span><span class="nx">turnOff</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">LightOnCommand</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">LightOffCommand</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">FanOnCommand</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">FanOffCommand</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Command Design Pattern/invoker.js</summary><div class="highlight"><pre><span></span><span class="c1">// Invoker class</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">RemoteControl</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">setCommand</span><span class="p">(</span><span class="nx">command</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">command</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span>
+<span class="w">    </span><span class="nx">pressButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">command</span><span class="p">.</span><span class="nx">execute</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="nx">RemoteControl</span><span class="p">}</span>
+<span class="w">  </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Command Design Pattern/receiver.js</summary><div class="highlight"><pre><span></span><span class="c1">// Receiver for Light</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Light</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">turnOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"The light is on."</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">turnOff</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"The light is off."</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Receiver for Fan</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Fan</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">turnOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"The fan is on."</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">turnOff</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"The fan is off."</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Light</span><span class="p">,</span><span class="w"> </span><span class="nx">Fan</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

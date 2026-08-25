@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chain of Responsibility · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Chain of Responsibility</p>
+    
+    <span class="badge">Behavioral Pattern</span>
+    <h1>Chain of Responsibility</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/chainofresponsibility/AuthHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AuthHandler</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="na">user</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"AuthHandler: ❌ User not authenticated."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="c1">// Stop the chain</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"AuthHandler: ✅ Authenticated."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/AuthorizationHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AuthorizationHandler</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="s">"ADMIN"</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="na">userRole</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"AuthorizationHandler: ❌ Access denied."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"AuthorizationHandler: ✅ Authorized."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/BaseHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">BaseHandler</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">RequestHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setNext</span><span class="p">(</span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">next</span><span class="p">.</span><span class="na">handle</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/BusinessLogicHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">BusinessLogicHandler</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"BusinessLogicHandler: 🚀 Processing request..."</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Core application logic goes here</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/RateLimitHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RateLimitHandler</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="na">requestCount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"RateLimitHandler: ❌ Rate limit exceeded."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"RateLimitHandler: ✅ Within rate limit."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/Request.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Request</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">user</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">userRole</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCount</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Request</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">role</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCount</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">userRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">role</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">requestCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requestCount</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/RequestHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">RequestHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setNext</span><span class="p">(</span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">next</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/RequestHandlerV1.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RequestHandlerV1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">authenticate</span><span class="p">(</span><span class="n">request</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Request Rejected: Authentication failed."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">authorize</span><span class="p">(</span><span class="n">request</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Request Rejected: Authorization failed."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rateLimit</span><span class="p">(</span><span class="n">request</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Request Rejected: Rate limit exceeded."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Request Rejected: Invalid payload."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Request passed all checks. Executing business logic..."</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Proceed to business logic</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="na">user</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">authorize</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"ADMIN"</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="na">userRole</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">rateLimit</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="na">requestCount</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="na">payload</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">req</span><span class="p">.</span><span class="na">payload</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/RequestHandlerV2.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RequestHandlerV2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Create handlers</span>
+<span class="w">        </span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">auth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AuthHandler</span><span class="p">();</span>
+<span class="w">        </span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">authorization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AuthorizationHandler</span><span class="p">();</span>
+<span class="w">        </span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">rateLimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RateLimitHandler</span><span class="p">();</span>
+<span class="w">        </span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">validation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ValidationHandler</span><span class="p">();</span>
+<span class="w">        </span><span class="n">RequestHandler</span><span class="w"> </span><span class="n">businessLogic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BusinessLogicHandler</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Build the chain</span>
+<span class="w">        </span><span class="n">auth</span><span class="p">.</span><span class="na">setNext</span><span class="p">(</span><span class="n">authorization</span><span class="p">);</span>
+<span class="w">        </span><span class="n">authorization</span><span class="p">.</span><span class="na">setNext</span><span class="p">(</span><span class="n">rateLimit</span><span class="p">);</span>
+<span class="w">        </span><span class="n">rateLimit</span><span class="p">.</span><span class="na">setNext</span><span class="p">(</span><span class="n">validation</span><span class="p">);</span>
+<span class="w">        </span><span class="n">validation</span><span class="p">.</span><span class="na">setNext</span><span class="p">(</span><span class="n">businessLogic</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Send a request through the chain</span>
+<span class="w">        </span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Request</span><span class="p">(</span><span class="s">"john"</span><span class="p">,</span><span class="w"> </span><span class="s">"ADMIN"</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s">"{ \"data\": \"valid\" }"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">auth</span><span class="p">.</span><span class="na">handle</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Trying an invalid request ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Request</span><span class="w"> </span><span class="n">badRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Request</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="s">"USER"</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span>
+<span class="w">        </span><span class="n">auth</span><span class="p">.</span><span class="na">handle</span><span class="p">(</span><span class="n">badRequest</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/chainofresponsibility/ValidationHandler.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ValidationHandler</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="na">payload</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">payload</span><span class="p">.</span><span class="na">trim</span><span class="p">().</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ValidationHandler: ❌ Invalid payload."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ValidationHandler: ✅ Payload valid."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/chainofresponsibility/main.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.auth_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.authorization_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorizationHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rate_limit_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.validation_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.business_logic_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BusinessLogicHandler</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create the chain of handlers</span>
+    <span class="n">auth_handler</span> <span class="o">=</span> <span class="n">AuthHandler</span><span class="p">()</span>
+    <span class="n">authz_handler</span> <span class="o">=</span> <span class="n">AuthorizationHandler</span><span class="p">()</span>
+    <span class="n">rate_limit_handler</span> <span class="o">=</span> <span class="n">RateLimitHandler</span><span class="p">()</span>
+    <span class="n">validation_handler</span> <span class="o">=</span> <span class="n">ValidationHandler</span><span class="p">()</span>
+    <span class="n">business_logic_handler</span> <span class="o">=</span> <span class="n">BusinessLogicHandler</span><span class="p">()</span>
+
+    <span class="c1"># Set up the chain</span>
+    <span class="n">auth_handler</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="n">authz_handler</span><span class="p">)</span>
+    <span class="n">authz_handler</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="n">rate_limit_handler</span><span class="p">)</span>
+    <span class="n">rate_limit_handler</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="n">validation_handler</span><span class="p">)</span>
+    <span class="n">validation_handler</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="n">business_logic_handler</span><span class="p">)</span>
+
+    <span class="c1"># Create a valid request</span>
+    <span class="n">valid_request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">"john"</span><span class="p">,</span>
+        <span class="n">user_role</span><span class="o">=</span><span class="s2">"admin"</span><span class="p">,</span>
+        <span class="n">request_count</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="s2">"Valid request data"</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create an invalid request</span>
+    <span class="n">invalid_request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">"jane"</span><span class="p">,</span>
+        <span class="n">user_role</span><span class="o">=</span><span class="s2">"user"</span><span class="p">,</span>
+        <span class="n">request_count</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+        <span class="n">payload</span><span class="o">=</span><span class="s2">""</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Processing valid request:"</span><span class="p">)</span>
+    <span class="n">auth_handler</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">valid_request</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Processing invalid request:"</span><span class="p">)</span>
+    <span class="n">auth_handler</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">invalid_request</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/__init__.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">RequestHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.auth_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.authorization_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorizationHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rate_limit_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.validation_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.business_logic_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BusinessLogicHandler</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'Request'</span><span class="p">,</span>
+    <span class="s1">'RequestHandler'</span><span class="p">,</span>
+    <span class="s1">'BaseHandler'</span><span class="p">,</span>
+    <span class="s1">'AuthHandler'</span><span class="p">,</span>
+    <span class="s1">'AuthorizationHandler'</span><span class="p">,</span>
+    <span class="s1">'RateLimitHandler'</span><span class="p">,</span>
+    <span class="s1">'ValidationHandler'</span><span class="p">,</span>
+    <span class="s1">'BusinessLogicHandler'</span>
+<span class="p">]</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/auth_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.base_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AuthHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Authentication failed: No user provided"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Authentication successful for user: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/authorization_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.base_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AuthorizationHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user_role</span> <span class="o">!=</span> <span class="s2">"admin"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Authorization failed: User </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2"> is not authorized"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Authorization successful for user: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/base_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.request_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">RequestHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseHandler</span><span class="p">(</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="p">:</span> <span class="n">RequestHandler</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">next_handler</span><span class="p">:</span> <span class="n">RequestHandler</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next</span> <span class="o">=</span> <span class="n">next_handler</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/business_logic_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.base_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BusinessLogicHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Processing business logic for request: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">payload</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/rate_limit_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.base_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RateLimitHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">request_count</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Rate limit exceeded for user: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Rate limit check passed for user: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/request.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Request</span><span class="p">:</span>
+    <span class="n">user</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">user_role</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">request_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="nb">str</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/request_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RequestHandler</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">next_handler</span><span class="p">:</span> <span class="s1">'RequestHandler'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/chainofresponsibility/validation_handler.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.base_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ValidationHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Validation failed: Empty payload"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Validation successful"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">request</span><span class="p">)</span> 
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/chainofresponsibility/main.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"auth_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"authorization_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"rate_limit_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"validation_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"business_logic_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"request.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Create handlers</span>
+<span class="w">    </span><span class="n">AuthHandler</span><span class="w"> </span><span class="n">auth</span><span class="p">;</span>
+<span class="w">    </span><span class="n">AuthorizationHandler</span><span class="w"> </span><span class="n">authorization</span><span class="p">;</span>
+<span class="w">    </span><span class="n">RateLimitHandler</span><span class="w"> </span><span class="n">rateLimit</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ValidationHandler</span><span class="w"> </span><span class="n">validation</span><span class="p">;</span>
+<span class="w">    </span><span class="n">BusinessLogicHandler</span><span class="w"> </span><span class="n">businessLogic</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Build the chain</span>
+<span class="w">    </span><span class="n">auth</span><span class="p">.</span><span class="n">setNext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">authorization</span><span class="p">);</span>
+<span class="w">    </span><span class="n">authorization</span><span class="p">.</span><span class="n">setNext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rateLimit</span><span class="p">);</span>
+<span class="w">    </span><span class="n">rateLimit</span><span class="p">.</span><span class="n">setNext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">validation</span><span class="p">);</span>
+<span class="w">    </span><span class="n">validation</span><span class="p">.</span><span class="n">setNext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">businessLogic</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Send a request through the chain</span>
+<span class="w">    </span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">(</span><span class="s">"john"</span><span class="p">,</span><span class="w"> </span><span class="s">"ADMIN"</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s">"{ </span><span class="se">\"</span><span class="s">data</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">valid</span><span class="se">\"</span><span class="s"> }"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">auth</span><span class="p">.</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">--- Trying an invalid request ---"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Request</span><span class="w"> </span><span class="n">badRequest</span><span class="p">(</span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">"USER"</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">);</span>
+<span class="w">    </span><span class="n">auth</span><span class="p">.</span><span class="n">handle</span><span class="p">(</span><span class="n">badRequest</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/auth_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"base_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AuthHandler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"AuthHandler: ❌ User not authenticated."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"AuthHandler: ✅ Authenticated."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/authorization_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"base_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AuthorizationHandler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">userRole</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">"ADMIN"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"AuthorizationHandler: ❌ Access denied."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"AuthorizationHandler: ✅ Authorized."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/base_handler.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"base_handler.h"</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">BaseHandler::setNext</span><span class="p">(</span><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">nextHandler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nextHandler</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">BaseHandler::forward</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/base_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"request_handler.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseHandler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">RequestHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">    </span><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">setNext</span><span class="p">(</span><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/business_logic_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"base_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BusinessLogicHandler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"BusinessLogicHandler: 🚀 Processing request..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// Core application logic goes here</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/rate_limit_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"base_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RateLimitHandler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">requestCount</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"RateLimitHandler: ❌ Rate limit exceeded."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"RateLimitHandler: ✅ Within rate limit."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/request.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"request.h"</span>
+
+<span class="n">Request</span><span class="o">::</span><span class="n">Request</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">role</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">user</span><span class="p">(</span><span class="n">user</span><span class="p">),</span><span class="w"> </span><span class="n">userRole</span><span class="p">(</span><span class="n">role</span><span class="p">),</span><span class="w"> </span><span class="n">requestCount</span><span class="p">(</span><span class="n">requestCount</span><span class="p">),</span><span class="w"> </span><span class="n">payload</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/request.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Request</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">user</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">userRole</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCount</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Request</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">role</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">payload</span><span class="p">);</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/request_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"request.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RequestHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">RequestHandler</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setNext</span><span class="p">(</span><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/chainofresponsibility/validation_handler.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"base_handler.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ValidationHandler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">BaseHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">find_first_not_of</span><span class="p">(</span><span class="s">" </span><span class="se">\t\n\r</span><span class="s">"</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"ValidationHandler: ❌ Invalid payload."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"ValidationHandler: ✅ Payload valid."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/chainofresponsibility/AuthHandler.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AuthHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseHandler</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">User</span><span class="p">))</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"AuthHandler: User is not authenticated"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"AuthHandler: User {request.User} is authenticated"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">HandleNext</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/AuthorizationHandler.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AuthorizationHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseHandler</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">UserRole</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">UserRole</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">"ADMIN"</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"AuthorizationHandler: User {request.User} is not authorized"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"AuthorizationHandler: User {request.User} is authorized"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">HandleNext</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/BaseHandler.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">abstract</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BaseHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IRequestHandler</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">protected</span><span class="w"> </span><span class="n">IRequestHandler</span><span class="w"> </span><span class="n">Next</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetNext</span><span class="p">(</span><span class="n">IRequestHandler</span><span class="w"> </span><span class="n">next</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">abstract</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">protected</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">HandleNext</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Next</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Next</span><span class="p">.</span><span class="n">Handle</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/BusinessLogicHandler.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BusinessLogicHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseHandler</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"BusinessLogicHandler: Processing request for user {request.User}"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">HandleNext</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/IRequestHandler.cs</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/Program.cs</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/RateLimitHandler.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RateLimitHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseHandler</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MAX_REQUESTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">RequestCount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">MAX_REQUESTS</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"RateLimitHandler: User {request.User} has exceeded the rate limit"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"RateLimitHandler: User {request.User} is within rate limit"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">HandleNext</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/Request.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Request</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">UserRole</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">RequestCount</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Payload</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">Request</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">role</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestCount</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">User</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">;</span>
+<span class="w">            </span><span class="n">UserRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">role</span><span class="p">;</span>
+<span class="w">            </span><span class="n">RequestCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">requestCount</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/chainofresponsibility/ValidationHandler.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ChainOfResponsibility</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ValidationHandler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseHandler</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Handle</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Payload</span><span class="p">))</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"ValidationHandler: Request payload is empty"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"ValidationHandler: Request payload is valid"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">HandleNext</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/chainofresponsibility/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">chainofresponsibility</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="c1">// Create handlers</span>
+<span class="w">	</span><span class="nx">auth</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">AuthenticationHandler</span><span class="p">{}</span>
+<span class="w">	</span><span class="nx">authz</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">AuthorizationHandler</span><span class="p">{}</span>
+<span class="w">	</span><span class="nx">validate</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">ValidationHandler</span><span class="p">{}</span>
+
+<span class="w">	</span><span class="c1">// Set up the chain</span>
+<span class="w">	</span><span class="nx">auth</span><span class="p">.</span><span class="nx">SetNext</span><span class="p">(</span><span class="nx">authz</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">authz</span><span class="p">.</span><span class="nx">SetNext</span><span class="p">(</span><span class="nx">validate</span><span class="p">)</span>
+
+<span class="w">	</span><span class="c1">// Create requests</span>
+<span class="w">	</span><span class="nx">authRequest</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Request</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">Type</span><span class="p">:</span><span class="w"> </span><span class="s">"auth"</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Data</span><span class="p">:</span><span class="w"> </span><span class="s">"valid_user"</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="nx">authzRequest</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Request</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">Type</span><span class="p">:</span><span class="w"> </span><span class="s">"authz"</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Data</span><span class="p">:</span><span class="w"> </span><span class="s">"admin_resource"</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="nx">validateRequest</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Request</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">Type</span><span class="p">:</span><span class="w"> </span><span class="s">"validate"</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Data</span><span class="p">:</span><span class="w"> </span><span class="s">"test_data"</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="nx">invalidRequest</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Request</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">Type</span><span class="p">:</span><span class="w"> </span><span class="s">"unknown"</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Data</span><span class="p">:</span><span class="w"> </span><span class="s">"invalid_data"</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="c1">// Process requests</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Processing authentication request:"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">auth</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="nx">authRequest</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"\nProcessing authorization request:"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">auth</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="nx">authzRequest</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"\nProcessing validation request:"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">auth</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="nx">validateRequest</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"\nProcessing invalid request:"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">auth</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="nx">invalidRequest</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/chainofresponsibility/authentication_handler.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">chainofresponsibility</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// AuthenticationHandler handles authentication requests</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">AuthenticationHandler</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">BaseHandler</span>
+<span class="p">}</span>
+
+<span class="c1">// Handle processes authentication requests</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="o">*</span><span class="nx">AuthenticationHandler</span><span class="p">)</span><span class="w"> </span><span class="nx">Handle</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">Type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"auth"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"AuthenticationHandler: Processing authentication request for user %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">Data</span><span class="p">)</span>
+<span class="w">		</span><span class="c1">// Simulate authentication logic</span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">Data</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"valid_user"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"AuthenticationHandler: Authentication successful"</span><span class="p">)</span>
+<span class="w">		</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"AuthenticationHandler: Authentication failed"</span><span class="p">)</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">h</span><span class="p">.</span><span class="nx">HandleNext</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/chainofresponsibility/authorization_handler.go</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/chainofresponsibility/base_handler.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">chainofresponsibility</span>
+
+<span class="c1">// BaseHandler provides common functionality for request handlers</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">BaseHandler</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">next</span><span class="w"> </span><span class="nx">RequestHandler</span>
+<span class="p">}</span>
+
+<span class="c1">// SetNext sets the next handler in the chain</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="o">*</span><span class="nx">BaseHandler</span><span class="p">)</span><span class="w"> </span><span class="nx">SetNext</span><span class="p">(</span><span class="nx">handler</span><span class="w"> </span><span class="nx">RequestHandler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">h</span><span class="p">.</span><span class="nx">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">handler</span>
+<span class="p">}</span>
+
+<span class="c1">// HandleNext passes the request to the next handler if one exists</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="o">*</span><span class="nx">BaseHandler</span><span class="p">)</span><span class="w"> </span><span class="nx">HandleNext</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">h</span><span class="p">.</span><span class="nx">next</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">h</span><span class="p">.</span><span class="nx">next</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/chainofresponsibility/request.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">chainofresponsibility</span>
+
+<span class="c1">// Request represents a request in the chain</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Request</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">Type</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">Data</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// NewRequest creates a new Request</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewRequest</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">role</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">requestCount</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">payload</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">Request</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Request</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">User</span><span class="p">:</span><span class="w">         </span><span class="nx">user</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">UserRole</span><span class="p">:</span><span class="w">     </span><span class="nx">role</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">RequestCount</span><span class="p">:</span><span class="w"> </span><span class="nx">requestCount</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Payload</span><span class="p">:</span><span class="w">      </span><span class="nx">payload</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/chainofresponsibility/request_handler.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">chainofresponsibility</span>
+
+<span class="c1">// RequestHandler defines the interface for request handlers in the chain</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">RequestHandler</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">SetNext</span><span class="p">(</span><span class="nx">handler</span><span class="w"> </span><span class="nx">RequestHandler</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">Handle</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">Request</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/chainofresponsibility/validation_handler.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">chainofresponsibility</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// ValidationHandler handles validation requests</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">ValidationHandler</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">BaseHandler</span>
+<span class="p">}</span>
+
+<span class="c1">// Handle processes validation requests</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="o">*</span><span class="nx">ValidationHandler</span><span class="p">)</span><span class="w"> </span><span class="nx">Handle</span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">*</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">Type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"validate"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"ValidationHandler: Processing validation request for data %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">request</span><span class="p">.</span><span class="nx">Data</span><span class="p">)</span>
+<span class="w">		</span><span class="c1">// Simulate validation logic</span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">Data</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"ValidationHandler: Validation successful"</span><span class="p">)</span>
+<span class="w">		</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"ValidationHandler: Validation failed"</span><span class="p">)</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">h</span><span class="p">.</span><span class="nx">HandleNext</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Behavioral Pattern/Chain of Responsibilites/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">InternetConnectionTeam</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">InternetSupportTeam</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">PhoneConnectionTeam</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">PhoneSupportTeam</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./supportRequest"</span><span class="p">);</span>
+
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">phoneSupport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">PhoneSupportTeam</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">phoneConnection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">PhoneConnectionTeam</span><span class="p">(</span><span class="nx">phoneSupport</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">internetSupport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">InternetSupportTeam</span><span class="p">(</span><span class="nx">phoneConnection</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">internetConnection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">InternetConnectionTeam</span><span class="p">(</span><span class="nx">internetSupport</span><span class="p">);</span>
+
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Problem 1 - internet connection"</span><span class="p">);</span>
+<span class="nx">internetConnection</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="s2">"internet"</span><span class="p">,</span><span class="w"> </span><span class="s2">"newConnection"</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Problem 2 - phone connection"</span><span class="p">);</span>
+<span class="nx">internetConnection</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="s2">"phone"</span><span class="p">,</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Problem 3 - phone support"</span><span class="p">);</span>
+<span class="nx">internetConnection</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="s2">"phone"</span><span class="p">,</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">);</span>
+
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Problem 4 - Invalid support"</span><span class="p">);</span>
+<span class="nx">internetConnection</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="s2">"Laptop"</span><span class="p">,</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">);</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Chain of Responsibilites/supportRequest.js</summary><div class="highlight"><pre><span></span><span class="c1">// Creating a chain for attaining support team</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">supportHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">nextHandler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">nextHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">nextHandler</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Method to handle the request</span>
+<span class="w">  </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nextHandler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Passing to the next executive team to resolve your issue"</span><span class="p">);</span>
+<span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">nextHandler</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"No further handlers available to process the request."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// First level internet support team for connection</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">InternetConnectionTeam</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">supportHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"internet"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"newConnection"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Your newConnection request is taken. Thank you! 🙂"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"internet"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"Seems you have an issue; we will redirect to the support team"</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">      </span><span class="k">super</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">);</span><span class="w"> </span><span class="c1">// Transferring to the next team</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"Unknown request type in InternetConnectionTeam. Passing to next team."</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">      </span><span class="k">super</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">);</span><span class="w"> </span><span class="c1">// Transfer to the next team</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Second level internet support team for problem</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">InternetSupportTeam</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">supportHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"internet"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Your internet request is taken. Thank you! 🙂"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"Unknown request type in InternetSupportTeam. Passing to next team."</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">      </span><span class="k">super</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">);</span><span class="w"> </span><span class="c1">// Transferring to the next team</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Third level connection</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">PhoneConnectionTeam</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">supportHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"phone"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"newConnection"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Your newConnection request is taken. Thank you! 🙂"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"phone"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"Seems you have an issue; we will redirect to the support team"</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">      </span><span class="k">super</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">);</span><span class="w"> </span><span class="c1">// Transferring to the next team</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"Unknown request type in PhoneConnectionTeam. Passing to next team."</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">      </span><span class="k">super</span><span class="p">.</span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">);</span><span class="w"> </span><span class="c1">// Transferring to the next team</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Last level phone support team for problem</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">PhoneSupportTeam</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">supportHandler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="w"> </span><span class="nx">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">request</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"phone"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">type</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"problem"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Your phone request is taken. Thank you! 🙂"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">        </span><span class="s2">"Unknown request type in PhoneSupportTeam. This is the last support level."</span>
+<span class="w">      </span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Main module export</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">InternetConnectionTeam</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">InternetSupportTeam</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">PhoneConnectionTeam</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">PhoneSupportTeam</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Prototype</p>
+    
+    <span class="badge">Creational Pattern</span>
+    <h1>Prototype</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/prototype/Enemy.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Enemy</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">EnemyPrototype</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">armored</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">weapon</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Enemy</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">weapon</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">health</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">armored</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">armored</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">weapon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weapon</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Enemy</span><span class="w"> </span><span class="nf">clone</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Enemy</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="n">weapon</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setHealth</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">health</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">printStats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" [Health: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">health</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">", Speed: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">", Armored: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">armored</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">", Weapon: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weapon</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"]"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/prototype/EnemyPrototype.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">EnemyPrototype</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">EnemyPrototype</span><span class="w"> </span><span class="nf">clone</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/prototype/EnemyRegistry.java</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.HashMap</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Map</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EnemyRegistry</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Enemy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">prototypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">Enemy</span><span class="w"> </span><span class="n">prototype</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">prototypes</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">prototype</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Enemy</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Enemy</span><span class="w"> </span><span class="n">prototype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prototypes</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prototype</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">prototype</span><span class="p">.</span><span class="na">clone</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"No prototype registered for: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/prototype/Game.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Game</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">EnemyRegistry</span><span class="w"> </span><span class="n">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EnemyRegistry</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Register prototype enemies</span>
+<span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="s">"flying"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Enemy</span><span class="p">(</span><span class="s">"FlyingEnemy"</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mf">12.0</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="s">"Laser"</span><span class="p">));</span>
+<span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="s">"armored"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Enemy</span><span class="p">(</span><span class="s">"ArmoredEnemy"</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mf">6.0</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="s">"Cannon"</span><span class="p">));</span>
+
+<span class="w">        </span><span class="c1">// Clone from registry</span>
+<span class="w">        </span><span class="n">Enemy</span><span class="w"> </span><span class="n">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">registry</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"flying"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Enemy</span><span class="w"> </span><span class="n">e2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">registry</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"flying"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">e2</span><span class="p">.</span><span class="na">setHealth</span><span class="p">(</span><span class="mi">80</span><span class="p">);</span><span class="w"> </span><span class="c1">// this one is damaged</span>
+
+<span class="w">        </span><span class="n">Enemy</span><span class="w"> </span><span class="n">e3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">registry</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">"armored"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Print enemy stats</span>
+<span class="w">        </span><span class="n">e1</span><span class="p">.</span><span class="na">printStats</span><span class="p">();</span>
+<span class="w">        </span><span class="n">e2</span><span class="p">.</span><span class="na">printStats</span><span class="p">();</span>
+<span class="w">        </span><span class="n">e3</span><span class="p">.</span><span class="na">printStats</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/prototype/__init__.py</summary><div class="highlight"><pre><span></span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/prototype/enemy.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.enemy_prototype</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnemyPrototype</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Enemy</span><span class="p">(</span><span class="n">EnemyPrototype</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Prototype - Enemy with cloning capability"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enemy_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">health</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">armored</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">weapon</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_type</span> <span class="o">=</span> <span class="n">enemy_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_health</span> <span class="o">=</span> <span class="n">health</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_speed</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_armored</span> <span class="o">=</span> <span class="n">armored</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weapon</span> <span class="o">=</span> <span class="n">weapon</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'Enemy'</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create a deep copy of this enemy"""</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    
+    <span class="c1"># Getters</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enemy_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_type</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">health</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_health</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">speed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_speed</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">armored</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_armored</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weapon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weapon</span>
+    
+    <span class="c1"># Setters for customization after cloning</span>
+    <span class="nd">@health</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">health</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">health</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_health</span> <span class="o">=</span> <span class="n">health</span>
+    
+    <span class="nd">@speed</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_speed</span> <span class="o">=</span> <span class="n">speed</span>
+    
+    <span class="nd">@armored</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">armored</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">armored</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_armored</span> <span class="o">=</span> <span class="n">armored</span>
+    
+    <span class="nd">@weapon</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weapon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weapon</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weapon</span> <span class="o">=</span> <span class="n">weapon</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"Enemy(type=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_enemy_type</span><span class="si">}</span><span class="s2">, health=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_health</span><span class="si">}</span><span class="s2">, "</span>
+                <span class="sa">f</span><span class="s2">"speed=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_speed</span><span class="si">}</span><span class="s2">, armored=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_armored</span><span class="si">}</span><span class="s2">, weapon=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_weapon</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/prototype/enemy_prototype.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EnemyPrototype</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Prototype interface for enemy cloning"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">'EnemyPrototype'</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/prototype/enemy_registry.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.enemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enemy</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EnemyRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Registry for managing enemy prototypes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prototypes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enemy</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">enemy</span><span class="p">:</span> <span class="n">Enemy</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Register an enemy prototype"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prototypes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">enemy</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Enemy</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Get a cloned enemy from the registry"""</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prototypes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Enemy type '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">' not found in registry"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prototypes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Get list of available enemy types"""</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prototypes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/prototype/game.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.enemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enemy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.enemy_registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">EnemyRegistry</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Game</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Game class demonstrating prototype pattern usage"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_registry</span> <span class="o">=</span> <span class="n">EnemyRegistry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_prototypes</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_prototypes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Setup initial enemy prototypes"""</span>
+        <span class="c1"># Create prototype enemies</span>
+        <span class="n">warrior</span> <span class="o">=</span> <span class="n">Enemy</span><span class="p">(</span><span class="s2">"Warrior"</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"Sword"</span><span class="p">)</span>
+        <span class="n">mage</span> <span class="o">=</span> <span class="n">Enemy</span><span class="p">(</span><span class="s2">"Mage"</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"Staff"</span><span class="p">)</span>
+        <span class="n">archer</span> <span class="o">=</span> <span class="n">Enemy</span><span class="p">(</span><span class="s2">"Archer"</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"Bow"</span><span class="p">)</span>
+        
+        <span class="c1"># Register prototypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_registry</span><span class="o">.</span><span class="n">register_enemy</span><span class="p">(</span><span class="s2">"WARRIOR"</span><span class="p">,</span> <span class="n">warrior</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_registry</span><span class="o">.</span><span class="n">register_enemy</span><span class="p">(</span><span class="s2">"MAGE"</span><span class="p">,</span> <span class="n">mage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_registry</span><span class="o">.</span><span class="n">register_enemy</span><span class="p">(</span><span class="s2">"ARCHER"</span><span class="p">,</span> <span class="n">archer</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">spawn_enemy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enemy_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Enemy</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Spawn a new enemy using prototype pattern"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_registry</span><span class="o">.</span><span class="n">get_enemy</span><span class="p">(</span><span class="n">enemy_type</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_enemy_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Get available enemy types"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enemy_registry</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">prototype_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate Prototype pattern"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Prototype Pattern Demo ==="</span><span class="p">)</span>
+    
+    <span class="n">game</span> <span class="o">=</span> <span class="n">Game</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Available enemy types:"</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">get_available_enemy_types</span><span class="p">())</span>
+    
+    <span class="c1"># Spawn enemies using prototypes</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Spawning Enemies ---"</span><span class="p">)</span>
+    <span class="n">warrior1</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">spawn_enemy</span><span class="p">(</span><span class="s2">"WARRIOR"</span><span class="p">)</span>
+    <span class="n">warrior2</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">spawn_enemy</span><span class="p">(</span><span class="s2">"WARRIOR"</span><span class="p">)</span>
+    <span class="n">mage1</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">spawn_enemy</span><span class="p">(</span><span class="s2">"MAGE"</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warrior 1: </span><span class="si">{</span><span class="n">warrior1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warrior 2: </span><span class="si">{</span><span class="n">warrior2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mage 1: </span><span class="si">{</span><span class="n">mage1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="c1"># Verify they are different instances</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Warrior1 is Warrior2: </span><span class="si">{</span><span class="n">warrior1</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">warrior2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warriors have same attributes: </span><span class="si">{</span><span class="n">warrior1</span><span class="o">.</span><span class="n">health</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">warrior2</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="c1"># Customize cloned enemies</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Customizing Cloned Enemies ---"</span><span class="p">)</span>
+    <span class="n">warrior2</span><span class="o">.</span><span class="n">health</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c1"># Strengthen the second warrior</span>
+    <span class="n">warrior2</span><span class="o">.</span><span class="n">weapon</span> <span class="o">=</span> <span class="s2">"Battle Axe"</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Original Warrior: </span><span class="si">{</span><span class="n">warrior1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Modified Warrior: </span><span class="si">{</span><span class="n">warrior2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">prototype_demo</span><span class="p">()</span>
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/prototype/main.cpp</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/prototype/enemy.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"enemy.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">Enemy</span><span class="o">::</span><span class="n">Enemy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">weapon</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">type</span><span class="p">(</span><span class="n">type</span><span class="p">),</span><span class="w"> </span><span class="n">health</span><span class="p">(</span><span class="n">health</span><span class="p">),</span><span class="w"> </span><span class="n">speed</span><span class="p">(</span><span class="n">speed</span><span class="p">),</span><span class="w"> </span><span class="n">armored</span><span class="p">(</span><span class="n">armored</span><span class="p">),</span><span class="w"> </span><span class="n">weapon</span><span class="p">(</span><span class="n">weapon</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="n">Enemy</span><span class="o">*</span><span class="w"> </span><span class="n">Enemy</span><span class="o">::</span><span class="n">clone</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Enemy</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="n">weapon</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">Enemy</span><span class="o">::</span><span class="n">setHealth</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">health</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">Enemy</span><span class="o">::</span><span class="n">printStats</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" [Health: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">health</span><span class="w"> </span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", Speed: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", Armored: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">armored</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"true"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"false"</span><span class="p">)</span><span class="w"> </span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", Weapon: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">weapon</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"]"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/prototype/enemy.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"enemy_prototype.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Enemy</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">EnemyPrototype</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Enemy</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">weapon</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Clone method implementation</span>
+<span class="w">    </span><span class="n">Enemy</span><span class="o">*</span><span class="w"> </span><span class="nf">clone</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Setter for health</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setHealth</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Print enemy stats</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">printStats</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">armored</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">weapon</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/prototype/enemy_prototype.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EnemyPrototype</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">EnemyPrototype</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">EnemyPrototype</span><span class="o">*</span><span class="w"> </span><span class="nf">clone</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/prototype/enemy_registry.cpp</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/prototype/enemy_registry.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"enemy.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EnemyRegistry</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">registerPrototype</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Enemy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">prototype</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Enemy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Enemy</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">prototypes</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/prototype/Enemy.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Prototype</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Enemy</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IEnemyPrototype</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">armored</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">weapon</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">Enemy</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">weapon</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">health</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">armored</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">armored</span><span class="p">;</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">weapon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weapon</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="n">IEnemyPrototype</span><span class="w"> </span><span class="nf">Clone</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Enemy</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">health</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">armored</span><span class="p">,</span><span class="w"> </span><span class="n">weapon</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetHealth</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">health</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">health</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">health</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PrintStats</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"{type} [Health: {health}, Speed: {speed}, Armored: {armored}, Weapon: {weapon}]"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/prototype/EnemyRegistry.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Prototype</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">EnemyRegistry</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Enemy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">prototypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="n">Enemy</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Register</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">Enemy</span><span class="w"> </span><span class="n">prototype</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">prototypes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prototype</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="n">Enemy</span><span class="w"> </span><span class="nf">Get</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">key</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prototypes</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">prototype</span><span class="p">))</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">Enemy</span><span class="p">)</span><span class="n">prototype</span><span class="p">.</span><span class="n">Clone</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">ArgumentException</span><span class="p">(</span><span class="s">$"No prototype registered for: {key}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/prototype/Game.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Prototype</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Game</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">registry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EnemyRegistry</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Register prototype enemies</span>
+<span class="w">            </span><span class="n">registry</span><span class="p">.</span><span class="n">Register</span><span class="p">(</span><span class="s">"flying"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Enemy</span><span class="p">(</span><span class="s">"FlyingEnemy"</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mf">12.0</span><span class="p">,</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="s">"Laser"</span><span class="p">));</span>
+<span class="w">            </span><span class="n">registry</span><span class="p">.</span><span class="n">Register</span><span class="p">(</span><span class="s">"armored"</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Enemy</span><span class="p">(</span><span class="s">"ArmoredEnemy"</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mf">6.0</span><span class="p">,</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="s">"Cannon"</span><span class="p">));</span>
+
+<span class="w">            </span><span class="c1">// Clone from registry</span>
+<span class="w">            </span><span class="n">Enemy</span><span class="w"> </span><span class="n">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">registry</span><span class="p">.</span><span class="n">Get</span><span class="p">(</span><span class="s">"flying"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Enemy</span><span class="w"> </span><span class="n">e2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">registry</span><span class="p">.</span><span class="n">Get</span><span class="p">(</span><span class="s">"flying"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">e2</span><span class="p">.</span><span class="n">SetHealth</span><span class="p">(</span><span class="mi">80</span><span class="p">);</span><span class="w"> </span><span class="c1">// this one is damaged</span>
+
+<span class="w">            </span><span class="n">Enemy</span><span class="w"> </span><span class="n">e3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">registry</span><span class="p">.</span><span class="n">Get</span><span class="p">(</span><span class="s">"armored"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Print enemy stats</span>
+<span class="w">            </span><span class="n">e1</span><span class="p">.</span><span class="n">PrintStats</span><span class="p">();</span>
+<span class="w">            </span><span class="n">e2</span><span class="p">.</span><span class="n">PrintStats</span><span class="p">();</span>
+<span class="w">            </span><span class="n">e3</span><span class="p">.</span><span class="n">PrintStats</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/prototype/IEnemyPrototype.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Prototype</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IEnemyPrototype</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">IEnemyPrototype</span><span class="w"> </span><span class="nf">Clone</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/prototype/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">prototype</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">registry</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewEnemyRegistry</span><span class="p">()</span>
+
+<span class="w">	</span><span class="c1">// Register prototype enemies</span>
+<span class="w">	</span><span class="nx">registry</span><span class="p">.</span><span class="nx">Register</span><span class="p">(</span><span class="s">"flying"</span><span class="p">,</span><span class="w"> </span><span class="nx">NewEnemy</span><span class="p">(</span><span class="s">"FlyingEnemy"</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mf">12.0</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="s">"Laser"</span><span class="p">))</span>
+<span class="w">	</span><span class="nx">registry</span><span class="p">.</span><span class="nx">Register</span><span class="p">(</span><span class="s">"armored"</span><span class="p">,</span><span class="w"> </span><span class="nx">NewEnemy</span><span class="p">(</span><span class="s">"ArmoredEnemy"</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mf">6.0</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="s">"Cannon"</span><span class="p">))</span>
+
+<span class="w">	</span><span class="c1">// Clone from registry</span>
+<span class="w">	</span><span class="nx">e1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">registry</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">"flying"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">e2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">registry</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">"flying"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">e2</span><span class="p">.</span><span class="nx">SetHealth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span><span class="w"> </span><span class="c1">// this one is damaged</span>
+
+<span class="w">	</span><span class="nx">e3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">registry</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">"armored"</span><span class="p">)</span>
+
+<span class="w">	</span><span class="c1">// Print enemy stats</span>
+<span class="w">	</span><span class="nx">e1</span><span class="p">.</span><span class="nx">PrintStats</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">e2</span><span class="p">.</span><span class="nx">PrintStats</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">e3</span><span class="p">.</span><span class="nx">PrintStats</span><span class="p">()</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/prototype/enemy.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">prototype</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// Enemy represents a game enemy</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Enemy</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">Type</span><span class="w">    </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">Health</span><span class="w">  </span><span class="kt">int</span>
+<span class="w">	</span><span class="nx">Speed</span><span class="w">   </span><span class="kt">float64</span>
+<span class="w">	</span><span class="nx">Armored</span><span class="w"> </span><span class="kt">bool</span>
+<span class="w">	</span><span class="nx">Weapon</span><span class="w">  </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// NewEnemy creates a new Enemy instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewEnemy</span><span class="p">(</span><span class="nx">type_</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">health</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">speed</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">armored</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="nx">weapon</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">Enemy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Enemy</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">Type</span><span class="p">:</span><span class="w">    </span><span class="nx">type_</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Health</span><span class="p">:</span><span class="w">  </span><span class="nx">health</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Speed</span><span class="p">:</span><span class="w">   </span><span class="nx">speed</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Armored</span><span class="p">:</span><span class="w"> </span><span class="nx">armored</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">Weapon</span><span class="p">:</span><span class="w">  </span><span class="nx">weapon</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Clone creates a copy of the enemy</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">Enemy</span><span class="p">)</span><span class="w"> </span><span class="nx">Clone</span><span class="p">()</span><span class="w"> </span><span class="nx">EnemyPrototype</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">NewEnemy</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Health</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Speed</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Armored</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Weapon</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// SetHealth updates the enemy's health</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">Enemy</span><span class="p">)</span><span class="w"> </span><span class="nx">SetHealth</span><span class="p">(</span><span class="nx">health</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">e</span><span class="p">.</span><span class="nx">Health</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">health</span>
+<span class="p">}</span>
+
+<span class="c1">// PrintStats displays the enemy's statistics</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">Enemy</span><span class="p">)</span><span class="w"> </span><span class="nx">PrintStats</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"%s [Health: %d, Speed: %.1f, Armored: %v, Weapon: %s]\n"</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">e</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Health</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Speed</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Armored</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Weapon</span><span class="p">)</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/prototype/enemy_prototype.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">prototype</span>
+
+<span class="c1">// EnemyPrototype defines the interface for cloneable enemies</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">EnemyPrototype</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">Clone</span><span class="p">()</span><span class="w"> </span><span class="nx">EnemyPrototype</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/prototype/enemy_registry.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">prototype</span>
+
+<span class="c1">// EnemyRegistry manages enemy prototypes</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">EnemyRegistry</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">prototypes</span><span class="w"> </span><span class="kt">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="nx">Enemy</span>
+<span class="p">}</span>
+
+<span class="c1">// NewEnemyRegistry creates a new EnemyRegistry</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewEnemyRegistry</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">EnemyRegistry</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">EnemyRegistry</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">prototypes</span><span class="p">:</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kt">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="o">*</span><span class="nx">Enemy</span><span class="p">),</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Register adds a prototype to the registry</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">EnemyRegistry</span><span class="p">)</span><span class="w"> </span><span class="nx">Register</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">prototype</span><span class="w"> </span><span class="o">*</span><span class="nx">Enemy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">r</span><span class="p">.</span><span class="nx">prototypes</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">prototype</span>
+<span class="p">}</span>
+
+<span class="c1">// Get retrieves and clones a prototype from the registry</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">EnemyRegistry</span><span class="p">)</span><span class="w"> </span><span class="nx">Get</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">Enemy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">prototype</span><span class="p">,</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">prototypes</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">prototype</span><span class="p">.</span><span class="nx">Clone</span><span class="p">().(</span><span class="o">*</span><span class="nx">Enemy</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">	</span><span class="nb">panic</span><span class="p">(</span><span class="s">"No prototype registered for: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">key</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Creational Pattern/Prototype Design Pattern/app.js</summary><div class="highlight"><pre><span></span><span class="kd">class</span><span class="w"> </span><span class="nx">Car</span><span class="p">{</span>
+<span class="w">    </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">model</span><span class="p">,</span><span class="w"> </span><span class="nx">year</span><span class="p">,</span><span class="w"> </span><span class="nx">color</span><span class="p">){</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">model</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">year</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">color</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span>
+
+<span class="w">    </span><span class="nx">clone</span><span class="p">(){</span><span class="w"> </span><span class="c1">// Clone method to clone the current object</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Car</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">year</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span><span class="w">  </span><span class="c1">// Return the new object with same properties</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">getDetails</span><span class="p">(){</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="sb">`Model: </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="si">}</span><span class="sb">, Year: </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">year</span><span class="si">}</span><span class="sb">, Color: </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="si">}</span><span class="sb">`</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">prototypeCar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Car</span><span class="p">(</span><span class="s2">"Mustang"</span><span class="p">,</span><span class="w"> </span><span class="mf">2019</span><span class="p">,</span><span class="w"> </span><span class="s2">"red"</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">cloneCar1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">prototypeCar</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// 1st clone</span>
+<span class="nx">cloneCar1</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"blue"</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">cloneCar2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">prototypeCar</span><span class="p">.</span><span class="nx">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// 2nd clone</span>
+<span class="nx">cloneCar2</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"green"</span><span class="p">;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">prototypeCar</span><span class="p">.</span><span class="nx">getDetails</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cloneCar1</span><span class="p">.</span><span class="nx">getDetails</span><span class="p">());</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cloneCar2</span><span class="p">.</span><span class="nx">getDetails</span><span class="p">());</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

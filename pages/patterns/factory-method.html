@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factory Method · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Factory Method</p>
+    
+    <span class="badge">Creational Pattern</span>
+    <h1>Factory Method</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/factory/notification/FactoryMethodDemo.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FactoryMethodDemo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">NotificationCreator</span><span class="w"> </span><span class="n">creator</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Send Email</span>
+<span class="w">        </span><span class="n">creator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EmailNotificationCreator</span><span class="p">();</span>
+<span class="w">        </span><span class="n">creator</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">"Welcome to our platform!"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Send SMS</span>
+<span class="w">        </span><span class="n">creator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SMSNotificationCreator</span><span class="p">();</span>
+<span class="w">        </span><span class="n">creator</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">"Your OTP is 123456"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Send Push Notification</span>
+<span class="w">        </span><span class="n">creator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PushNotificationCreator</span><span class="p">();</span>
+<span class="w">        </span><span class="n">creator</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">"You have a new follower!"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/EmailNotification.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmailNotification</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Sending email: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/EmailNotificationCreator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">EmailNotificationCreator</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">NotificationCreator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="nf">createNotification</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EmailNotification</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/Notification.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/NotificationCreator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">NotificationCreator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Factory Method</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="nf">createNotification</span><span class="p">();</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Common logic using the factory method</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Notification</span><span class="w"> </span><span class="n">notification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNotification</span><span class="p">();</span>
+<span class="w">        </span><span class="n">notification</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/NotificationServiceNaive.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">NotificationServiceNaive</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sendNotification</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">"EMAIL"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">EmailNotification</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EmailNotification</span><span class="p">();</span>
+<span class="w">            </span><span class="n">email</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">"SMS"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">SMSNotification</span><span class="w"> </span><span class="n">sms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SMSNotification</span><span class="p">();</span>
+<span class="w">            </span><span class="n">sms</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">"Push"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">PushNotification</span><span class="w"> </span><span class="n">push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PushNotification</span><span class="p">();</span>
+<span class="w">            </span><span class="n">push</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/PushNotification.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PushNotification</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Sending push notification: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/PushNotificationCreator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PushNotificationCreator</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">NotificationCreator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="nf">createNotification</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PushNotification</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/SimpleNotificationFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleNotificationFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="nf">createNotification</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"EMAIL"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EmailNotification</span><span class="p">();</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"SMS"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SMSNotification</span><span class="p">();</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"PUSH"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PushNotification</span><span class="p">();</span>
+<span class="w">            </span><span class="k">default</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"Unknown type"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/SMSNotification.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SMSNotification</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Sending SMS: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/notification/SMSNotificationCreator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SMSNotificationCreator</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">NotificationCreator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="nf">createNotification</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SMSNotification</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/Customer.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Customer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">customerId</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Subscription</span><span class="w"> </span><span class="n">subscription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Customer</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">customerId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">customerId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">customerId</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">SubscribePlan</span><span class="p">(</span><span class="n">Subscription</span><span class="w"> </span><span class="n">subscription</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">subscription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">subscription</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">subscription</span><span class="p">.</span><span class="na">addSubscription</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">unSubscribePlan</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">subscription</span><span class="p">.</span><span class="na">removeSubscription</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">updateSubcribePlan</span><span class="p">(</span><span class="n">Subscription</span><span class="w"> </span><span class="n">newSubscription</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">subscription</span><span class="p">.</span><span class="na">removeSubscription</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">subscription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newSubscription</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">subscription</span><span class="p">.</span><span class="na">addSubscription</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/DataBase.java</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.HashMap</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DataBase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">customerList</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DataBase</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">customerList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addToDataBase</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">customerId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">subscriptionType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">customerList</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">customerId</span><span class="p">))</span>
+<span class="w">            </span><span class="n">customerList</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">customerId</span><span class="p">,</span><span class="w"> </span><span class="n">subscriptionType</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Successfull Added to the DB"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeFromDataBase</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">customerId</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">customerList</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">customerId</span><span class="p">))</span>
+<span class="w">            </span><span class="n">customerList</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">customerId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Successfully removed from the DB"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">updateDataBase</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">customerId</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">subscriptionType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">customerList</span><span class="p">.</span><span class="na">containsKey</span><span class="p">(</span><span class="n">customerId</span><span class="p">))</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Record not found"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">customerList</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">customerId</span><span class="p">,</span><span class="w"> </span><span class="n">subscriptionType</span><span class="p">);</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Sucessfully update the DB"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w">    </span>
+<span class="w">            </span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/FactoryApplication.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FactoryApplication</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="kd">public</span><span class="w"> </span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DataBase</span><span class="p">();</span>
+<span class="w">        </span><span class="n">SubscriptionFactory</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SubscriptionFactory</span><span class="p">(</span><span class="n">dataBase</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Customer</span><span class="w"> </span><span class="n">customer1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Customer</span><span class="p">(</span><span class="s">"1"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Customer</span><span class="w"> </span><span class="n">customer2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Customer</span><span class="p">(</span><span class="s">"2"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Customer</span><span class="w"> </span><span class="n">customer3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Customer</span><span class="p">(</span><span class="s">"3"</span><span class="p">);</span>
+
+
+<span class="w">        </span><span class="n">customer1</span><span class="p">.</span><span class="na">SubscribePlan</span><span class="p">(</span><span class="n">factory</span><span class="p">.</span><span class="na">getSubscription</span><span class="p">(</span><span class="s">"gold"</span><span class="p">));</span>
+<span class="w">        </span><span class="n">customer2</span><span class="p">.</span><span class="na">SubscribePlan</span><span class="p">(</span><span class="n">factory</span><span class="p">.</span><span class="na">getSubscription</span><span class="p">(</span><span class="s">"silver"</span><span class="p">));</span>
+<span class="w">        </span><span class="n">customer1</span><span class="p">.</span><span class="na">updateSubcribePlan</span><span class="p">(</span><span class="n">factory</span><span class="p">.</span><span class="na">getSubscription</span><span class="p">(</span><span class="s">"royalGold"</span><span class="p">));</span>
+<span class="w">        </span><span class="n">customer2</span><span class="p">.</span><span class="na">unSubscribePlan</span><span class="p">();</span>
+<span class="w">        </span><span class="n">customer3</span><span class="p">.</span><span class="na">SubscribePlan</span><span class="p">(</span><span class="n">factory</span><span class="p">.</span><span class="na">getSubscription</span><span class="p">(</span><span class="s">"platinum"</span><span class="p">));</span>
+
+
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/Gold.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Gold</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Subscription</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Gold</span><span class="p">(</span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dataBase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">subscriptionType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">addSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer"</span><span class="o">+</span><span class="w"> </span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="o">+</span><span class="w"> </span><span class="s">"Added to the Gold List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">addToDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"Gold"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">removeSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">removeFromDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer "</span><span class="o">+</span><span class="w"> </span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="w"> </span><span class="o">+</span><span class="s">" removed to the Gold List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">updateSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">updateDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"Gold"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer "</span><span class="o">+</span><span class="w"> </span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="o">+</span><span class="s">" Updated to the Gold List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/Platinum.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Platinum</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Subscription</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Platinum</span><span class="p">(</span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dataBase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">subscriptionType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">addSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer Added to the Platinum List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">addToDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"Platinum"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">removeSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">removeFromDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer removed to the Platinum List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">updateSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">updateDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"Platinum"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer Updated to the Platinum List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/RoyalGold.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RoyalGold</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Subscription</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">RoyalGold</span><span class="p">(</span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dataBase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">subscriptionType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">addSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer Added to the RoyalGold List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">addToDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"RoyalGold"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">removeSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">removeFromDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer removed to the RoyalGold List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">updateSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">updateDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"RoyalGold"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer Updated to the RoyalGold List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/Silver.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Silver</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Subscription</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Silver</span><span class="p">(</span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dataBase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">subscriptionType</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">addSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer Added to the Silver List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">addToDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"Silver"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">removeSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">removeFromDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer removed to the Silver List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">updateSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">dataBase</span><span class="p">.</span><span class="na">updateDataBase</span><span class="p">(</span><span class="n">customer</span><span class="p">.</span><span class="na">customerId</span><span class="p">,</span><span class="w"> </span><span class="s">"Silver"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Customer Updated to the Silver List"</span><span class="w"> </span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/Subscription.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Subscription</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">subscriptionType</span><span class="p">();</span>
+<span class="w">     </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">addSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">);</span>
+<span class="w">     </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">removeSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">);</span>
+<span class="w">     </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">updateSubscription</span><span class="p">(</span><span class="n">Customer</span><span class="w"> </span><span class="n">customer</span><span class="p">);</span>
+
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/factory/subscription/SubscriptionFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SubscriptionFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">SubscriptionFactory</span><span class="p">(</span><span class="n">DataBase</span><span class="w"> </span><span class="n">dataBase</span><span class="p">){</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">dataBase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataBase</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Subscription</span><span class="w"> </span><span class="nf">getSubscription</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">subscriptionType</span><span class="p">){</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">subscriptionType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"gold"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Gold</span><span class="p">(</span><span class="n">dataBase</span><span class="p">);</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"silver"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Silver</span><span class="p">(</span><span class="n">dataBase</span><span class="p">);</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"platinum"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Platinum</span><span class="p">(</span><span class="n">dataBase</span><span class="p">);</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"royalGold"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RoyalGold</span><span class="p">(</span><span class="n">dataBase</span><span class="p">);</span>
+<span class="w">            </span><span class="k">default</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"Unknown subcription type"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/factory/factory_method_demo.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.email_notification_creator</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailNotificationCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sms_notification_creator</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMSNotificationCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.push_notification_creator</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushNotificationCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.simple_notification_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNotificationFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.notification_service_naive</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotificationServiceNaive</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">factory_method_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate Factory Method Pattern"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Factory Method Pattern Demo ==="</span><span class="p">)</span>
+    
+    <span class="c1"># Send Email</span>
+    <span class="n">creator</span> <span class="o">=</span> <span class="n">EmailNotificationCreator</span><span class="p">()</span>
+    <span class="n">creator</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Welcome to our platform!"</span><span class="p">)</span>
+    
+    <span class="c1"># Send SMS</span>
+    <span class="n">creator</span> <span class="o">=</span> <span class="n">SMSNotificationCreator</span><span class="p">()</span>
+    <span class="n">creator</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Your OTP is 123456"</span><span class="p">)</span>
+    
+    <span class="c1"># Send Push Notification</span>
+    <span class="n">creator</span> <span class="o">=</span> <span class="n">PushNotificationCreator</span><span class="p">()</span>
+    <span class="n">creator</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"You have a new follower!"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_factory_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate Simple Factory Pattern"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Simple Factory Pattern Demo ==="</span><span class="p">)</span>
+    
+    <span class="c1"># Using simple factory</span>
+    <span class="n">factory</span> <span class="o">=</span> <span class="n">SimpleNotificationFactory</span><span class="p">()</span>
+    
+    <span class="n">email_notification</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_notification</span><span class="p">(</span><span class="s2">"EMAIL"</span><span class="p">)</span>
+    <span class="n">email_notification</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Welcome via Simple Factory!"</span><span class="p">)</span>
+    
+    <span class="n">sms_notification</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_notification</span><span class="p">(</span><span class="s2">"SMS"</span><span class="p">)</span>
+    <span class="n">sms_notification</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"OTP via Simple Factory: 789012"</span><span class="p">)</span>
+    
+    <span class="n">push_notification</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_notification</span><span class="p">(</span><span class="s2">"PUSH"</span><span class="p">)</span>
+    <span class="n">push_notification</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"Push via Simple Factory!"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">naive_implementation_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate naive implementation (what to avoid)"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Naive Implementation Demo ==="</span><span class="p">)</span>
+    
+    <span class="n">service</span> <span class="o">=</span> <span class="n">NotificationServiceNaive</span><span class="p">()</span>
+    <span class="n">service</span><span class="o">.</span><span class="n">send_notification</span><span class="p">(</span><span class="s2">"EMAIL"</span><span class="p">,</span> <span class="s2">"Email via naive service"</span><span class="p">)</span>
+    <span class="n">service</span><span class="o">.</span><span class="n">send_notification</span><span class="p">(</span><span class="s2">"SMS"</span><span class="p">,</span> <span class="s2">"SMS via naive service"</span><span class="p">)</span>
+    <span class="n">service</span><span class="o">.</span><span class="n">send_notification</span><span class="p">(</span><span class="s2">"PUSH"</span><span class="p">,</span> <span class="s2">"Push via naive service"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">factory_method_demo</span><span class="p">()</span>
+    <span class="n">simple_factory_demo</span><span class="p">()</span>
+    <span class="n">naive_implementation_demo</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/__init__.py</summary><div class="highlight"><pre><span></span><span class="c1"># Factory Pattern Package</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/email_notification.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EmailNotification</span><span class="p">(</span><span class="n">Notification</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sending email: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/email_notification_creator.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification_creator</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotificationCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.email_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EmailNotificationCreator</span><span class="p">(</span><span class="n">NotificationCreator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Creator"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Notification</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EmailNotification</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/notification.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Notification</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Product interface"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/notification_creator.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NotificationCreator</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Creator - Factory Method Pattern"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Notification</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Factory method - to be implemented by concrete creators"""</span>
+        <span class="k">pass</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Common logic using the factory method"""</span>
+        <span class="n">notification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_notification</span><span class="p">()</span>
+        <span class="n">notification</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/notification_service_naive.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.email_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sms_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMSNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.push_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushNotification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NotificationServiceNaive</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Naive implementation without factory pattern (anti-pattern)"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">send_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">notification_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">notification_type</span> <span class="o">==</span> <span class="s2">"EMAIL"</span><span class="p">:</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="n">EmailNotification</span><span class="p">()</span>
+            <span class="n">email</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">notification_type</span> <span class="o">==</span> <span class="s2">"SMS"</span><span class="p">:</span>
+            <span class="n">sms</span> <span class="o">=</span> <span class="n">SMSNotification</span><span class="p">()</span>
+            <span class="n">sms</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">notification_type</span> <span class="o">==</span> <span class="s2">"PUSH"</span><span class="p">:</span>
+            <span class="n">push</span> <span class="o">=</span> <span class="n">PushNotification</span><span class="p">()</span>
+            <span class="n">push</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown notification type: </span><span class="si">{</span><span class="n">notification_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/push_notification.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PushNotification</span><span class="p">(</span><span class="n">Notification</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sending push notification: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/push_notification_creator.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification_creator</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotificationCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.push_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PushNotificationCreator</span><span class="p">(</span><span class="n">NotificationCreator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Creator"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Notification</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PushNotification</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/simple_notification_factory.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.email_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sms_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMSNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.push_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">PushNotification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleNotificationFactory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Simple Factory Pattern"""</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_notification</span><span class="p">(</span><span class="n">notification_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Notification</span><span class="p">:</span>
+        <span class="n">notification_type</span> <span class="o">=</span> <span class="n">notification_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">notification_type</span> <span class="o">==</span> <span class="s2">"EMAIL"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">EmailNotification</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">notification_type</span> <span class="o">==</span> <span class="s2">"SMS"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SMSNotification</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">notification_type</span> <span class="o">==</span> <span class="s2">"PUSH"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PushNotification</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown notification type: </span><span class="si">{</span><span class="n">notification_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/sms_notification.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SMSNotification</span><span class="p">(</span><span class="n">Notification</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sending SMS: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/factory/sms_notification_creator.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.notification_creator</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotificationCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sms_notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMSNotification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SMSNotificationCreator</span><span class="p">(</span><span class="n">NotificationCreator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Creator"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Notification</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">SMSNotification</span><span class="p">()</span>
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/factory/main.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"notification_factory.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Create different types of notifications using the factory</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">emailNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NotificationFactory</span><span class="o">::</span><span class="n">createNotification</span><span class="p">(</span><span class="s">"EMAIL"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">smsNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NotificationFactory</span><span class="o">::</span><span class="n">createNotification</span><span class="p">(</span><span class="s">"SMS"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">pushNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NotificationFactory</span><span class="o">::</span><span class="n">createNotification</span><span class="p">(</span><span class="s">"PUSH"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Send messages using the notifications</span>
+<span class="w">        </span><span class="n">emailNotification</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(</span><span class="s">"Hello via Email!"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">smsNotification</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(</span><span class="s">"Hello via SMS!"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">pushNotification</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(</span><span class="s">"Hello via Push!"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Try to create an invalid notification type</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">invalidNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NotificationFactory</span><span class="o">::</span><span class="n">createNotification</span><span class="p">(</span><span class="s">"INVALID"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Error: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/email_notification.cpp</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/email_notification.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"notification.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EmailNotification</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/notification.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Notification</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/notification_factory.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"notification_factory.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"email_notification.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"sms_notification.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"push_notification.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Notification</span><span class="o">&gt;</span><span class="w"> </span><span class="n">NotificationFactory</span><span class="o">::</span><span class="n">createNotification</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"EMAIL"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">EmailNotification</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"SMS"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">SMSNotification</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"PUSH"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">PushNotification</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">"Unknown notification type"</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/notification_factory.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"notification.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NotificationFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Notification</span><span class="o">&gt;</span><span class="w"> </span><span class="n">createNotification</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">type</span><span class="p">);</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/push_notification.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"push_notification.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">PushNotification::send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Sending push notification: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/push_notification.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"notification.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PushNotification</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/sms_notification.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"sms_notification.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">SMSNotification::send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Sending SMS: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/factory/sms_notification.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"notification.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SMSNotification</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Notification</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/factory/EmailNotification.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Factory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">EmailNotification</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">INotification</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Send</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Sending email: {message}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/factory/INotification.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Factory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">INotification</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">Send</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/factory/NotificationServiceNaive.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Factory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">NotificationServiceNaive</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SendNotification</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"EMAIL"</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EmailNotification</span><span class="p">();</span>
+<span class="w">                </span><span class="n">email</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"SMS"</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">sms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SMSNotification</span><span class="p">();</span>
+<span class="w">                </span><span class="n">sms</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"PUSH"</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PushNotification</span><span class="p">();</span>
+<span class="w">                </span><span class="n">push</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/factory/Program.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Factory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Using the factory</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"=== Using Factory Pattern ==="</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">emailNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SimpleNotificationFactory</span><span class="p">.</span><span class="n">CreateNotification</span><span class="p">(</span><span class="s">"EMAIL"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">emailNotification</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="s">"Hello via Email!"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">smsNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SimpleNotificationFactory</span><span class="p">.</span><span class="n">CreateNotification</span><span class="p">(</span><span class="s">"SMS"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">smsNotification</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="s">"Hello via SMS!"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">pushNotification</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SimpleNotificationFactory</span><span class="p">.</span><span class="n">CreateNotification</span><span class="p">(</span><span class="s">"PUSH"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">pushNotification</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="s">"Hello via Push!"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Using the naive approach</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\n=== Using Naive Approach ==="</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">notificationService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotificationServiceNaive</span><span class="p">();</span>
+<span class="w">            </span><span class="n">notificationService</span><span class="p">.</span><span class="n">SendNotification</span><span class="p">(</span><span class="s">"EMAIL"</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello via Email!"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">notificationService</span><span class="p">.</span><span class="n">SendNotification</span><span class="p">(</span><span class="s">"SMS"</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello via SMS!"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">notificationService</span><span class="p">.</span><span class="n">SendNotification</span><span class="p">(</span><span class="s">"PUSH"</span><span class="p">,</span><span class="w"> </span><span class="s">"Hello via Push!"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/factory/PushNotification.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Factory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PushNotification</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">INotification</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Send</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Sending push notification: {message}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/factory/SimpleNotificationFactory.cs</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/factory/SMSNotification.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Factory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SMSNotification</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">INotification</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Send</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Sending SMS: {message}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/factory/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">factory</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="c1">// Create the factory</span>
+<span class="w">	</span><span class="nx">factory</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewSimpleNotificationFactory</span><span class="p">()</span>
+
+<span class="w">	</span><span class="c1">// Create and send different types of notifications</span>
+<span class="w">	</span><span class="nx">notifications</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"EMAIL"</span><span class="p">,</span><span class="w"> </span><span class="s">"SMS"</span><span class="p">,</span><span class="w"> </span><span class="s">"PUSH"</span><span class="p">}</span>
+<span class="w">	</span><span class="nx">messages</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span>
+<span class="w">		</span><span class="s">"Welcome to our platform!"</span><span class="p">,</span>
+<span class="w">		</span><span class="s">"Your OTP is 123456"</span><span class="p">,</span>
+<span class="w">		</span><span class="s">"You have a new follower!"</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">notificationType</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">notifications</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">notification</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">factory</span><span class="p">.</span><span class="nx">CreateNotification</span><span class="p">(</span><span class="nx">notificationType</span><span class="p">)</span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Error creating notification: %v\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">			</span><span class="k">continue</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">		</span><span class="nx">notification</span><span class="p">.</span><span class="nx">Send</span><span class="p">(</span><span class="nx">messages</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/factory/email_notification.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">factory</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// EmailNotification represents an email notification</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">EmailNotification</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+
+<span class="c1">// NewEmailNotification creates a new EmailNotification instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewEmailNotification</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">EmailNotification</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">EmailNotification</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// Send sends an email notification</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">EmailNotification</span><span class="p">)</span><span class="w"> </span><span class="nx">Send</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Sending email: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/factory/notification.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">factory</span>
+
+<span class="c1">// Notification defines the interface for all notification types</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Notification</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">Send</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/factory/push_notification.go</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/factory/simple_notification_factory.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">factory</span>
+
+<span class="c1">// SimpleNotificationFactory creates different types of notifications</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">SimpleNotificationFactory</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+
+<span class="c1">// NewSimpleNotificationFactory creates a new SimpleNotificationFactory instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewSimpleNotificationFactory</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">SimpleNotificationFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">SimpleNotificationFactory</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// CreateNotification creates a notification based on the type</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="o">*</span><span class="nx">SimpleNotificationFactory</span><span class="p">)</span><span class="w"> </span><span class="nx">CreateNotification</span><span class="p">(</span><span class="nx">notificationType</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">Notification</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">switch</span><span class="w"> </span><span class="nx">notificationType</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="s">"EMAIL"</span><span class="p">:</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">NewEmailNotification</span><span class="p">(),</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="s">"SMS"</span><span class="p">:</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">NewSMSNotification</span><span class="p">(),</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="s">"PUSH"</span><span class="p">:</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">NewPushNotification</span><span class="p">(),</span><span class="w"> </span><span class="kc">nil</span>
+<span class="w">	</span><span class="k">default</span><span class="p">:</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">"unknown notification type: %s"</span><span class="p">,</span><span class="w"> </span><span class="nx">notificationType</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/factory/sms_notification.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">factory</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// SMSNotification represents an SMS notification</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">SMSNotification</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+
+<span class="c1">// NewSMSNotification creates a new SMSNotification instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewSMSNotification</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">SMSNotification</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">SMSNotification</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// Send sends an SMS notification</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">SMSNotification</span><span class="p">)</span><span class="w"> </span><span class="nx">Send</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Sending SMS: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Creational Pattern/Factory Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">pizzaFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./factory"</span><span class="p">);</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">pizzaType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s2">"cheese"</span><span class="p">;</span>
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">pizza</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pizzaFactory</span><span class="p">.</span><span class="nx">createPizza</span><span class="p">(</span><span class="nx">pizzaType</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">pizza</span><span class="p">.</span><span class="nx">prepare</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">pizza</span><span class="p">.</span><span class="nx">bake</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">pizza</span><span class="p">.</span><span class="nx">cut</span><span class="p">();</span>
+<span class="w">    </span><span class="nx">pizza</span><span class="p">.</span><span class="nx">box</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">main</span><span class="p">();</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Creational Pattern/Factory Design Pattern/factory.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">cheesePizza</span><span class="p">,</span><span class="w"> </span><span class="nx">pepperoniPizza</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./pizza"</span><span class="p">);</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">pizzaFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="nx">createPizza</span><span class="p">(</span><span class="nx">pizzaType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">pizzaType</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"cheese"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">cheesePizza</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">pizzaType</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"pepperoni"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">pepperoniPizza</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"Invalid pizza type"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pizzaFactory</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Creational Pattern/Factory Design Pattern/pizza.js</summary><div class="highlight"><pre><span></span><span class="kd">class</span><span class="w"> </span><span class="nx">Pizza</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">prepare</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">error</span><span class="p">(</span><span class="s1">'Method "prepare()" must be implemented'</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">bake</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Baking for 25 minutes"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">cut</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Cutting the pizza"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">box</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"boxing the pizza"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">cheesePizza</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Pizza</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">prepare</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Preparing cheese pizza"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">pepperoniPizza</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Pizza</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">prepare</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Preparing pepperoni pizza"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">cheesePizza</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">pepperoniPizza</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abstract Factory · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Abstract Factory</p>
+    
+    <span class="badge">Creational Pattern</span>
+    <h1>Abstract Factory</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/abstractfactory/AppLauncher.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">AppLauncher</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Simulate platform detection</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getProperty</span><span class="p">(</span><span class="s">"os.name"</span><span class="p">).</span><span class="na">toLowerCase</span><span class="p">();</span>
+<span class="w">        </span><span class="n">GUIFactory</span><span class="w"> </span><span class="n">factory</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="s">"mac"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MacOSFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">WindowsFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">Application</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Application</span><span class="p">(</span><span class="n">factory</span><span class="p">);</span>
+<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="na">renderUI</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/Application.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Application</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="n">button</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Checkbox</span><span class="w"> </span><span class="n">checkbox</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Application</span><span class="p">(</span><span class="n">GUIFactory</span><span class="w"> </span><span class="n">factory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">createButton</span><span class="p">();</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">checkbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="na">createCheckbox</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">renderUI</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">button</span><span class="p">.</span><span class="na">paint</span><span class="p">();</span>
+<span class="w">        </span><span class="n">checkbox</span><span class="p">.</span><span class="na">paint</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/Button.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Button</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">paint</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">onClick</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/Checkbox.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Checkbox</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">paint</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">onSelect</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/GUIFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">GUIFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Button</span><span class="w"> </span><span class="nf">createButton</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Checkbox</span><span class="w"> </span><span class="nf">createCheckbox</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/MacOSButton.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MacOSButton</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paint</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Painting a macOS-style button."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onClick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"MacOS button clicked."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/MacOSCheckbox.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MacOSCheckbox</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Checkbox</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paint</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Painting a macOS-style checkbox."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onSelect</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"MacOS checkbox selected."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/MacOSFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MacOSFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">GUIFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="nf">createButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MacOSButton</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Checkbox</span><span class="w"> </span><span class="nf">createCheckbox</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MacOSCheckbox</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/BumpySole.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">BumpySole</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleBuild</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Bummpy"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleMaterial</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Plastic Rubber"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/CasualShoeFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CasualShoeFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShoeFactory</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="nf">createShoeSole</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ThinSole</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="nf">createShoeLace</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TapeShoeLace</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/FlatSole.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FlatSole</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleBuild</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Flat"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleMaterial</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Synthetic Rubber"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/FormalShoeFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FormalShoeFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShoeFactory</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="nf">createShoeSole</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FlatSole</span><span class="p">();</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="nf">createShoeLace</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RoundShoeLace</span><span class="p">();</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/RoundShoeLace.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RoundShoeLace</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">shoeLaceBuild</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Round"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">shoeLaceMaterial</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Synthetic Polyster"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/Shoe.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Shoe</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="n">sole</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="n">shoeLace</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Shoe</span><span class="p">(</span><span class="n">Sole</span><span class="w"> </span><span class="n">sole</span><span class="p">,</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="n">shoeLace</span><span class="p">){</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">sole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sole</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">shoeLace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shoeLace</span><span class="p">;</span><span class="w">        </span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">displayBuildShoe</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Sole Type is: "</span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">sole</span><span class="p">.</span><span class="na">soleBuild</span><span class="p">());</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Sole Material is: "</span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">sole</span><span class="p">.</span><span class="na">soleMaterial</span><span class="p">());</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ShoeLace Type is: "</span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">shoeLace</span><span class="p">.</span><span class="na">shoeLaceBuild</span><span class="p">());</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ShoeLace Material is: "</span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">shoeLace</span><span class="p">.</span><span class="na">shoeLaceMaterial</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/ShoeFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ShoeFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="nf">createShoeSole</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="nf">createShoeLace</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/ShoeLace.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ShoeLace</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">shoeLaceBuild</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">shoeLaceMaterial</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/ShoeManufacture.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ShoeManufacture</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="n">ShoeFactory</span><span class="w"> </span><span class="n">shoeFactory</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Shoe</span><span class="w"> </span><span class="nf">produceShoe</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">shoeType</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">shoeType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"Formal"</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">shoeFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FormalShoeFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">shoeType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"Sports"</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">shoeFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SportsShoeFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">shoeType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"Casual"</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">shoeFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CasualShoeFactory</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Shoe</span><span class="p">(</span><span class="n">shoeFactory</span><span class="p">.</span><span class="na">createShoeSole</span><span class="p">(),</span><span class="w"> </span><span class="n">shoeFactory</span><span class="p">.</span><span class="na">createShoeLace</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Shoe</span><span class="w"> </span><span class="n">formalShoe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">produceShoe</span><span class="p">(</span><span class="s">"Formal"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Shoe</span><span class="w"> </span><span class="n">sportaShoe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">produceShoe</span><span class="p">(</span><span class="s">"Sports"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Shoe</span><span class="w"> </span><span class="n">casualShoe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">produceShoe</span><span class="p">(</span><span class="s">"Casual"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">formalShoe</span><span class="p">.</span><span class="na">displayBuildShoe</span><span class="p">();</span>
+<span class="w">        </span><span class="n">sportaShoe</span><span class="p">.</span><span class="na">displayBuildShoe</span><span class="p">();</span>
+<span class="w">        </span><span class="n">casualShoe</span><span class="p">.</span><span class="na">displayBuildShoe</span><span class="p">();</span>
+
+
+
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/Sole.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">Sole</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleBuild</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleMaterial</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/SportsShoeFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SportsShoeFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShoeFactory</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="nf">createShoeSole</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BumpySole</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">ShoeLace</span><span class="w"> </span><span class="nf">createShoeLace</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">RoundShoeLace</span><span class="p">();</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/TapeShoeLace.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TapeShoeLace</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShoeLace</span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">shoeLaceBuild</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Tape Flat"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">shoeLaceMaterial</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Synthetic Cotton"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/shoefactory/ThinSole.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ThinSole</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Sole</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleBuild</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Thin Plated"</span><span class="p">;</span>
+<span class="w">     </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">soleMaterial</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">"Rubber"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/WindowsButton.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WindowsButton</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paint</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Painting a Windows-style button."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onClick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Windows button clicked."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/WindowsCheckbox.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WindowsCheckbox</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Checkbox</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">paint</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Painting a Windows-style checkbox."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onSelect</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Windows checkbox selected."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/abstractfactory/WindowsFactory.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WindowsFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">GUIFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="nf">createButton</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">WindowsButton</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Checkbox</span><span class="w"> </span><span class="nf">createCheckbox</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">WindowsCheckbox</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/abstractfactory/__init__.py</summary><div class="highlight"><pre><span></span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/bumpy_sole.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BumpySole</span><span class="p">(</span><span class="n">Sole</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product - Bumpy Sole for sports shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sole_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Bumpy Sole"</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/casual_shoe_factory.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.flat_sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">FlatSole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.round_shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoundShoeLace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CasualShoeFactory</span><span class="p">(</span><span class="n">ShoeFactory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Factory for casual shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_sole</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sole</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">FlatSole</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_shoe_lace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShoeLace</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RoundShoeLace</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/flat_sole.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FlatSole</span><span class="p">(</span><span class="n">Sole</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product - Flat Sole for casual shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sole_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Flat Sole"</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/formal_shoe_factory.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.thin_sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThinSole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tape_shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">TapeShoeLace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FormalShoeFactory</span><span class="p">(</span><span class="n">ShoeFactory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Factory for formal shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_sole</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sole</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ThinSole</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_shoe_lace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShoeLace</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">TapeShoeLace</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/round_shoe_lace.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RoundShoeLace</span><span class="p">(</span><span class="n">ShoeLace</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product - Round shoe lace for casual and sports shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_lace_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Round Shoe Lace"</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/shoe.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Shoe</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Product that uses components from Abstract Factory"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sole</span><span class="p">:</span> <span class="n">Sole</span><span class="p">,</span> <span class="n">shoe_lace</span><span class="p">:</span> <span class="n">ShoeLace</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sole</span> <span class="o">=</span> <span class="n">sole</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shoe_lace</span> <span class="o">=</span> <span class="n">shoe_lace</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Shoe with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sole</span><span class="o">.</span><span class="n">get_sole_type</span><span class="p">()</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_shoe_lace</span><span class="o">.</span><span class="n">get_lace_type</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sole</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sole</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sole</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shoe_lace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShoeLace</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shoe_lace</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/shoe_factory.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShoeFactory</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Abstract Factory for creating shoe components"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_shoe_lace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShoeLace</span><span class="p">:</span>
+        <span class="k">pass</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_sole</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sole</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/shoe_lace.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShoeLace</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Abstract Product - ShoeLace"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_lace_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/shoe_manufacture.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.casual_shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">CasualShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.formal_shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormalShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sports_shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">SportsShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shoe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Shoe</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShoeManufacture</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Client that uses Abstract Factory to produce shoes"""</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">produce_shoe</span><span class="p">(</span><span class="n">shoe_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Shoe</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Produce a shoe using the appropriate factory"""</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">ShoeManufacture</span><span class="o">.</span><span class="n">_get_factory</span><span class="p">(</span><span class="n">shoe_type</span><span class="p">)</span>
+        <span class="n">sole</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_sole</span><span class="p">()</span>
+        <span class="n">shoe_lace</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_shoe_lace</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Shoe</span><span class="p">(</span><span class="n">sole</span><span class="p">,</span> <span class="n">shoe_lace</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_factory</span><span class="p">(</span><span class="n">shoe_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShoeFactory</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Get the appropriate factory based on shoe type"""</span>
+        <span class="n">shoe_type</span> <span class="o">=</span> <span class="n">shoe_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">shoe_type</span> <span class="o">==</span> <span class="s2">"CASUAL"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">CasualShoeFactory</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">shoe_type</span> <span class="o">==</span> <span class="s2">"FORMAL"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">FormalShoeFactory</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">shoe_type</span> <span class="o">==</span> <span class="s2">"SPORTS"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SportsShoeFactory</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown shoe type: </span><span class="si">{</span><span class="n">shoe_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">abstract_factory_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate Abstract Factory pattern"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Abstract Factory Pattern Demo ==="</span><span class="p">)</span>
+    
+    <span class="c1"># Produce different types of shoes</span>
+    <span class="n">casual_shoe</span> <span class="o">=</span> <span class="n">ShoeManufacture</span><span class="o">.</span><span class="n">produce_shoe</span><span class="p">(</span><span class="s2">"CASUAL"</span><span class="p">)</span>
+    <span class="n">formal_shoe</span> <span class="o">=</span> <span class="n">ShoeManufacture</span><span class="o">.</span><span class="n">produce_shoe</span><span class="p">(</span><span class="s2">"FORMAL"</span><span class="p">)</span>
+    <span class="n">sports_shoe</span> <span class="o">=</span> <span class="n">ShoeManufacture</span><span class="o">.</span><span class="n">produce_shoe</span><span class="p">(</span><span class="s2">"SPORTS"</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Casual Shoe: </span><span class="si">{</span><span class="n">casual_shoe</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Formal Shoe: </span><span class="si">{</span><span class="n">formal_shoe</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sports Shoe: </span><span class="si">{</span><span class="n">sports_shoe</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">abstract_factory_demo</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/sole.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Sole</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Abstract Product - Sole"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sole_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/sports_shoe_factory.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.bumpy_sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">BumpySole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.round_shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoundShoeLace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SportsShoeFactory</span><span class="p">(</span><span class="n">ShoeFactory</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Factory for sports shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_sole</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sole</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">BumpySole</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_shoe_lace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShoeLace</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RoundShoeLace</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/tape_shoe_lace.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shoe_lace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoeLace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TapeShoeLace</span><span class="p">(</span><span class="n">ShoeLace</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product - Tape shoe lace for formal shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_lace_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Tape Shoe Lace"</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/abstractfactory/thin_sole.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.sole</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sole</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ThinSole</span><span class="p">(</span><span class="n">Sole</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Product - Thin Sole for formal shoes"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sole_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Thin Sole"</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Creational Pattern/AbstractFactory Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">ModernFurnitureFactory</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">ClassicFurnitureFactory</span><span class="p">,</span>
+<span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./abstract"</span><span class="p">);</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">createFurniture</span><span class="p">(</span><span class="nx">factory</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">chair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">factory</span><span class="p">.</span><span class="nx">createChair</span><span class="p">();</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">sofa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">factory</span><span class="p">.</span><span class="nx">createSofa</span><span class="p">();</span>
+
+<span class="w">  </span><span class="nx">chair</span><span class="p">.</span><span class="nx">sitOn</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">sofa</span><span class="p">.</span><span class="nx">lieOn</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Use the Modern Furniture Factory</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">modernFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ModernFurnitureFactory</span><span class="p">();</span>
+<span class="nx">createFurniture</span><span class="p">(</span><span class="nx">modernFactory</span><span class="p">);</span>
+
+<span class="c1">// Use the Victorian Furniture Factory</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">classicFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ClassicFurnitureFactory</span><span class="p">();</span>
+<span class="nx">createFurniture</span><span class="p">(</span><span class="nx">classicFactory</span><span class="p">);</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Creational Pattern/AbstractFactory Design Pattern/abstract.js</summary><div class="highlight"><pre><span></span><span class="c1">// Abstract product</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Chair</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">sitOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">error</span><span class="p">(</span><span class="s2">"Sitting on chair"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">Sofa</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">lieOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">error</span><span class="p">(</span><span class="s2">"Lying on sofa"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete product for modernStyle</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">ModernChair</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Chair</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">sitOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Sitting on modern chair"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">ModernSofa</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Sofa</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">lieOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Lying on modern sofa"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete product for classicStyle</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">ClassicChair</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Chair</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">sitOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Sitting on classic chair"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">ClassicSofa</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Sofa</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">lieOn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Lying on classic sofa"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Abstract factory</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">FurnitureFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">createChair</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">error</span><span class="p">(</span><span class="s2">"Creating chair"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">createSofa</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">error</span><span class="p">(</span><span class="s2">"Creating sofa"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete factory for modernStyle</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">ModernFurnitureFactory</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">FurnitureFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">createChair</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ModernChair</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">createSofa</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ModernSofa</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete factory for classicStyle</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">ClassicFurnitureFactory</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">FurnitureFactory</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">createChair</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ClassicChair</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">createSofa</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ClassicSofa</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">ModernFurnitureFactory</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">ClassicFurnitureFactory</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -354,8 +354,6 @@
 
   <script>
     const GH = "https://github.com/amritanshuj/awesome-low-level-design";
-    const BLOB = GH + "/blob/main/";
-    const TREE = GH + "/tree/main/";
     const LEARN = "https://algomaster.io/learn/lld/";
     const CONC = "https://algomaster.io/learn/concurrency-interview/";
 
@@ -369,37 +367,39 @@
 
     const lang = (label, href) => ({ label, href });
 
-    function oopCode(folder, rustFolder) {
-      const rust = rustFolder || folder;
+    function oopCode(slug) {
+      const page = "pages/oop/" + slug + ".html";
       return [
-        lang("Java", TREE + "oop/java/" + folder),
-        lang("C++", TREE + "oop/cpp/" + folder),
-        lang("Python", TREE + "oop/python/" + folder),
-        lang("C#", TREE + "oop/csharp/" + folder),
-        lang("Go", TREE + "oop/golang/" + folder),
-        lang("Rust", TREE + "oop/rust/" + rust)
+        lang("Java", page + "#java"),
+        lang("C++", page + "#cpp"),
+        lang("Python", page + "#python"),
+        lang("C#", page + "#csharp"),
+        lang("Go", page + "#go"),
+        lang("Rust", page + "#rust")
       ];
     }
 
-    function patternCode(name, folders) {
+    function patternCode(slug, folders) {
+      const page = "pages/patterns/" + slug + ".html";
       const out = [];
-      if (folders.java) out.push(lang("Java", TREE + "design-patterns/java/" + folders.java));
-      if (folders.python) out.push(lang("Python", TREE + "design-patterns/python/" + folders.python));
-      if (folders.cpp) out.push(lang("C++", TREE + "design-patterns/cpp/" + folders.cpp));
-      if (folders.csharp) out.push(lang("C#", TREE + "design-patterns/csharp/" + folders.csharp));
-      if (folders.go) out.push(lang("Go", TREE + "design-patterns/golang/" + folders.go));
-      if (folders.js) out.push(lang("JavaScript", TREE + "design-patterns/Javascript/" + folders.js.split("/").map(encodeURIComponent).join("/")));
+      if (folders.java) out.push(lang("Java", page + "#java"));
+      if (folders.python) out.push(lang("Python", page + "#python"));
+      if (folders.cpp) out.push(lang("C++", page + "#cpp"));
+      if (folders.csharp) out.push(lang("C#", page + "#csharp"));
+      if (folders.go) out.push(lang("Go", page + "#go"));
+      if (folders.js) out.push(lang("JavaScript", page + "#js"));
       return out;
     }
 
-    function problemLangs(opts) {
+    function problemLangs(slug, opts) {
+      const page = "pages/problems/" + slug + ".html";
       const out = [];
-      if (opts.java) out.push(lang("Java", TREE + "solutions/java/src/" + opts.java));
-      if (opts.python) out.push(lang("Python", TREE + "solutions/python/" + opts.python));
-      if (opts.cpp) out.push(lang("C++", TREE + "solutions/cpp/" + opts.cpp));
-      if (opts.csharp) out.push(lang("C#", TREE + "solutions/csharp/" + opts.csharp));
-      if (opts.go) out.push(lang("Go", TREE + "solutions/golang/" + opts.go));
-      if (opts.ts) out.push(lang("TypeScript", TREE + "solutions/typescript/src/" + opts.ts));
+      if (opts.java) out.push(lang("Java", page + "#java"));
+      if (opts.python) out.push(lang("Python", page + "#python"));
+      if (opts.cpp) out.push(lang("C++", page + "#cpp"));
+      if (opts.csharp) out.push(lang("C#", page + "#csharp"));
+      if (opts.go) out.push(lang("Go", page + "#go"));
+      if (opts.ts) out.push(lang("TypeScript", page + "#ts"));
       return out;
     }
 
@@ -414,19 +414,19 @@
       { section: "oop", group: "Start here", badge: "Getting Started", title: "How to Learn LLD", desc: "A practical path for learning Low Level Design and Object-Oriented Design from first principles.", href: LEARN + "how-to-learn-lld", action: "Start learning", icon: "compass" },
       { section: "oop", group: "Start here", badge: "Getting Started", title: "15 Must-Know OOP Concepts", desc: "The core object-oriented ideas you need before walking into an LLD interview.", href: LEARN + "15-must-know-oop-concepts", action: "Read guide", icon: "book-open" },
 
-      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Classes and Objects", desc: "Model real-world entities with classes, instances, fields, and methods.", href: LEARN + "classes-and-objects", langs: oopCode("classesandobjects", "classes_and_objects"), action: "Read concept", icon: "boxes" },
+      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Classes and Objects", desc: "Model real-world entities with classes, instances, fields, and methods.", href: "pages/oop/classes-and-objects.html", langs: oopCode("classes-and-objects"), action: "Read concept", icon: "boxes" },
       { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Enums", desc: "Use enumerated types to represent a fixed set of named constants in your design.", href: LEARN + "enums", action: "Read concept", icon: "list" },
-      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Interfaces", desc: "Define contracts that classes can implement to keep designs loosely coupled.", href: LEARN + "interfaces", langs: oopCode("interfaces"), action: "Explore code", icon: "plug" },
-      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Encapsulation", desc: "Hide internal state and expose a stable public API.", href: LEARN + "encapsulation", langs: oopCode("encapsulation"), action: "Explore code", icon: "lock" },
-      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Abstraction", desc: "Show essential behavior and hide unnecessary implementation detail.", href: LEARN + "abstraction", langs: oopCode("abstraction"), action: "Explore code", icon: "layers" },
-      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Inheritance", desc: "Reuse and extend behavior through class hierarchies.", href: LEARN + "inheritance", langs: oopCode("inheritance"), action: "Explore code", icon: "git-branch" },
-      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Polymorphism", desc: "Let one interface take many forms through overriding and dynamic dispatch.", href: LEARN + "polymorphism", langs: oopCode("polymorphism"), action: "Explore code", icon: "shuffle" },
+      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Interfaces", desc: "Define contracts that classes can implement to keep designs loosely coupled.", href: "pages/oop/interfaces.html", langs: oopCode("interfaces"), action: "Explore code", icon: "plug" },
+      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Encapsulation", desc: "Hide internal state and expose a stable public API.", href: "pages/oop/encapsulation.html", langs: oopCode("encapsulation"), action: "Explore code", icon: "lock" },
+      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Abstraction", desc: "Show essential behavior and hide unnecessary implementation detail.", href: "pages/oop/abstraction.html", langs: oopCode("abstraction"), action: "Explore code", icon: "layers" },
+      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Inheritance", desc: "Reuse and extend behavior through class hierarchies.", href: "pages/oop/inheritance.html", langs: oopCode("inheritance"), action: "Explore code", icon: "git-branch" },
+      { section: "oop", group: "OOP fundamentals", badge: "OOP", title: "Polymorphism", desc: "Let one interface take many forms through overriding and dynamic dispatch.", href: "pages/oop/polymorphism.html", langs: oopCode("polymorphism"), action: "Explore code", icon: "shuffle" },
 
-      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Association", desc: "A structural relationship where objects of one class are connected to objects of another.", href: LEARN + "association", langs: oopCode("association"), action: "Explore code", icon: "link" },
-      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Aggregation", desc: "A has-a relationship where the child can exist independently of the parent.", href: LEARN + "aggregation", langs: oopCode("aggregation"), action: "Explore code", icon: "component" },
-      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Composition", desc: "A strong has-a relationship where the part cannot live without the whole.", href: LEARN + "composition", langs: oopCode("composition"), action: "Explore code", icon: "combine" },
+      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Association", desc: "A structural relationship where objects of one class are connected to objects of another.", href: "pages/oop/association.html", langs: oopCode("association"), action: "Explore code", icon: "link" },
+      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Aggregation", desc: "A has-a relationship where the child can exist independently of the parent.", href: "pages/oop/aggregation.html", langs: oopCode("aggregation"), action: "Explore code", icon: "component" },
+      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Composition", desc: "A strong has-a relationship where the part cannot live without the whole.", href: "pages/oop/composition.html", langs: oopCode("composition"), action: "Explore code", icon: "combine" },
       { section: "oop", group: "Class relationships", badge: "Relationships", title: "Dependency", desc: "A uses-a relationship where one class depends on another to operate.", href: LEARN + "dependency", action: "Read concept", icon: "waypoint" },
-      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Aggregation vs Composition", desc: "Side-by-side Java examples that contrast aggregation and composition.", href: TREE + "oop/java/AggregationVsComposition", action: "Explore code", icon: "git-compare" },
+      { section: "oop", group: "Class relationships", badge: "Relationships", title: "Aggregation vs Composition", desc: "Side-by-side Java examples that contrast aggregation and composition.", href: "pages/oop/aggregation-vs-composition.html", action: "Explore code", icon: "git-compare" },
 
       { section: "oop", group: "Design principles", badge: "Principle", title: "DRY Principle", desc: "Don't Repeat Yourself — keep a single source of truth for each piece of knowledge.", href: LEARN + "dry", action: "Read principle", icon: "copy-slash" },
       { section: "oop", group: "Design principles", badge: "Principle", title: "YAGNI Principle", desc: "You Aren't Gonna Need It — implement only what the current requirements need.", href: LEARN + "yagni", action: "Read principle", icon: "scissors" },
@@ -434,30 +434,30 @@
       { section: "oop", group: "Design principles", badge: "SOLID", title: "SOLID Principles with Pictures", desc: "Visual walkthrough of Single Responsibility, Open/Closed, Liskov, Interface Segregation, and Dependency Inversion.", href: "https://medium.com/backticks-tildes/the-s-o-l-i-d-principles-in-pictures-b34ce2f1e898", action: "View diagrams", icon: "image" },
       { section: "oop", group: "Design principles", badge: "SOLID", title: "SOLID Principles with Code", desc: "SOLID explained with practical code so you can apply each rule in interviews.", href: "https://blog.algomaster.io/p/solid-principles-explained-with-code", action: "Read with code", icon: "braces" },
 
-      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Singleton", desc: "Ensure a class has only one instance and provide a global access point.", href: LEARN + "singleton", langs: patternCode("singleton", gof("singleton", "Creational Pattern/Singleton Design  Pattern")), action: "Explore code", icon: "circle-dot" },
-      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Factory Method", desc: "Let subclasses decide which class to instantiate through a factory method.", href: LEARN + "factory-method", langs: patternCode("factory", gof("factory", "Creational Pattern/Factory Design Pattern")), action: "Explore code", icon: "factory" },
-      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Abstract Factory", desc: "Create families of related objects without specifying their concrete classes.", href: LEARN + "abstract-factory", langs: patternCode("abstractfactory", gof("abstractfactory", "Creational Pattern/AbstractFactory Design Pattern")), action: "Explore code", icon: "layout-grid" },
-      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Builder", desc: "Construct complex objects step by step and keep the same construction process reusable.", href: LEARN + "builder", langs: patternCode("builder", gof("builder", "Creational Pattern/Builder Design Pattern")), action: "Explore code", icon: "hammer" },
-      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Prototype", desc: "Create new objects by copying an existing instance.", href: LEARN + "prototype", langs: patternCode("prototype", gof("prototype", "Creational Pattern/Prototype Design Pattern")), action: "Explore code", icon: "copy" },
+      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Singleton", desc: "Ensure a class has only one instance and provide a global access point.", href: "pages/patterns/singleton.html", langs: patternCode("singleton", gof("singleton", "Creational Pattern/Singleton Design  Pattern")), action: "Explore code", icon: "circle-dot" },
+      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Factory Method", desc: "Let subclasses decide which class to instantiate through a factory method.", href: "pages/patterns/factory-method.html", langs: patternCode("factory-method", gof("factory", "Creational Pattern/Factory Design Pattern")), action: "Explore code", icon: "factory" },
+      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Abstract Factory", desc: "Create families of related objects without specifying their concrete classes.", href: "pages/patterns/abstract-factory.html", langs: patternCode("abstract-factory", gof("abstractfactory", "Creational Pattern/AbstractFactory Design Pattern")), action: "Explore code", icon: "layout-grid" },
+      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Builder", desc: "Construct complex objects step by step and keep the same construction process reusable.", href: "pages/patterns/builder.html", langs: patternCode("builder", gof("builder", "Creational Pattern/Builder Design Pattern")), action: "Explore code", icon: "hammer" },
+      { section: "patterns", group: "Creational patterns", badge: "Creational Pattern", title: "Prototype", desc: "Create new objects by copying an existing instance.", href: "pages/patterns/prototype.html", langs: patternCode("prototype", gof("prototype", "Creational Pattern/Prototype Design Pattern")), action: "Explore code", icon: "copy" },
 
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Adapter", desc: "Convert one interface into another that clients already expect.", href: LEARN + "adapter", langs: patternCode("adapter", gof("adapter", "Structural Pattern/Adapter Design Pattern")), action: "Explore code", icon: "unplug" },
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Bridge", desc: "Decouple an abstraction from its implementation so both can vary independently.", href: LEARN + "bridge", langs: patternCode("bridge", gof("bridge", "Structural Pattern/Bridge Design Pattern")), action: "Explore code", icon: "waypoints" },
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Composite", desc: "Compose objects into tree structures and treat individual objects and compositions uniformly.", href: LEARN + "composite", langs: patternCode("composite", gof("composite", "Structural Pattern/Composite Design Pattern")), action: "Explore code", icon: "folder-tree" },
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Decorator", desc: "Attach additional responsibilities to an object dynamically.", href: LEARN + "decorator", langs: patternCode("decorator", gof("decorator", "Structural Pattern/Decorator Design Pattern")), action: "Explore code", icon: "sparkle" },
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Facade", desc: "Provide a simplified interface to a larger body of code.", href: LEARN + "facade", langs: patternCode("facade", gof("facade", "Structural Pattern/Facade Design Pattern")), action: "Explore code", icon: "app-window" },
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Flyweight", desc: "Share common state across many objects to save memory.", href: LEARN + "flyweight", langs: patternCode("flyweight", gof("flyweight", "Structural Pattern/Flyweight Design Pattern")), action: "Explore code", icon: "feather" },
-      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Proxy", desc: "Provide a placeholder or surrogate that controls access to another object.", href: LEARN + "proxy", langs: patternCode("proxy", gof("proxy", "Structural Pattern/Proxy Design Pattern")), action: "Explore code", icon: "shield" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Adapter", desc: "Convert one interface into another that clients already expect.", href: "pages/patterns/adapter.html", langs: patternCode("adapter", gof("adapter", "Structural Pattern/Adapter Design Pattern")), action: "Explore code", icon: "unplug" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Bridge", desc: "Decouple an abstraction from its implementation so both can vary independently.", href: "pages/patterns/bridge.html", langs: patternCode("bridge", gof("bridge", "Structural Pattern/Bridge Design Pattern")), action: "Explore code", icon: "waypoints" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Composite", desc: "Compose objects into tree structures and treat individual objects and compositions uniformly.", href: "pages/patterns/composite.html", langs: patternCode("composite", gof("composite", "Structural Pattern/Composite Design Pattern")), action: "Explore code", icon: "folder-tree" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Decorator", desc: "Attach additional responsibilities to an object dynamically.", href: "pages/patterns/decorator.html", langs: patternCode("decorator", gof("decorator", "Structural Pattern/Decorator Design Pattern")), action: "Explore code", icon: "sparkle" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Facade", desc: "Provide a simplified interface to a larger body of code.", href: "pages/patterns/facade.html", langs: patternCode("facade", gof("facade", "Structural Pattern/Facade Design Pattern")), action: "Explore code", icon: "app-window" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Flyweight", desc: "Share common state across many objects to save memory.", href: "pages/patterns/flyweight.html", langs: patternCode("flyweight", gof("flyweight", "Structural Pattern/Flyweight Design Pattern")), action: "Explore code", icon: "feather" },
+      { section: "patterns", group: "Structural patterns", badge: "Structural Pattern", title: "Proxy", desc: "Provide a placeholder or surrogate that controls access to another object.", href: "pages/patterns/proxy.html", langs: patternCode("proxy", gof("proxy", "Structural Pattern/Proxy Design Pattern")), action: "Explore code", icon: "shield" },
 
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Iterator", desc: "Access elements of a collection sequentially without exposing its representation.", href: LEARN + "iterator", langs: patternCode("iterator", gof("iterator", "Behavioral Pattern/Iterator Design Pattern")), action: "Explore code", icon: "list-ordered" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Observer", desc: "Notify dependent objects automatically when an object's state changes.", href: LEARN + "observer", langs: patternCode("observer", gof("observer", "Behavioral Pattern/Observer Design Pattern")), action: "Explore code", icon: "eye" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Strategy", desc: "Define a family of algorithms and make them interchangeable at runtime.", href: LEARN + "strategy", langs: patternCode("strategy", gof("strategy", "Behavioral Pattern/Strategy Design Pattern")), action: "Explore code", icon: "route" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Command", desc: "Encapsulate a request as an object so you can queue, log, or undo it.", href: LEARN + "command", langs: patternCode("command", gof("command", "Behavioral Pattern/Command Design Pattern")), action: "Explore code", icon: "terminal" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "State", desc: "Let an object alter its behavior when its internal state changes.", href: LEARN + "state", langs: patternCode("state", gof("state", "Behavioral Pattern/State Design Pattern")), action: "Explore code", icon: "toggle-left" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Template Method", desc: "Define the skeleton of an algorithm and let subclasses fill in the steps.", href: LEARN + "template-method", langs: patternCode("templatemethod", gof("templatemethod", "Behavioral Pattern/Template Design Pattern")), action: "Explore code", icon: "layout-template" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Visitor", desc: "Add new operations to object structures without modifying their classes.", href: LEARN + "visitor", langs: patternCode("visitor", gof("visitor", "Behavioral Pattern/Visitor Design Pattern")), action: "Explore code", icon: "person-standing" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Mediator", desc: "Reduce chaotic dependencies by having objects communicate through a mediator.", href: LEARN + "mediator", langs: patternCode("mediator", gof("mediator", "Behavioral Pattern/Mediator Design Pattern")), action: "Explore code", icon: "messages-square" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Memento", desc: "Capture and restore an object's internal state without violating encapsulation.", href: LEARN + "memento", langs: patternCode("memento", gof("memento", "Behavioral Pattern/Memento Design Pattern")), action: "Explore code", icon: "history" },
-      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Chain of Responsibility", desc: "Pass a request along a chain of handlers until one of them handles it.", href: LEARN + "chain-of-responsibility", langs: patternCode("chainofresponsibility", gof("chainofresponsibility", "Behavioral Pattern/Chain of Responsibilites")), action: "Explore code", icon: "link-2" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Iterator", desc: "Access elements of a collection sequentially without exposing its representation.", href: "pages/patterns/iterator.html", langs: patternCode("iterator", gof("iterator", "Behavioral Pattern/Iterator Design Pattern")), action: "Explore code", icon: "list-ordered" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Observer", desc: "Notify dependent objects automatically when an object's state changes.", href: "pages/patterns/observer.html", langs: patternCode("observer", gof("observer", "Behavioral Pattern/Observer Design Pattern")), action: "Explore code", icon: "eye" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Strategy", desc: "Define a family of algorithms and make them interchangeable at runtime.", href: "pages/patterns/strategy.html", langs: patternCode("strategy", gof("strategy", "Behavioral Pattern/Strategy Design Pattern")), action: "Explore code", icon: "route" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Command", desc: "Encapsulate a request as an object so you can queue, log, or undo it.", href: "pages/patterns/command.html", langs: patternCode("command", gof("command", "Behavioral Pattern/Command Design Pattern")), action: "Explore code", icon: "terminal" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "State", desc: "Let an object alter its behavior when its internal state changes.", href: "pages/patterns/state.html", langs: patternCode("state", gof("state", "Behavioral Pattern/State Design Pattern")), action: "Explore code", icon: "toggle-left" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Template Method", desc: "Define the skeleton of an algorithm and let subclasses fill in the steps.", href: "pages/patterns/template-method.html", langs: patternCode("template-method", gof("templatemethod", "Behavioral Pattern/Template Design Pattern")), action: "Explore code", icon: "layout-template" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Visitor", desc: "Add new operations to object structures without modifying their classes.", href: "pages/patterns/visitor.html", langs: patternCode("visitor", gof("visitor", "Behavioral Pattern/Visitor Design Pattern")), action: "Explore code", icon: "person-standing" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Mediator", desc: "Reduce chaotic dependencies by having objects communicate through a mediator.", href: "pages/patterns/mediator.html", langs: patternCode("mediator", gof("mediator", "Behavioral Pattern/Mediator Design Pattern")), action: "Explore code", icon: "messages-square" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Memento", desc: "Capture and restore an object's internal state without violating encapsulation.", href: "pages/patterns/memento.html", langs: patternCode("memento", gof("memento", "Behavioral Pattern/Memento Design Pattern")), action: "Explore code", icon: "history" },
+      { section: "patterns", group: "Behavioral patterns", badge: "Behavioral Pattern", title: "Chain of Responsibility", desc: "Pass a request along a chain of handlers until one of them handles it.", href: "pages/patterns/chain-of-responsibility.html", langs: patternCode("chain-of-responsibility", gof("chainofresponsibility", "Behavioral Pattern/Chain of Responsibilites")), action: "Explore code", icon: "link-2" },
 
       { section: "patterns", group: "UML", badge: "UML", title: "Class Diagram", desc: "Map classes, fields, methods, and relationships before you write code.", href: LEARN + "class-diagram", action: "View diagram guide", icon: "waypoints" },
       { section: "patterns", group: "UML", badge: "UML", title: "Use Case Diagram", desc: "Capture actors and the goals they accomplish with the system.", href: LEARN + "use-case-diagram", action: "View diagram guide", icon: "users" },
@@ -506,16 +506,17 @@
     ];
 
     problems.forEach(([difficulty, badge, title, desc, md, diagram, langs]) => {
+      const slug = md ? md.replace(/\.md$/, "") : title.replace(/^Design\s+/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
       ITEMS.push({
         section: "problems",
         group: difficulty + " LLD problems",
         badge: difficulty + " · " + badge,
         title,
         desc,
-        href: md ? BLOB + "problems/" + md : TREE + "solutions/java/src/" + langs.java,
+        href: "pages/problems/" + slug + ".html",
         diagram: "class-diagrams/" + diagram,
-        langs: problemLangs(langs),
-        action: md ? "Read solution" : "Explore code",
+        langs: problemLangs(slug, langs),
+        action: "Read solution",
         secondary: "View diagram",
         icon: "boxes"
       });
@@ -563,31 +564,28 @@
     });
 
     const languageHubs = [
-      ["Java implementations", "OOP, design patterns, and every LLD problem in Java.", TREE + "solutions/java/src", TREE + "design-patterns/java", TREE + "oop/java"],
-      ["C++ implementations", "Design patterns and LLD problem solutions in modern C++.", TREE + "solutions/cpp", TREE + "design-patterns/cpp", TREE + "oop/cpp"],
-      ["Python implementations", "Pythonic OOP, GoF patterns, and interview problem code.", TREE + "solutions/python", TREE + "design-patterns/python", TREE + "oop/python"],
-      ["C# implementations", "C# ports of the LLD problems and design patterns.", TREE + "solutions/csharp", TREE + "design-patterns/csharp", TREE + "oop/csharp"],
-      ["Go implementations", "Idiomatic Go solutions for the same interview problems.", TREE + "solutions/golang", TREE + "design-patterns/golang", TREE + "oop/golang"],
-      ["TypeScript implementations", "Parking Lot, Stack Overflow, Vending Machine, Logging, Tasks, Traffic, and Coffee Machine.", TREE + "solutions/typescript/src", null, null],
-      ["JavaScript design patterns", "Creational, structural, and behavioral pattern examples in JavaScript.", TREE + "design-patterns/Javascript", null, null],
-      ["Rust OOP samples", "OOP relationship and principle samples in Rust.", TREE + "oop/rust", null, null]
+      ["Java implementations", "OOP, design patterns, and every LLD problem in Java.", "pages/languages/java.html"],
+      ["C++ implementations", "Design patterns and LLD problem solutions in modern C++.", "pages/languages/cpp.html"],
+      ["Python implementations", "Pythonic OOP, GoF patterns, and interview problem code.", "pages/languages/python.html"],
+      ["C# implementations", "C# ports of the LLD problems and design patterns.", "pages/languages/csharp.html"],
+      ["Go implementations", "Idiomatic Go solutions for the same interview problems.", "pages/languages/go.html"],
+      ["TypeScript implementations", "Parking Lot, Stack Overflow, Vending Machine, Logging, Tasks, Traffic, and Coffee Machine.", "pages/languages/ts.html"],
+      ["JavaScript design patterns", "Creational, structural, and behavioral pattern examples in JavaScript.", "pages/languages/js.html"],
+      ["Rust OOP samples", "OOP relationship and principle samples in Rust.", "pages/languages/rust.html"]
     ];
-    languageHubs.forEach(([title, desc, primary, patterns, oop]) => {
-      const langs = [];
-      if (oop) langs.push(lang("OOP", oop));
-      if (patterns) langs.push(lang("Patterns", patterns));
+    languageHubs.forEach(([title, desc, primary]) => {
       ITEMS.push({
         section: "languages",
         group: "Language implementations",
         badge: "Code Snippets",
-        title, desc, href: primary, langs, action: "Explore code", icon: "code-2"
+        title, desc, href: primary, action: "Explore code", icon: "code-2"
       });
     });
 
     ITEMS.push(
-      { section: "interview", group: "Interview method", badge: "Interview Favorite", title: "How to Answer a LLD Interview Problem", desc: "A repeatable template for requirements, UML, classes, and follow-ups. The original interview template image is shown in the hero and below.", href: "https://blog.algomaster.io/p/how-to-answer-a-lld-interview-problem", diagram: "images/interview-template.png", action: "Read the guide", secondary: "View template", icon: "clipboard-check" },
-      { section: "interview", group: "Cheat sheet", badge: "Cheat Sheet", title: "SOLID at a glance", desc: "SRP: one reason to change. OCP: open for extension, closed for modification. LSP: subtypes must be substitutable. ISP: no fat interfaces. DIP: depend on abstractions.", href: "https://blog.algomaster.io/p/solid-principles-explained-with-code", action: "Open cheat sheet", icon: "table" },
-      { section: "interview", group: "Cheat sheet", badge: "Cheat Sheet", title: "DRY · YAGNI · KISS", desc: "Don't Repeat Yourself. You Aren't Gonna Need It. Keep It Simple. Use these as a sanity check before adding classes in an interview.", href: LEARN + "dry", action: "Review principles", icon: "list-checks" },
+      { section: "interview", group: "Interview method", badge: "Interview Favorite", title: "How to Answer a LLD Interview Problem", desc: "A repeatable template for requirements, UML, classes, and follow-ups. The original interview template image is shown in the hero and below.", href: "pages/interview.html", diagram: "images/interview-template.png", action: "Read the guide", secondary: "View template", icon: "clipboard-check" },
+      { section: "interview", group: "Cheat sheet", badge: "Cheat Sheet", title: "SOLID at a glance", desc: "SRP: one reason to change. OCP: open for extension, closed for modification. LSP: subtypes must be substitutable. ISP: no fat interfaces. DIP: depend on abstractions.", href: "pages/interview.html", action: "Open cheat sheet", icon: "table" },
+      { section: "interview", group: "Cheat sheet", badge: "Cheat Sheet", title: "DRY · YAGNI · KISS", desc: "Don't Repeat Yourself. You Aren't Gonna Need It. Keep It Simple. Use these as a sanity check before adding classes in an interview.", href: "pages/interview.html", action: "Review principles", icon: "list-checks" },
       { section: "interview", group: "Courses", badge: "Course", title: "Master LLD Interviews — AlgoMaster.io", desc: "Structured LLD interview course linked from the repository README.", href: LEARN + "course-introduction", action: "Open course", icon: "graduation-cap" },
       { section: "interview", group: "Courses", badge: "Course", title: "Master Concurrency Interviews — AlgoMaster.io", desc: "Concurrency interview track covering primitives, pitfalls, and problems.", href: "https://algomaster.io/learn/concurrency-interview", action: "Open course", icon: "cpu" },
       { section: "interview", group: "Books", badge: "Book", title: "Head First Design Patterns", desc: "A visual introduction to the classic Gang of Four patterns.", href: "https://www.amazon.in/dp/9385889753", action: "View book", icon: "book" },
@@ -672,9 +670,9 @@
             </div>
             <h3 class="fg text-base font-semibold">${highlight(item.title)}</h3>
             <p class="fg-muted mt-2 flex-1 text-sm leading-6">${item.desc}</p>
-            ${langs.length ? `<div class="mt-3 flex flex-wrap gap-1.5">${langs.map(l => `<a href="${l.href}" target="_blank" rel="noopener" class="lang-chip rounded-md px-2 py-1 text-[11px] font-medium">${l.label}</a>`).join("")}</div>` : ""}
+            ${langs.length ? `<div class="mt-3 flex flex-wrap gap-1.5">${langs.map(l => `<a href="${l.href}" class="lang-chip rounded-md px-2 py-1 text-[11px] font-medium">${l.label}</a>`).join("")}</div>` : ""}
             <div class="mt-4 flex flex-wrap gap-2">
-              <a href="${item.href}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold">
+              <a href="${item.href}" ${item.href.startsWith("http") ? 'target="_blank" rel="noopener"' : ""} class="btn-primary inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold">
                 ${item.action || "Open"}
                 <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
               </a>

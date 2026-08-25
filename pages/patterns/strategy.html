@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strategy · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Strategy</p>
+    
+    <span class="badge">Behavioral Pattern</span>
+    <h1>Strategy</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/strategy/DistanceBasedShipping.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DistanceBasedShipping</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">ratePerKm</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">DistanceBasedShipping</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">ratePerKm</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">ratePerKm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ratePerKm</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Distance-Based strategy for zone: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="na">getDestinationZone</span><span class="p">());</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="na">getDestinationZone</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"ZoneA"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ratePerKm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s">"ZoneB"</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ratePerKm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">7.0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">default</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ratePerKm</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span>
+<span class="w">        </span><span class="p">};</span><span class="w">        </span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/ECommerceAppV1.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ECommerceAppV1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ShippingCostCalculatorNaive</span><span class="w"> </span><span class="n">calculator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShippingCostCalculatorNaive</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Order</span><span class="w"> </span><span class="n">order1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Order</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"--- Order 1 ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">calculator</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">,</span><span class="w"> </span><span class="s">"FLAT_RATE"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">calculator</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">,</span><span class="w"> </span><span class="s">"WEIGHT_BASED"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">calculator</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">,</span><span class="w"> </span><span class="s">"DISTANCE_BASED"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">calculator</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">,</span><span class="w"> </span><span class="s">"THIRD_PARTY_API"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// What if we want to try a new "PremiumZone" strategy?</span>
+<span class="w">        </span><span class="c1">// We have to modify the ShippingCostCalculatorNaive class!</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/ECommerceAppV2.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ECommerceAppV2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Order</span><span class="w"> </span><span class="n">order1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Order</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Create different strategy instances</span>
+<span class="w">        </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">flatRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FlatRateShipping</span><span class="p">(</span><span class="mf">10.0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">weightBased</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">WeightBasedShipping</span><span class="p">(</span><span class="mf">2.5</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">distanceBased</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DistanceBasedShipping</span><span class="p">(</span><span class="mf">5.0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">thirdParty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ThirdPartyApiShipping</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.02</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Create context with an initial strategy</span>
+<span class="w">        </span><span class="n">ShippingCostService</span><span class="w"> </span><span class="n">shippingService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="p">(</span><span class="n">flatRate</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"--- Order 1: Using Flat Rate (initial) ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Order 1: Changing to Weight-Based ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">setStrategy</span><span class="p">(</span><span class="n">weightBased</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Order 1: Changing to Distance-Based ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">setStrategy</span><span class="p">(</span><span class="n">distanceBased</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Order 1: Changing to Third-Party API ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">setStrategy</span><span class="p">(</span><span class="n">thirdParty</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shippingService</span><span class="p">.</span><span class="na">calculateShippingCost</span><span class="p">(</span><span class="n">order1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Adding a NEW strategy is easy:</span>
+<span class="w">        </span><span class="c1">// 1. Create a new class implementing ShippingStrategy (e.g., FreeShippingStrategy)</span>
+<span class="w">        </span><span class="c1">// 2. Client can then instantiate and use it:</span>
+<span class="w">        </span><span class="c1">//    ShippingStrategy freeShipping = new FreeShippingStrategy();</span>
+<span class="w">        </span><span class="c1">//    shippingService.setStrategy(freeShipping);</span>
+<span class="w">        </span><span class="c1">//    shippingService.calculateShippingCost(primeMemberOrder);</span>
+<span class="w">        </span><span class="c1">// No modification to ShippingCostService is needed!</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/FlatRateShipping.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FlatRateShipping</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">rate</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">FlatRateShipping</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">rate</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rate</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Flat Rate strategy ($"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">rate</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">")"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">rate</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/Order.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Order</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">getTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span><span class="w"> </span><span class="cm">/* kg */</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getDestinationZone</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s">"ZoneA"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">getOrderValue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mf">150.0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// ... other order details    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/ShippingCostCalculatorNaive.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ShippingCostCalculatorNaive</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateShippingCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">strategyType</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"FLAT_RATE"</span><span class="p">.</span><span class="na">equalsIgnoreCase</span><span class="p">(</span><span class="n">strategyType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Flat Rate strategy."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span><span class="w"> </span><span class="c1">// Fixed $10</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"WEIGHT_BASED"</span><span class="p">.</span><span class="na">equalsIgnoreCase</span><span class="p">(</span><span class="n">strategyType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Weight-Based strategy."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="na">getTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2.5</span><span class="p">;</span><span class="w"> </span><span class="c1">// $2.5 per kg</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"DISTANCE_BASED"</span><span class="p">.</span><span class="na">equalsIgnoreCase</span><span class="p">(</span><span class="n">strategyType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Distance-Based strategy."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"ZoneA"</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="na">getDestinationZone</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"ZoneB"</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="na">getDestinationZone</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">12.0</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">20.0</span><span class="p">;</span><span class="w"> </span><span class="c1">// Default for other zones</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"THIRD_PARTY_API"</span><span class="p">.</span><span class="na">equalsIgnoreCase</span><span class="p">(</span><span class="n">strategyType</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Third-Party API strategy."</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// Simulate API call</span>
+<span class="w">            </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">7.5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="na">getOrderValue</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.02</span><span class="p">);</span><span class="w"> </span><span class="c1">// Example: base fee + % of order value</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"Unknown shipping strategy type: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">strategyType</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculated Shipping Cost: $"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cost</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">cost</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/ShippingCostService.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ShippingCostService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">strategy</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Constructor to set initial strategy</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">ShippingCostService</span><span class="p">(</span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">strategy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strategy</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Method to change strategy at runtime</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setStrategy</span><span class="p">(</span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="n">strategy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ShippingCostService: Strategy changed to "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">strategy</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getSimpleName</span><span class="p">());</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strategy</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateShippingCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strategy</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IllegalStateException</span><span class="p">(</span><span class="s">"Shipping strategy not set."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strategy</span><span class="p">.</span><span class="na">calculateCost</span><span class="p">(</span><span class="n">order</span><span class="p">);</span><span class="w"> </span><span class="c1">// Delegate to the strategy</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"ShippingCostService: Final Calculated Shipping Cost: $"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cost</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                           </span><span class="s">" (using "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">strategy</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getSimpleName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">")"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">cost</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/ShippingStrategy.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/ThirdPartyApiShipping.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ThirdPartyApiShipping</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">baseFee</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">percentageFee</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">ThirdPartyApiShipping</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">baseFee</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">percentageFee</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">baseFee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">baseFee</span><span class="p">;</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">percentageFee</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">percentageFee</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Third-Party API strategy."</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Simulate API call</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">baseFee</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="na">getOrderValue</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">percentageFee</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/strategy/WeightBasedShipping.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">WeightBasedShipping</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">ratePerKg</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">WeightBasedShipping</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">ratePerKg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">ratePerKg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ratePerKg</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Calculating with Weight-Based strategy ($"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ratePerKg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"/kg)"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="na">getTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ratePerKg</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/strategy/ecommerce_app_demo.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.order</span><span class="w"> </span><span class="kn">import</span> <span class="n">Order</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_cost_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingCostService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.flat_rate_shipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">FlatRateShipping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.weight_based_shipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeightBasedShipping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.distance_based_shipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceBasedShipping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.third_party_api_shipping</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThirdPartyApiShipping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_cost_calculator_naive</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingCostCalculatorNaive</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ecommerce_app_v2_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate Strategy pattern with e-commerce shipping"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Strategy Pattern Demo - E-commerce App V2 ==="</span><span class="p">)</span>
+    
+    <span class="c1"># Create order</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">150.0</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">99.99</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Order details: </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="c1"># Create service with initial strategy</span>
+    <span class="n">shipping_service</span> <span class="o">=</span> <span class="n">ShippingCostService</span><span class="p">(</span><span class="n">FlatRateShipping</span><span class="p">())</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Flat Rate Shipping ---"</span><span class="p">)</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">shipping_service</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shipping cost: $</span><span class="si">{</span><span class="n">cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Weight Based Shipping ---"</span><span class="p">)</span>
+    <span class="n">shipping_service</span><span class="o">.</span><span class="n">set_strategy</span><span class="p">(</span><span class="n">WeightBasedShipping</span><span class="p">())</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">shipping_service</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shipping cost: $</span><span class="si">{</span><span class="n">cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Distance Based Shipping ---"</span><span class="p">)</span>
+    <span class="n">shipping_service</span><span class="o">.</span><span class="n">set_strategy</span><span class="p">(</span><span class="n">DistanceBasedShipping</span><span class="p">())</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">shipping_service</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shipping cost: $</span><span class="si">{</span><span class="n">cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Third Party API Shipping ---"</span><span class="p">)</span>
+    <span class="n">shipping_service</span><span class="o">.</span><span class="n">set_strategy</span><span class="p">(</span><span class="n">ThirdPartyApiShipping</span><span class="p">())</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">shipping_service</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shipping cost: $</span><span class="si">{</span><span class="n">cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ecommerce_app_v1_demo</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demonstrate naive implementation (anti-pattern)"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== Naive Implementation Demo - E-commerce App V1 ==="</span><span class="p">)</span>
+    
+    <span class="n">order</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">150.0</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">99.99</span><span class="p">)</span>
+    <span class="n">calculator</span> <span class="o">=</span> <span class="n">ShippingCostCalculatorNaive</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Order details: </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="n">cost1</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="s2">"FLAT_RATE"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Flat rate cost: $</span><span class="si">{</span><span class="n">cost1</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="n">cost2</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="s2">"WEIGHT_BASED"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Weight-based cost: $</span><span class="si">{</span><span class="n">cost2</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="n">cost3</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">calculate_shipping_cost</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="s2">"DISTANCE_BASED"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Distance-based cost: $</span><span class="si">{</span><span class="n">cost3</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">ecommerce_app_v2_demo</span><span class="p">()</span>
+    <span class="n">ecommerce_app_v1_demo</span><span class="p">()</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/__init__.py</summary><div class="highlight"><pre><span></span><span class="c1"># Strategy Pattern Package</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/distance_based_shipping.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_strategy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingStrategy</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DistanceBasedShipping</span><span class="p">(</span><span class="n">ShippingStrategy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Strategy - distance-based shipping"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate_per_km</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rate_per_km</span> <span class="o">=</span> <span class="n">rate_per_km</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"DistanceBasedShipping: Calculating cost for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">order</span><span class="o">.</span><span class="n">distance</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rate_per_km</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/flat_rate_shipping.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_strategy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingStrategy</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FlatRateShipping</span><span class="p">(</span><span class="n">ShippingStrategy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Strategy - flat rate shipping"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rate</span> <span class="o">=</span> <span class="n">rate</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"FlatRateShipping: Calculating cost for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rate</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/order.py</summary><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Order</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Order data class containing order details"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weight</span> <span class="o">=</span> <span class="n">weight</span>  <span class="c1"># in kg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span> <span class="o">=</span> <span class="n">distance</span>  <span class="c1"># in km</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>  <span class="c1"># in currency units</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weight</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Order(weight=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_weight</span><span class="si">}</span><span class="s2">kg, distance=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_distance</span><span class="si">}</span><span class="s2">km, value=$</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="si">}</span><span class="s2">)"</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/shipping_cost_calculator_naive.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.order</span><span class="w"> </span><span class="kn">import</span> <span class="n">Order</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShippingCostCalculatorNaive</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Naive implementation without strategy pattern (anti-pattern)"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_shipping_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="n">Order</span><span class="p">,</span> <span class="n">shipping_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">shipping_type</span> <span class="o">==</span> <span class="s2">"FLAT_RATE"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Calculating flat rate shipping for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mf">10.0</span>
+        <span class="k">elif</span> <span class="n">shipping_type</span> <span class="o">==</span> <span class="s2">"WEIGHT_BASED"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Calculating weight-based shipping for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">order</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="mf">2.0</span>
+        <span class="k">elif</span> <span class="n">shipping_type</span> <span class="o">==</span> <span class="s2">"DISTANCE_BASED"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Calculating distance-based shipping for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">order</span><span class="o">.</span><span class="n">distance</span> <span class="o">*</span> <span class="mf">0.5</span>
+        <span class="k">elif</span> <span class="n">shipping_type</span> <span class="o">==</span> <span class="s2">"THIRD_PARTY"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Calculating third-party shipping for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mf">15.0</span>  <span class="c1"># Simplified</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown shipping type: </span><span class="si">{</span><span class="n">shipping_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/shipping_cost_service.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_strategy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingStrategy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.order</span><span class="w"> </span><span class="kn">import</span> <span class="n">Order</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShippingCostService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Context class that uses a shipping strategy"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span> <span class="n">ShippingStrategy</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span> <span class="n">ShippingStrategy</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Runtime strategy switching"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_shipping_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="n">Order</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Delegate to the current strategy"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strategy</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/shipping_strategy.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShippingStrategy</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Strategy interface for shipping cost calculation"""</span>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/third_party_api_shipping.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_strategy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingStrategy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ThirdPartyApiShipping</span><span class="p">(</span><span class="n">ShippingStrategy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Strategy - third-party API shipping"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ThirdPartyApiShipping: Calling external API for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="c1"># Simulate API call with random cost</span>
+        <span class="n">api_cost</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ThirdPartyApiShipping: API returned cost: $</span><span class="si">{</span><span class="n">api_cost</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">api_cost</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/strategy/weight_based_shipping.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.shipping_strategy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShippingStrategy</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">WeightBasedShipping</span><span class="p">(</span><span class="n">ShippingStrategy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete Strategy - weight-based shipping"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate_per_kg</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rate_per_kg</span> <span class="o">=</span> <span class="n">rate_per_kg</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"WeightBasedShipping: Calculating cost for </span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">order</span><span class="o">.</span><span class="n">weight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rate_per_kg</span>
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/strategy/distance_based_shipping.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"distance_based_shipping.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">DistanceBasedShipping::calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Calculating distance-based shipping cost..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Zone-based rates</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">zoneRates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span><span class="s">"ZoneA"</span><span class="p">,</span><span class="w"> </span><span class="mf">5.0</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s">"ZoneB"</span><span class="p">,</span><span class="w"> </span><span class="mf">10.0</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s">"ZoneC"</span><span class="p">,</span><span class="w"> </span><span class="mf">15.0</span><span class="p">}</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zoneRates</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">order</span><span class="p">.</span><span class="n">getDestinationZone</span><span class="p">());</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">zoneRates</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mf">20.0</span><span class="p">;</span><span class="w"> </span><span class="c1">// Default rate for unknown zones</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/distance_based_shipping.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"shipping_strategy.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DistanceBasedShipping</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/ecommerce_app.cpp</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/flat_rate_shipping.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"flat_rate_shipping.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">FlatRateShipping::calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Calculating flat rate shipping cost..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span><span class="w"> </span><span class="c1">// Fixed rate of $10</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/flat_rate_shipping.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"shipping_strategy.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FlatRateShipping</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/order.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Order</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">getTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// kg</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">getDestinationZone</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s">"ZoneA"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">getOrderValue</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mf">150.0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// ... other order details</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/shipping_cost_service.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"shipping_cost_service.h"</span>
+
+<span class="n">ShippingCostService</span><span class="o">::</span><span class="n">ShippingCostService</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ShippingStrategy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">strategy</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">strategy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">strategy</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="o">::</span><span class="n">setStrategy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ShippingStrategy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newStrategy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">newStrategy</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="o">::</span><span class="n">calculateShippingCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">strategy</span><span class="o">-&gt;</span><span class="n">calculateCost</span><span class="p">(</span><span class="n">order</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/shipping_cost_service.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"shipping_strategy.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShippingCostService</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ShippingStrategy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">strategy</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setStrategy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ShippingStrategy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">strategy</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateShippingCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ShippingStrategy</span><span class="o">&gt;</span><span class="w"> </span><span class="n">strategy</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/shipping_strategy.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"order.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">ShippingStrategy</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/third_party_api_shipping.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"third_party_api_shipping.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">ThirdPartyApiShipping::calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Calculating shipping cost using third-party API..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Simulate API call</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">getOrderValue</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"> </span><span class="c1">// 10% of order value</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/third_party_api_shipping.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"shipping_strategy.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ThirdPartyApiShipping</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/weight_based_shipping.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"weight_based_shipping.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">double</span><span class="w"> </span><span class="nf">WeightBasedShipping::calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Calculating weight-based shipping cost..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">getTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span><span class="w"> </span><span class="c1">// $2 per kg</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/strategy/weight_based_shipping.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"shipping_strategy.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">WeightBasedShipping</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ShippingStrategy</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">calculateCost</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Order</span><span class="o">&amp;</span><span class="w"> </span><span class="n">order</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/strategy/DistanceBasedShipping.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DistanceBasedShipping</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IShippingStrategy</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">BASE_RATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">ZONE_A_MULTIPLIER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">ZONE_B_MULTIPLIER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">ZONE_C_MULTIPLIER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">CalculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">multiplier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">GetDestinationZone</span><span class="p">()</span><span class="w"> </span><span class="k">switch</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="s">"ZoneA"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">ZONE_A_MULTIPLIER</span><span class="p">,</span>
+<span class="w">                </span><span class="s">"ZoneB"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">ZONE_B_MULTIPLIER</span><span class="p">,</span>
+<span class="w">                </span><span class="s">"ZoneC"</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">ZONE_C_MULTIPLIER</span><span class="p">,</span>
+<span class="w">                </span><span class="n">_</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">ZONE_A_MULTIPLIER</span>
+<span class="w">            </span><span class="p">};</span>
+
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">BASE_RATE</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">multiplier</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/FlatRateShipping.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FlatRateShipping</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IShippingStrategy</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">FLAT_RATE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">CalculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">FLAT_RATE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/IShippingStrategy.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IShippingStrategy</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="nf">CalculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/Order.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Order</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">GetTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span><span class="w"> </span><span class="c1">// kg</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetDestinationZone</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">"ZoneA"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">GetOrderValue</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="mf">150.0</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// ... other order details</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/Program.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Order</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Using different shipping strategies</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">flatRateService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">FlatRateShipping</span><span class="p">());</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">weightBasedService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">WeightBasedShipping</span><span class="p">());</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">distanceBasedService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">DistanceBasedShipping</span><span class="p">());</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">thirdPartyService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ShippingCostService</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ThirdPartyApiShipping</span><span class="p">());</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Shipping costs using different strategies:"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Flat Rate Shipping: ${flatRateService.CalculateShippingCost(order):F2}"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Weight Based Shipping: ${weightBasedService.CalculateShippingCost(order):F2}"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Distance Based Shipping: ${distanceBasedService.CalculateShippingCost(order):F2}"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Third Party API Shipping: ${thirdPartyService.CalculateShippingCost(order):F2}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/ShippingCostService.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ShippingCostService</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IShippingStrategy</span><span class="w"> </span><span class="n">shippingStrategy</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">ShippingCostService</span><span class="p">(</span><span class="n">IShippingStrategy</span><span class="w"> </span><span class="n">shippingStrategy</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">shippingStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shippingStrategy</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">CalculateShippingCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">shippingStrategy</span><span class="p">.</span><span class="n">CalculateCost</span><span class="p">(</span><span class="n">order</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/ThirdPartyApiShipping.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ThirdPartyApiShipping</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IShippingStrategy</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">CalculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Simulate API call to third-party shipping service</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">baseRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">15.0</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">weightFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">GetTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1.5</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">distanceFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">GetDestinationZone</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"ZoneC"</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mf">2.0</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">baseRate</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">weightFactor</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">distanceFactor</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/strategy/WeightBasedShipping.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Strategy</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">WeightBasedShipping</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IShippingStrategy</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">RATE_PER_KG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">CalculateCost</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">GetTotalWeight</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">RATE_PER_KG</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/strategy/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">strategy</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">cart</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewShoppingCart</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)</span>
+
+<span class="w">	</span><span class="c1">// Use credit card payment</span>
+<span class="w">	</span><span class="nx">creditCard</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewCreditCardPayment</span><span class="p">(</span><span class="s">"1234-5678-9012-3456"</span><span class="p">,</span><span class="w"> </span><span class="s">"John Doe"</span><span class="p">,</span><span class="w"> </span><span class="s">"123"</span><span class="p">,</span><span class="w"> </span><span class="s">"12/25"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">cart</span><span class="p">.</span><span class="nx">SetPaymentStrategy</span><span class="p">(</span><span class="nx">creditCard</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">cart</span><span class="p">.</span><span class="nx">Checkout</span><span class="p">()</span>
+
+<span class="w">	</span><span class="c1">// Use PayPal payment</span>
+<span class="w">	</span><span class="nx">paypal</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewPayPalPayment</span><span class="p">(</span><span class="s">"john@example.com"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">cart</span><span class="p">.</span><span class="nx">SetPaymentStrategy</span><span class="p">(</span><span class="nx">paypal</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">cart</span><span class="p">.</span><span class="nx">Checkout</span><span class="p">()</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/strategy/credit_card_payment.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">strategy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// CreditCardPayment represents the credit card payment strategy</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">CreditCardPayment</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">cardNumber</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">name</span><span class="w">       </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">cvv</span><span class="w">        </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">dateOfExp</span><span class="w">  </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// NewCreditCardPayment creates a new credit card payment strategy</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewCreditCardPayment</span><span class="p">(</span><span class="nx">cardNumber</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">cvv</span><span class="p">,</span><span class="w"> </span><span class="nx">dateOfExp</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">CreditCardPayment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">CreditCardPayment</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">cardNumber</span><span class="p">:</span><span class="w"> </span><span class="nx">cardNumber</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">name</span><span class="p">:</span><span class="w">       </span><span class="nx">name</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">cvv</span><span class="p">:</span><span class="w">        </span><span class="nx">cvv</span><span class="p">,</span>
+<span class="w">		</span><span class="nx">dateOfExp</span><span class="p">:</span><span class="w">  </span><span class="nx">dateOfExp</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Pay implements the payment strategy for credit card</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">CreditCardPayment</span><span class="p">)</span><span class="w"> </span><span class="nx">Pay</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">"%.2f paid with credit/debit card"</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/strategy/payment_strategy.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">strategy</span>
+
+<span class="c1">// PaymentStrategy defines the interface for payment strategies</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">PaymentStrategy</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">Pay</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/strategy/paypal_payment.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">strategy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// PayPalPayment represents the PayPal payment strategy</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">PayPalPayment</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">email</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// NewPayPalPayment creates a new PayPal payment strategy</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewPayPalPayment</span><span class="p">(</span><span class="nx">email</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">PayPalPayment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">PayPalPayment</span><span class="p">{</span><span class="nx">email</span><span class="p">:</span><span class="w"> </span><span class="nx">email</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Pay implements the payment strategy for PayPal</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">PayPalPayment</span><span class="p">)</span><span class="w"> </span><span class="nx">Pay</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">"%.2f paid using PayPal"</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/strategy/shopping_cart.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">strategy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// ShoppingCart is the context that uses a payment strategy</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">ShoppingCart</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">amount</span><span class="w">   </span><span class="kt">float64</span>
+<span class="w">	</span><span class="nx">strategy</span><span class="w"> </span><span class="nx">PaymentStrategy</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewShoppingCart</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">ShoppingCart</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">ShoppingCart</span><span class="p">{</span><span class="nx">amount</span><span class="p">:</span><span class="w"> </span><span class="nx">amount</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">ShoppingCart</span><span class="p">)</span><span class="w"> </span><span class="nx">SetPaymentStrategy</span><span class="p">(</span><span class="nx">strategy</span><span class="w"> </span><span class="nx">PaymentStrategy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">c</span><span class="p">.</span><span class="nx">strategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">strategy</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">ShoppingCart</span><span class="p">)</span><span class="w"> </span><span class="nx">Checkout</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">strategy</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"No payment strategy selected."</span><span class="p">)</span>
+<span class="w">		</span><span class="k">return</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">	</span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">strategy</span><span class="p">.</span><span class="nx">Pay</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">amount</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Behavioral Pattern/Strategy Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">ShoppinCart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./shoppingCart_Context"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Cash</span><span class="p">,</span><span class="w"> </span><span class="nx">UPI</span><span class="p">,</span><span class="w"> </span><span class="nx">Card</span><span class="p">,</span><span class="w"> </span><span class="nx">InternetBanking</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./paymentStrategy"</span><span class="p">);</span>
+
+<span class="c1">// Creating a shopping cart Instance</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">shoppingCart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ShoppinCart</span><span class="p">();</span>
+
+<span class="c1">// Adding items to the shopping cart</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">addItem</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"Laptop"</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">addItem</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"Mobile"</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">addItem</span><span class="p">({</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">"TV"</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="w"> </span><span class="p">});</span>
+
+<span class="c1">// View cart after adding items</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">viewCart</span><span class="p">();</span>
+
+<span class="c1">// Checkout in method - 1</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">setPaymentMethod</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">Card</span><span class="p">(</span><span class="mf">123456789</span><span class="p">,</span><span class="w"> </span><span class="mf">123</span><span class="p">));</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">checkout</span><span class="p">();</span>
+
+<span class="c1">// Checkout in method - 2</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">setPaymentMethod</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">Cash</span><span class="p">(</span><span class="mf">123</span><span class="p">));</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">checkout</span><span class="p">();</span>
+
+<span class="c1">// Checkout in method - 3</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">setPaymentMethod</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">UPI</span><span class="p">(</span><span class="mf">123456789</span><span class="p">,</span><span class="w"> </span><span class="mf">123</span><span class="p">));</span>
+<span class="nx">shoppingCart</span><span class="p">.</span><span class="nx">checkout</span><span class="p">();</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Strategy Design Pattern/paymentStrategy.js</summary><div class="highlight"><pre><span></span><span class="c1">// Strategy class</span>
+
+<span class="c1">// Abstract class</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">PaymentGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">pay</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"Method 'pay()' must be implemented!"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete class for paymentGateway</span>
+
+<span class="c1">// Cash payment method</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Cash</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">PaymentGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">pay</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Payment of </span><span class="si">${</span><span class="nx">amount</span><span class="si">}</span><span class="sb"> done using Cash`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// UPI payment method</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">UPI</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">PaymentGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">UPI_ID</span><span class="p">,</span><span class="w"> </span><span class="nx">UPI_PIN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">UPI_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">UPI_ID</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">UPI_PIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">UPI_PIN</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">pay</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">      </span><span class="sb">`Payment of </span><span class="si">${</span><span class="nx">amount</span><span class="si">}</span><span class="sb"> done using UPI with ID </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">UPI_ID</span><span class="si">}</span><span class="sb"> and PIN </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">UPI_PIN</span><span class="si">}</span><span class="sb">`</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Card payment method</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Card</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">PaymentGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">cardNumber</span><span class="p">,</span><span class="w"> </span><span class="nx">CVV</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">cardNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">cardNumber</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">CVV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CVV</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">pay</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">      </span><span class="sb">`Payment of </span><span class="si">${</span><span class="nx">amount</span><span class="si">}</span><span class="sb"> done using Card Number </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">cardNumber</span><span class="si">}</span><span class="sb"> and CVV </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">CVV</span><span class="si">}</span><span class="sb">`</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Internet Banking payment method</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">InternetBanking</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">PaymentGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">accountNumber</span><span class="p">,</span><span class="w"> </span><span class="nx">IFSC</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">accountNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">accountNumber</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">IFSC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">IFSC</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">pay</span><span class="p">(</span><span class="nx">amount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+<span class="w">      </span><span class="sb">`Payment of </span><span class="si">${</span><span class="nx">amount</span><span class="si">}</span><span class="sb"> done using Internet Banking with Account Number </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">accountNumber</span><span class="si">}</span><span class="sb"> and IFSC </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">IFSC</span><span class="si">}</span><span class="sb">`</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Cash</span><span class="p">,</span><span class="w"> </span><span class="nx">UPI</span><span class="p">,</span><span class="w"> </span><span class="nx">Card</span><span class="p">,</span><span class="w"> </span><span class="nx">InternetBanking</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Strategy Design Pattern/shoppingCart_Context.js</summary><div class="highlight"><pre><span></span><span class="c1">// Context file as shoppingCart class</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">ShoppinCart</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">paymentMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Adding items to the shopping cart</span>
+<span class="w">  </span><span class="nx">addItem</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// View cart after adding items</span>
+<span class="w">  </span><span class="nx">viewCart</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Your cart contains: "</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">item</span><span class="p">,</span><span class="w"> </span><span class="nx">index</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="si">}</span><span class="sb">. </span><span class="si">${</span><span class="nx">item</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb"> - $</span><span class="si">${</span><span class="nx">item</span><span class="p">.</span><span class="nx">price</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Selecting the payment method</span>
+<span class="w">  </span><span class="nx">setPaymentMethod</span><span class="p">(</span><span class="nx">paymentMethod</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">paymentMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">paymentMethod</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Checkout</span>
+<span class="w">  </span><span class="nx">checkout</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Adding reduce method to calculate the total bill</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">Total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">total</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">item</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Checks if paymentMethod is choosen to proceed for checkout</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">paymentMethod</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Total Bill: $</span><span class="si">${</span><span class="nx">Total</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">paymentMethod</span><span class="p">.</span><span class="nx">pay</span><span class="p">(</span><span class="nx">Total</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Please confirm your payment method"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ShoppinCart</span><span class="p">;</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interfaces · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Interfaces</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Interfaces</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Interfaces</h1>
+<h2>Introduction</h2>
+<p>In Object-Oriented Programming (OOP), an <strong>interface</strong> is a crucial concept that defines a contract for classes to follow. It allows multiple classes to share a common structure while enforcing certain behaviors. Interfaces are widely used in Java and other OOP languages to achieve <strong>abstraction, polymorphism, and loose coupling</strong>.</p>
+<h2>What is an Interface?</h2>
+<p>An <strong>interface</strong> in Java is a collection of abstract methods (methods without implementation) that a class can implement. It defines a contract that the implementing classes must adhere to.</p>
+<h3><strong>Key Characteristics of Interfaces</strong></h3>
+<ul>
+<li>Defines a <strong>contract</strong> that implementing classes must follow.</li>
+<li>Cannot have instance variables (only <code>public static final</code> constants).</li>
+<li>All methods are <strong>implicitly public and abstract</strong> (unless they have a default or static implementation).</li>
+<li>Supports <strong>multiple inheritance</strong>, unlike classes.</li>
+<li>Improves <strong>code flexibility and testability</strong>.</li>
+</ul>
+<hr />
+<h2><strong>Defining and Implementing an Interface in Java</strong></h2>
+<h3><strong>Step 1: Define an Interface</strong></h3>
+<p>To define an interface, use the <code>interface</code> keyword.</p>
+<pre><code class="language-java">// Defining an interface
+public interface Vehicle {
+    void start(); // Abstract method (no implementation)
+    void stop();  // Abstract method (no implementation)
+}
+</code></pre>
+<h3><strong>Step 2: Implement the Interface</strong></h3>
+<p>A class implements an interface using the <code>implements</code> keyword.</p>
+<pre><code class="language-java">// Implementing the Vehicle interface in a Car class
+public class Car implements Vehicle {
+    @Override
+    public void start() {
+        System.out.println(&quot;Car is starting...&quot;);
+    }
+
+    @Override
+    public void stop() {
+        System.out.println(&quot;Car is stopping...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Step 3: Using the Implemented Class</strong></h3>
+<p>Now, let's create objects and call the methods.</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Vehicle myCar = new Car(); // Polymorphism: Interface reference
+        myCar.start();
+        myCar.stop();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Car is stopping...
+</code></pre>
+<hr />
+<h2><strong>Multiple Inheritance with Interfaces</strong></h2>
+<p>Unlike C++, Java <strong>does not support multiple inheritance</strong> with classes, but it does support <strong>multiple inheritance</strong> with interfaces.</p>
+<pre><code class="language-java">// First interface
+interface Flyable {
+    void fly();
+}
+
+// Second interface
+interface Drivable {
+    void drive();
+}
+
+// Implementing multiple interfaces
+public class FlyingCar implements Flyable, Drivable {
+    @Override
+    public void fly() {
+        System.out.println(&quot;FlyingCar is flying...&quot;);
+    }
+
+    @Override
+    public void drive() {
+        System.out.println(&quot;FlyingCar is driving...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        FlyingCar myVehicle = new FlyingCar();
+        myVehicle.fly();
+        myVehicle.drive();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>FlyingCar is flying...
+FlyingCar is driving...
+</code></pre>
+<hr />
+<h2><strong>Default and Static Methods in Interfaces</strong></h2>
+<h3><strong>Default Methods</strong></h3>
+<p>Java 8 introduced <strong>default methods</strong> in interfaces, allowing methods with a body.</p>
+<pre><code class="language-java">interface Animal {
+    void sound();
+
+    // Default method with implementation
+    default void sleep() {
+        System.out.println(&quot;Sleeping...&quot;);
+    }
+}
+
+class Dog implements Animal {
+    @Override
+    public void sound() {
+        System.out.println(&quot;Dog barks&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Dog myDog = new Dog();
+        myDog.sound();
+        myDog.sleep(); // Calling default method
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Sleeping...
+</code></pre>
+<h3><strong>Static Methods</strong></h3>
+<p>Interfaces can also have <strong>static methods</strong>.</p>
+<pre><code class="language-java">interface MathOperations {
+    static int add(int a, int b) {
+        return a + b;
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        int result = MathOperations.add(5, 10);
+        System.out.println(&quot;Sum: &quot; + result);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Sum: 15
+</code></pre>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<pre><code class="language-java">interface Payment {
+    void pay(double amount);
+}
+
+class CreditCardPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        System.out.println(&quot;Paid &quot; + amount + &quot; using Credit Card&quot;);
+    }
+}
+
+class PayPalPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        System.out.println(&quot;Paid &quot; + amount + &quot; using PayPal&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Payment payment1 = new CreditCardPayment();
+        payment1.pay(100.50);
+
+        Payment payment2 = new PayPalPayment();
+        payment2.pay(200.75);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Interfaces in C++</h1>
+<h2>Introduction</h2>
+<p>In Object-Oriented Programming (OOP), an <strong>interface</strong> is a crucial concept that defines a contract for classes to follow. It allows multiple classes to share a common structure while enforcing certain behaviors. While C++ does not have explicit support for interfaces like Java, it achieves the same functionality using <strong>pure virtual functions</strong> in abstract classes.</p>
+<h2>What is an Interface?</h2>
+<p>An <strong>interface</strong> is a collection of method definitions that a class must implement. It defines a contract that implementing classes must adhere to.</p>
+<h3><strong>Key Characteristics of Interfaces in C++</strong></h3>
+<ul>
+<li>Uses <strong>abstract classes with pure virtual functions</strong> to define interfaces.</li>
+<li>Defines methods without implementation that must be overridden.</li>
+<li>Supports <strong>multiple inheritance</strong>, unlike normal classes.</li>
+<li>Improves <strong>code flexibility and maintainability</strong>.</li>
+</ul>
+<hr />
+<h2><strong>Defining and Implementing an Interface in C++</strong></h2>
+<h3><strong>Step 1: Define an Interface using an Abstract Class</strong></h3>
+<p>To define an interface, we use a class with at least one <strong>pure virtual function</strong>.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// Defining an interface
+class Vehicle {
+public:
+    virtual void start() = 0; // Pure virtual function
+    virtual void stop() = 0;  // Pure virtual function
+};
+</code></pre>
+<h3><strong>Step 2: Implement the Interface</strong></h3>
+<p>A class implements an interface by inheriting from it and providing concrete implementations of the pure virtual functions.</p>
+<pre><code class="language-cpp">// Implementing the Vehicle interface in a Car class
+class Car : public Vehicle {
+public:
+    void start() override {
+        cout &lt;&lt; &quot;Car is starting...&quot; &lt;&lt; endl;
+    }
+
+    void stop() override {
+        cout &lt;&lt; &quot;Car is stopping...&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Step 3: Using the Implemented Class</strong></h3>
+<p>Now, let's create objects and call the methods.</p>
+<pre><code class="language-cpp">int main() {
+    Vehicle* myCar = new Car(); // Polymorphism: Interface reference
+    myCar-&gt;start();
+    myCar-&gt;stop();
+
+    delete myCar; // Clean up memory
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Car is stopping...
+</code></pre>
+<hr />
+<h2><strong>Multiple Inheritance with Interfaces</strong></h2>
+<p>Unlike normal classes, C++ <strong>supports multiple inheritance</strong> with interfaces.</p>
+<pre><code class="language-cpp">// First interface
+class Flyable {
+public:
+    virtual void fly() = 0;
+};
+
+// Second interface
+class Drivable {
+public:
+    virtual void drive() = 0;
+};
+
+// Implementing multiple interfaces
+class FlyingCar : public Flyable, public Drivable {
+public:
+    void fly() override {
+        cout &lt;&lt; &quot;FlyingCar is flying...&quot; &lt;&lt; endl;
+    }
+
+    void drive() override {
+        cout &lt;&lt; &quot;FlyingCar is driving...&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-cpp">int main() {
+    FlyingCar myVehicle;
+    myVehicle.fly();
+    myVehicle.drive();
+
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>FlyingCar is flying...
+FlyingCar is driving...
+</code></pre>
+<hr />
+<h2><strong>Providing Default Implementations in Interfaces</strong></h2>
+<p>Unlike Java, C++ does not have <strong>default methods</strong> in interfaces, but we can provide default implementations in base classes.</p>
+<pre><code class="language-cpp">class Animal {
+public:
+    virtual void sound() = 0;
+    void sleep() { // Default method
+        cout &lt;&lt; &quot;Sleeping...&quot; &lt;&lt; endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void sound() override {
+        cout &lt;&lt; &quot;Dog barks&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-cpp">int main() {
+    Dog myDog;
+    myDog.sound();
+    myDog.sleep();
+
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Sleeping...
+</code></pre>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<pre><code class="language-cpp">class Payment {
+public:
+    virtual void pay(double amount) = 0;
+};
+
+class CreditCardPayment : public Payment {
+public:
+    void pay(double amount) override {
+        cout &lt;&lt; &quot;Paid &quot; &lt;&lt; amount &lt;&lt; &quot; using Credit Card&quot; &lt;&lt; endl;
+    }
+};
+
+class PayPalPayment : public Payment {
+public:
+    void pay(double amount) override {
+        cout &lt;&lt; &quot;Paid &quot; &lt;&lt; amount &lt;&lt; &quot; using PayPal&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-cpp">int main() {
+    Payment* payment1 = new CreditCardPayment();
+    payment1-&gt;pay(100.50);
+
+    Payment* payment2 = new PayPalPayment();
+    payment2-&gt;pay(200.75);
+
+    delete payment1;
+    delete payment2;
+
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Interfaces in Python</h1>
+<h2>Introduction</h2>
+<p>In Object-Oriented Programming (OOP), an <strong>interface</strong> is a crucial concept that defines a contract for classes to follow. It allows multiple classes to share a common structure while enforcing certain behaviors. While Python does not have built-in support for interfaces like Java, it achieves the same functionality using <strong>abstract base classes (ABCs)</strong> from the <code>abc</code> module.</p>
+<h2>What is an Interface?</h2>
+<p>An <strong>interface</strong> is a collection of method definitions that a class must implement. It defines a contract that implementing classes must adhere to.</p>
+<h3><strong>Key Characteristics of Interfaces in Python</strong></h3>
+<ul>
+<li>Uses the <code>abc</code> module to create abstract base classes (ABCs).</li>
+<li>Defines methods without implementation that must be overridden.</li>
+<li>Supports <strong>multiple inheritance</strong>, like normal classes.</li>
+<li>Improves <strong>code flexibility and maintainability</strong>.</li>
+</ul>
+<hr />
+<h2><strong>Defining and Implementing an Interface in Python</strong></h2>
+<h3><strong>Step 1: Define an Interface using <code>ABC</code></strong></h3>
+<p>To define an interface, we use the <code>ABC</code> class from the <code>abc</code> module.</p>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+# Defining an interface
+class Vehicle(ABC):
+    @abstractmethod
+    def start(self):
+        pass  # Abstract method (no implementation)
+
+    @abstractmethod
+    def stop(self):
+        pass  # Abstract method (no implementation)
+</code></pre>
+<h3><strong>Step 2: Implement the Interface</strong></h3>
+<p>A class implements an interface by inheriting from it and providing concrete implementations of the abstract methods.</p>
+<pre><code class="language-python"># Implementing the Vehicle interface in a Car class
+class Car(Vehicle):
+    def start(self):
+        print(&quot;Car is starting...&quot;)
+
+    def stop(self):
+        print(&quot;Car is stopping...&quot;)
+</code></pre>
+<h3><strong>Step 3: Using the Implemented Class</strong></h3>
+<p>Now, let's create objects and call the methods.</p>
+<pre><code class="language-python">if __name__ == &quot;__main__&quot;:
+    my_car = Car()  # Instantiating the class
+    my_car.start()
+    my_car.stop()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Car is stopping...
+</code></pre>
+<hr />
+<h2><strong>Multiple Inheritance with Interfaces</strong></h2>
+<p>Unlike normal classes, Python <strong>supports multiple inheritance</strong> with interfaces.</p>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+# First interface
+class Flyable(ABC):
+    @abstractmethod
+    def fly(self):
+        pass
+
+# Second interface
+class Drivable(ABC):
+    @abstractmethod
+    def drive(self):
+        pass
+
+# Implementing multiple interfaces
+class FlyingCar(Flyable, Drivable):
+    def fly(self):
+        print(&quot;FlyingCar is flying...&quot;)
+
+    def drive(self):
+        print(&quot;FlyingCar is driving...&quot;)
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-python">if __name__ == &quot;__main__&quot;:
+    my_vehicle = FlyingCar()
+    my_vehicle.fly()
+    my_vehicle.drive()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>FlyingCar is flying...
+FlyingCar is driving...
+</code></pre>
+<hr />
+<h2><strong>Default Method Behavior in Interfaces</strong></h2>
+<p>Unlike Java, Python does not have <strong>default methods</strong> in interfaces, but we can provide default implementations in base classes.</p>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def sound(self):
+        pass
+
+    def sleep(self):  # Default method
+        print(&quot;Sleeping...&quot;)
+
+class Dog(Animal):
+    def sound(self):
+        print(&quot;Dog barks&quot;)
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-python">if __name__ == &quot;__main__&quot;:
+    my_dog = Dog()
+    my_dog.sound()
+    my_dog.sleep()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Sleeping...
+</code></pre>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Payment(ABC):
+    @abstractmethod
+    def pay(self, amount):
+        pass
+
+class CreditCardPayment(Payment):
+    def pay(self, amount):
+        print(f&quot;Paid {amount} using Credit Card&quot;)
+
+class PayPalPayment(Payment):
+    def pay(self, amount):
+        print(f&quot;Paid {amount} using PayPal&quot;)
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-python">if __name__ == &quot;__main__&quot;:
+    payment1 = CreditCardPayment()
+    payment1.pay(100.50)
+
+    payment2 = PayPalPayment()
+    payment2.pay(200.75)
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Interfaces in C</h1>
+<h2>Introduction</h2>
+<p>In Object-Oriented Programming (OOP), an <strong>interface</strong> is a crucial concept that defines a contract for classes to follow. It allows multiple classes to share a common structure while enforcing certain behaviors. Interfaces are widely used in C# and other OOP languages to achieve <strong>abstraction, polymorphism, and loose coupling</strong>.</p>
+<h2>What is an Interface?</h2>
+<p>An <strong>interface</strong> is a collection of method definitions that a class must implement. It defines a contract that implementing classes must adhere to.</p>
+<h3><strong>Key Characteristics of Interfaces in C#</strong></h3>
+<ul>
+<li>Defines a <strong>contract</strong> that implementing classes must follow.</li>
+<li>All methods are <strong>implicitly public and abstract</strong> (unless they have a default implementation).</li>
+<li>Cannot have instance variables (only static and constant fields are allowed).</li>
+<li>Supports <strong>multiple inheritance</strong>, unlike classes.</li>
+<li>Improves <strong>code flexibility and maintainability</strong>.</li>
+</ul>
+<hr />
+<h2><strong>Defining and Implementing an Interface in C#</strong></h2>
+<h3><strong>Step 1: Define an Interface</strong></h3>
+<p>To define an interface, use the <code>interface</code> keyword.</p>
+<pre><code class="language-csharp">// Defining an interface
+public interface IVehicle {
+    void Start(); // Abstract method (no implementation)
+    void Stop();  // Abstract method (no implementation)
+}
+</code></pre>
+<h3><strong>Step 2: Implement the Interface</strong></h3>
+<p>A class implements an interface using the <code>: (colon)</code> symbol.</p>
+<pre><code class="language-csharp">// Implementing the IVehicle interface in a Car class
+public class Car : IVehicle {
+    public void Start() {
+        Console.WriteLine(&quot;Car is starting...&quot;);
+    }
+
+    public void Stop() {
+        Console.WriteLine(&quot;Car is stopping...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Step 3: Using the Implemented Class</strong></h3>
+<p>Now, let's create objects and call the methods.</p>
+<pre><code class="language-csharp">public class Program {
+    public static void Main(string[] args) {
+        IVehicle myCar = new Car(); // Polymorphism: Interface reference
+        myCar.Start();
+        myCar.Stop();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Car is stopping...
+</code></pre>
+<hr />
+<h2><strong>Multiple Inheritance with Interfaces</strong></h2>
+<p>Unlike classes, C# <strong>supports multiple inheritance</strong> with interfaces.</p>
+<pre><code class="language-csharp">// First interface
+public interface IFlyable {
+    void Fly();
+}
+
+// Second interface
+public interface IDrivable {
+    void Drive();
+}
+
+// Implementing multiple interfaces
+public class FlyingCar : IFlyable, IDrivable {
+    public void Fly() {
+        Console.WriteLine(&quot;FlyingCar is flying...&quot;);
+    }
+
+    public void Drive() {
+        Console.WriteLine(&quot;FlyingCar is driving...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-csharp">public class Program {
+    public static void Main(string[] args) {
+        FlyingCar myVehicle = new FlyingCar();
+        myVehicle.Fly();
+        myVehicle.Drive();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>FlyingCar is flying...
+FlyingCar is driving...
+</code></pre>
+<hr />
+<h2><strong>Default Method Behavior in Interfaces</strong></h2>
+<p>C# 8 introduced <strong>default methods</strong> in interfaces, allowing methods with a body.</p>
+<pre><code class="language-csharp">public interface IAnimal {
+    void Sound();
+
+    // Default method with implementation
+    public void Sleep() {
+        Console.WriteLine(&quot;Sleeping...&quot;);
+    }
+}
+
+public class Dog : IAnimal {
+    public void Sound() {
+        Console.WriteLine(&quot;Dog barks&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-csharp">public class Program {
+    public static void Main(string[] args) {
+        Dog myDog = new Dog();
+        myDog.Sound();
+        myDog.Sleep(); // Calling default method
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Sleeping...
+</code></pre>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<pre><code class="language-csharp">public interface IPayment {
+    void Pay(double amount);
+}
+
+public class CreditCardPayment : IPayment {
+    public void Pay(double amount) {
+        Console.WriteLine($&quot;Paid {amount} using Credit Card&quot;);
+    }
+}
+
+public class PayPalPayment : IPayment {
+    public void Pay(double amount) {
+        Console.WriteLine($&quot;Paid {amount} using PayPal&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-csharp">public class Program {
+    public static void Main(string[] args) {
+        IPayment payment1 = new CreditCardPayment();
+        payment1.Pay(100.50);
+
+        IPayment payment2 = new PayPalPayment();
+        payment2.Pay(200.75);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Interfaces in Go (Golang)</h1>
+<h2>Introduction</h2>
+<p>In Object-Oriented Programming (OOP), an <strong>interface</strong> is a crucial concept that defines a contract for types to follow. It allows multiple types to share a common structure while enforcing certain behaviors. Unlike Java and C++, Go interfaces are <strong>implicit</strong>—a type satisfies an interface simply by implementing its methods.</p>
+<h2>What is an Interface?</h2>
+<p>An <strong>interface</strong> is a set of method signatures that a type must implement. It defines a contract that implementing types must adhere to.</p>
+<h3><strong>Key Characteristics of Interfaces in Go</strong></h3>
+<ul>
+<li>Interfaces in Go are <strong>implicit</strong>, meaning types don’t explicitly declare they implement an interface.</li>
+<li>They define <strong>method signatures</strong> that types must implement.</li>
+<li>Interfaces <strong>enable polymorphism</strong>, allowing functions to operate on different types that share a common behavior.</li>
+<li>They support <strong>multiple interface implementation</strong>, unlike struct embedding.</li>
+</ul>
+<hr />
+<h2><strong>Defining and Implementing an Interface in Go</strong></h2>
+<h3><strong>Step 1: Define an Interface</strong></h3>
+<p>To define an interface, we use the <code>interface</code> keyword.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Defining an interface
+type Vehicle interface {
+    Start()
+    Stop()
+}
+</code></pre>
+<h3><strong>Step 2: Implement the Interface</strong></h3>
+<p>A type implements an interface by defining methods with the same signatures.</p>
+<pre><code class="language-go">// Implementing the Vehicle interface in a Car struct
+type Car struct {
+    brand string
+}
+
+func (c Car) Start() {
+    fmt.Println(&quot;Car is starting...&quot;)
+}
+
+func (c Car) Stop() {
+    fmt.Println(&quot;Car is stopping...&quot;)
+}
+</code></pre>
+<h3><strong>Step 3: Using the Implemented Interface</strong></h3>
+<p>Now, let's create an instance and call the methods.</p>
+<pre><code class="language-go">func main() {
+    var myCar Vehicle = Car{brand: &quot;Toyota&quot;} // Interface reference
+    myCar.Start()
+    myCar.Stop()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Car is stopping...
+</code></pre>
+<hr />
+<h2><strong>Multiple Interface Implementation in Go</strong></h2>
+<p>Go allows a struct to implement multiple interfaces implicitly.</p>
+<pre><code class="language-go">// First interface
+type Flyable interface {
+    Fly()
+}
+
+// Second interface
+type Drivable interface {
+    Drive()
+}
+
+// Implementing multiple interfaces
+type FlyingCar struct {}
+
+func (f FlyingCar) Fly() {
+    fmt.Println(&quot;FlyingCar is flying...&quot;)
+}
+
+func (f FlyingCar) Drive() {
+    fmt.Println(&quot;FlyingCar is driving...&quot;)
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-go">func main() {
+    var myVehicle Flyable = FlyingCar{}
+    myVehicle.Fly()
+
+    var myCar Drivable = FlyingCar{}
+    myCar.Drive()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>FlyingCar is flying...
+FlyingCar is driving...
+</code></pre>
+<hr />
+<h2><strong>Interface Composition in Go</strong></h2>
+<p>Go interfaces can be composed of other interfaces.</p>
+<pre><code class="language-go">type Engine interface {
+    Start()
+    Stop()
+}
+
+type Transmission interface {
+    ShiftGear(gear int)
+}
+
+type CarInterface interface {
+    Engine
+    Transmission
+}
+</code></pre>
+<p>This means any type that implements <code>Start()</code>, <code>Stop()</code>, and <code>ShiftGear()</code> automatically implements <code>CarInterface</code>.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<pre><code class="language-go">type Payment interface {
+    Pay(amount float64)
+}
+
+type CreditCardPayment struct {}
+
+func (c CreditCardPayment) Pay(amount float64) {
+    fmt.Printf(&quot;Paid %.2f using Credit Card\n&quot;, amount)
+}
+
+type PayPalPayment struct {}
+
+func (p PayPalPayment) Pay(amount float64) {
+    fmt.Printf(&quot;Paid %.2f using PayPal\n&quot;, amount)
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-go">func main() {
+    var payment1 Payment = CreditCardPayment{}
+    payment1.Pay(100.50)
+
+    var payment2 Payment = PayPalPayment{}
+    payment2.Pay(200.75)
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.50 using Credit Card
+Paid 200.75 using PayPal
+</code></pre></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Interfaces in Rust (Traits)</h1>
+<h2>Introduction</h2>
+<p>In Object-Oriented Programming (OOP), an <strong>Interface</strong> is a crucial concept that defines a contract for types to follow. It allows multiple types to share a common structure while enforcing certain behaviors. Interfaces are widely used in Java to achieve <strong>abstraction, polymorphism, and loose coupling</strong>.</p>
+<p>In Rust, this concept is called a <strong>Trait</strong>.</p>
+<p>A Trait defines functionality a particular type has and can share with other types. We can use traits to define shared behavior in an abstract way.</p>
+<h2>What is a Trait?</h2>
+<p>A <strong>Trait</strong> in Rust is a collection of method signatures that a type can implement. It defines a contract that the implementing types must adhere to.</p>
+<h3><strong>Key Characteristics of Traits</strong></h3>
+<ul>
+<li>Defines a <strong>contract</strong> of behavior (methods) that implementing types must fulfill.</li>
+<li><strong>Strict Separation:</strong> Unlike Java where you write <code>class Car implements Vehicle</code>, in Rust, you define the <code>struct Car</code> (data) in one block and the <code>impl Vehicle for Car</code> (logic) in a completely separate block.</li>
+<li><strong>Explicit Context:</strong> Rust methods require you to explicitly say if they use the object's data by passing <code>&amp;self</code> as the first argument.</li>
+<li>Supports <strong>Multiple Trait Implementation</strong> (Rust's version of multiple inheritance).</li>
+<li>Can contain <strong>Default Implementations</strong> (methods with code) and <strong>Associated Functions</strong> (static methods).</li>
+</ul>
+<hr />
+<h2><strong>Defining and Implementing a Trait</strong></h2>
+<h3><strong>Step 1: Define the Trait</strong></h3>
+<p>To define a trait (interface), use the <code>trait</code> keyword.</p>
+<pre><code class="language-rust">// Defining a trait 'Vehicle'
+// This is the &quot;Contract&quot;
+pub trait Vehicle {
+    fn start(&amp;self); // Abstract method (no body)
+    fn stop(&amp;self);  // Abstract method (no body)
+}
+
+</code></pre>
+<h3><strong>Step 2: Implement the Trait</strong></h3>
+<p>In Java, you implement the interface inside the class. In Rust, you use the <code>impl [Trait] for [Type]</code> syntax.</p>
+<pre><code class="language-rust">// 1. Define the Data (Struct)
+pub struct Car {
+    pub brand: String,
+}
+
+// 2. Implement the Behavior (Trait) separately
+// &quot;Implement the Vehicle Trait FOR the Car Struct&quot;
+impl Vehicle for Car {
+    fn start(&amp;self) {
+        println!(&quot;{} is starting... 🚗&quot;, self.brand);
+    }
+
+    fn stop(&amp;self) {
+        println!(&quot;{} is stopping... 🛑&quot;, self.brand);
+    }
+}
+
+</code></pre>
+<h3><strong>Step 3: Using the Implemented Struct</strong></h3>
+<p>We create an instance of the struct and call the trait methods.</p>
+<pre><code class="language-rust">fn main() {
+    let my_car = Car { brand: &quot;Toyota&quot;.to_string() };
+
+    // We can call methods just like in Java
+    my_car.start();
+    my_car.stop();
+}
+
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">Toyota is starting... 🚗
+Toyota is stopping... 🛑
+
+</code></pre>
+<hr />
+<h2><strong>Multiple Traits (Composition)</strong></h2>
+<p>Java uses interfaces to solve the "Multiple Inheritance" problem. Rust does the same. A single struct can implement as many traits as necessary.</p>
+<pre><code class="language-rust">// First Trait
+trait Flyable {
+    fn fly(&amp;self);
+}
+
+// Second Trait
+trait Drivable {
+    fn drive(&amp;self);
+}
+
+// The Struct
+struct FlyingCar;
+
+// Implement Trait 1
+impl Flyable for FlyingCar {
+    fn fly(&amp;self) {
+        println!(&quot;FlyingCar is flying... ✈️&quot;);
+    }
+}
+
+// Implement Trait 2
+impl Drivable for FlyingCar {
+    fn drive(&amp;self) {
+        println!(&quot;FlyingCar is driving... 🚙&quot;);
+    }
+}
+
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-rust">fn main() {
+    let my_vehicle = FlyingCar;
+
+    // The same object can do both actions
+    my_vehicle.fly();
+    my_vehicle.drive();
+}
+
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">FlyingCar is flying... ✈️
+FlyingCar is driving... 🚙
+
+</code></pre>
+<hr />
+<h2><strong>Default and Associated Functions</strong></h2>
+<p>Rust traits are powerful. They can have <strong>Default Implementations</strong> (pre-written logic) and <strong>Associated Functions</strong> (static utility methods).</p>
+<h3><strong>Default Implementations</strong></h3>
+<p>Just like Java's <code>default</code> keyword, Rust allows you to provide a method body in the trait itself. If a struct doesn't override it, the default logic is used.</p>
+<pre><code class="language-rust">trait Animal {
+    fn sound(&amp;self); // Abstract method (Must be implemented)
+
+    // Default method (Optional to implement)
+    fn sleep(&amp;self) {
+        println!(&quot;Sleeping... 💤&quot;);
+    }
+}
+
+struct Dog;
+
+impl Animal for Dog {
+    fn sound(&amp;self) {
+        println!(&quot;Dog barks! 🐶&quot;);
+    }
+    // We don't implement sleep(), so Dog gets the default behavior.
+}
+
+</code></pre>
+<h3><strong>Associated Functions (Static Methods)</strong></h3>
+<p>If a function inside a trait does <strong>not</strong> take <code>&amp;self</code>, it acts like a Java <code>static</code> method. It belongs to the <em>Type</em>, not the <em>Instance</em>.</p>
+<pre><code class="language-rust">trait MathOperations {
+    // No '&amp;self' here, so this is a &quot;Static Method&quot;
+    fn add(a: i32, b: i32) -&gt; i32 {
+        a + b
+    }
+}
+
+// We need a dummy struct to attach this trait to
+struct Calculator;
+impl MathOperations for Calculator {}
+
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-rust">fn main() {
+    let my_dog = Dog;
+    my_dog.sound();
+    my_dog.sleep(); // Calls default implementation
+
+    // Call static method using the Type name (::)
+    let result = Calculator::add(5, 10);
+    println!(&quot;Sum: {}&quot;, result);
+}
+
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">Dog barks! 🐶
+Sleeping... 💤
+Sum: 15
+
+</code></pre>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>This example demonstrates <strong>Polymorphism</strong>. We want to write a function that can accept <em>any</em> payment method, whether it's a Credit Card or PayPal.</p>
+<pre><code class="language-rust">// The Contract
+trait Payment {
+    fn pay(&amp;self, amount: f64);
+}
+
+// Struct 1: Credit Card
+struct CreditCard;
+impl Payment for CreditCard {
+    fn pay(&amp;self, amount: f64) {
+        println!(&quot;Paid ${:.2} using Credit Card 💳&quot;, amount);
+    }
+}
+
+// Struct 2: PayPal
+struct PayPal;
+impl Payment for PayPal {
+    fn pay(&amp;self, amount: f64) {
+        println!(&quot;Paid ${:.2} using PayPal 🅿️&quot;, amount);
+    }
+}
+
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-rust">fn main() {
+    let card = CreditCard;
+    let paypal = PayPal;
+
+    // The same function works for different types!
+    // We can use references to the trait object
+    let payments: Vec&lt;&amp;dyn Payment&gt; = vec![&amp;card, &amp;paypal];
+
+    for payment in payments {
+        payment.pay(100.50);
+    }
+}
+
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-text">Paid $100.50 using Credit Card 💳
+Paid $100.50 using PayPal 🅿️
+
+</code></pre>
+<hr />
+<h2>📚 New Terminology (Detailed Explanation)</h2>
+<p>Since you are moving from Java to Rust, here are the specific new terms introduced in this topic:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Java Equivalent</th>
+<th>Detailed Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Trait</strong></td>
+<td><code>Interface</code></td>
+<td>A set of method signatures. It defines <em>what</em> an object can do, but not <em>how</em> it does it.</td>
+</tr>
+<tr>
+<td><strong><code>impl Trait for Type</code></strong></td>
+<td><code>implements</code></td>
+<td>In Rust, you don't declare implementations inside the struct definition. You use a separate <code>impl</code> block to bind the Trait to the Struct. This allows you to add traits to types you didn't even create!</td>
+</tr>
+<tr>
+<td><strong><code>&amp;self</code></strong></td>
+<td><code>this</code></td>
+<td>In Java, <code>this</code> is hidden/implicit. In Rust, you must <strong>explicitly</strong> pass <code>&amp;self</code> as the first argument to any method that works on an instance. If you forget <code>&amp;self</code>, Rust thinks it is a static method.</td>
+</tr>
+<tr>
+<td><strong>Associated Function</strong></td>
+<td><code>static</code> method</td>
+<td>A function defined inside a trait/struct that does <strong>not</strong> have <code>&amp;self</code>. It is called using <code>::</code> (e.g., <code>Calculator::add</code>) instead of <code>.</code> (dot).</td>
+</tr>
+<tr>
+<td><strong><code>dyn Trait</code></strong></td>
+<td>Polymorphism</td>
+<td>Short for "Dynamic Dispatch". It tells the compiler: "I don't know the exact size of this object at compile time, but I know it implements this Trait." Used when storing different types in the same list (like <code>Vec&lt;&amp;dyn Payment&gt;</code>).</td>
+</tr>
+</tbody>
+</table></div><details class="file"><summary>oop/rust/interfaces/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * INTERFACES IN RUST (TRAITS)</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: Demonstrate how Traits act as contracts (Java Interface equivalent).</span>
+<span class="cm"> */</span>
+
+<span class="c1">// 1. BASIC INTERFACE</span>
+<span class="c1">// The Contract</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Vehicle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// The Data</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">brand</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// The Implementation (Binding Trait to Struct)</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Vehicle</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"{} is starting... 🚗"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">brand</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"{} is stopping... 🛑"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">brand</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 2. MULTIPLE INTERFACES (Composition)</span>
+<span class="k">trait</span><span class="w"> </span><span class="n">Flyable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">fly</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">Drivable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">drive</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">FlyingCar</span><span class="p">;</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Flyable</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">FlyingCar</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">fly</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"FlyingCar is flying... ✈️"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Drivable</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">FlyingCar</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">drive</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"FlyingCar is driving... 🚙"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. DEFAULT &amp; STATIC METHODS</span>
+<span class="k">trait</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Default method (Optional to override)</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">sleep</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Sleeping... 💤"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Dog</span><span class="p">;</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Dog</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Dog barks! 🐶"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">MathOperations</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Associated Function (Static Method) - No '&amp;self'</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Calculator</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">MathOperations</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Calculator</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="c1">// 4. REAL WORLD PAYMENT (POLYMORPHISM)</span>
+<span class="k">trait</span><span class="w"> </span><span class="n">Payment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">CreditCard</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Payment</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">CreditCard</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Paid ${:.2} using Credit Card 💳"</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">PayPal</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Payment</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">PayPal</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Paid ${:.2} using PayPal 🅿️"</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 1. Basic Interface ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">my_car</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">brand</span><span class="p">:</span><span class="w"> </span><span class="s">"Toyota"</span><span class="p">.</span><span class="n">to_string</span><span class="p">()</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">my_car</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="w">    </span><span class="n">my_car</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 2. Multiple Interfaces ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">fly_car</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FlyingCar</span><span class="p">;</span>
+<span class="w">    </span><span class="n">fly_car</span><span class="p">.</span><span class="n">fly</span><span class="p">();</span>
+<span class="w">    </span><span class="n">fly_car</span><span class="p">.</span><span class="n">drive</span><span class="p">();</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 3. Default &amp; Static Methods ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">dog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dog</span><span class="p">;</span>
+<span class="w">    </span><span class="n">dog</span><span class="p">.</span><span class="n">sound</span><span class="p">();</span>
+<span class="w">    </span><span class="n">dog</span><span class="p">.</span><span class="n">sleep</span><span class="p">();</span><span class="w"> </span><span class="c1">// Uses default implementation</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Call static method using the Type name</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Calculator</span><span class="p">::</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Sum: {}"</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 4. Real World Polymorphism ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">cc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreditCard</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">pp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PayPal</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Using explicit loop to simulate processing different payments</span>
+<span class="w">    </span><span class="c1">// '&amp;dyn Payment' allows us to store different types in one list</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">payments</span><span class="p">:</span><span class="w"> </span><span class="nb">Vec</span><span class="o">&lt;&amp;</span><span class="k">dyn</span><span class="w"> </span><span class="n">Payment</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span><span class="o">&amp;</span><span class="n">cc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pp</span><span class="p">];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">payments</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">p</span><span class="p">.</span><span class="n">pay</span><span class="p">(</span><span class="mf">100.0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

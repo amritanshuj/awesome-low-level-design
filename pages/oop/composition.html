@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Composition · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Composition</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Composition</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Composition in Java</h1>
+<h2>Introduction</h2>
+<p>Composition is one of the key concepts of object-oriented programming (OOP). It allows objects to be built using other objects, promoting code reuse, flexibility, and better maintainability. Unlike inheritance, which establishes an "is-a" relationship, composition represents a "has-a" relationship.</p>
+<h2>What is Composition?</h2>
+<p>Composition is a design principle in OOP where one class contains an instance (or instances) of another class as a field. The contained class is often called a component, and the containing class is referred to as a composite class. This helps in building complex systems by combining simpler objects.</p>
+<h3>Example: A Car and its Components</h3>
+<p>Consider a <code>Car</code> that consists of multiple components like an <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code>. Instead of inheriting from these components, a <code>Car</code> object will contain them as fields.</p>
+<pre><code class="language-java">class Engine {
+    private int horsepower;
+
+    public Engine(int horsepower) {
+        this.horsepower = horsepower;
+    }
+
+    public void start() {
+        System.out.println(&quot;Engine started with &quot; + horsepower + &quot; HP.&quot;);
+    }
+}
+
+class Wheel {
+    private String type;
+
+    public Wheel(String type) {
+        this.type = type;
+    }
+
+    public void rotate() {
+        System.out.println(&quot;The &quot; + type + &quot; wheel is rotating.&quot;);
+    }
+}
+
+class Transmission {
+    private String type;
+
+    public Transmission(String type) {
+        this.type = type;
+    }
+
+    public void shiftGear() {
+        System.out.println(&quot;Transmission shifted: &quot; + type);
+    }
+}
+
+class Car {
+    private Engine engine;
+    private Wheel wheel;
+    private Transmission transmission;
+
+    public Car(Engine engine, Wheel wheel, Transmission transmission) {
+        this.engine = engine;
+        this.wheel = wheel;
+        this.transmission = transmission;
+    }
+
+    public void drive() {
+        engine.start();
+        wheel.rotate();
+        transmission.shiftGear();
+        System.out.println(&quot;Car is moving!&quot;);
+    }
+}
+
+public class CompositionExample {
+    public static void main(String[] args) {        
+        Car car = new Car(new Engine(150), new Wheel(&quot;Alloy&quot;), new Transmission(&quot;Automatic&quot;));
+        car.drive();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Engine started with 150 HP.
+The Alloy wheel is rotating.
+Transmission shifted: Automatic
+Car is moving!
+</code></pre>
+<hr />
+<h2>Why Prefer Composition Over Inheritance?</h2>
+<h3>1. <strong>Encapsulation and Flexibility</strong></h3>
+<ul>
+<li>Composition allows us to change the behavior of an object dynamically by replacing components at runtime.</li>
+<li>Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.</li>
+</ul>
+<h3>2. <strong>Better Code Reusability</strong></h3>
+<ul>
+<li>Composition promotes reusable components. The <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code> classes can be used in multiple types of vehicles (Car, Bike, Truck) without modification.</li>
+</ul>
+<h3>3. <strong>Avoids Inheritance Pitfalls</strong></h3>
+<ul>
+<li>Inheritance can lead to deep class hierarchies, making maintenance difficult.</li>
+<li>It enforces strict parent-child relationships, which can be too rigid for some designs.</li>
+</ul>
+<h3>4. <strong>Supports Interface-Based Design</strong></h3>
+<ul>
+<li>Composition can be combined with interfaces to achieve powerful decoupling.</li>
+</ul>
+<hr />
+<h2>Composition with Interfaces</h2>
+<p>Using interfaces with composition allows for greater flexibility and loose coupling.</p>
+<pre><code class="language-java">interface Engine {
+    void start();
+}
+
+class PetrolEngine implements Engine {
+    public void start() {
+        System.out.println(&quot;Petrol Engine started.&quot;);
+    }
+}
+
+class DieselEngine implements Engine {
+    public void start() {
+        System.out.println(&quot;Diesel Engine started.&quot;);
+    }
+}
+
+class Car {
+    private Engine engine;
+
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void startCar() {
+        engine.start();
+        System.out.println(&quot;Car is ready to go!&quot;);
+    }
+}
+
+public class InterfaceCompositionExample {
+    public static void main(String[] args) {
+        Car petrolCar = new Car(new PetrolEngine());
+        petrolCar.startCar();
+
+        Car dieselCar = new Car(new DieselEngine());
+        dieselCar.startCar();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Petrol Engine started.
+Car is ready to go!
+Diesel Engine started.
+Car is ready to go!
+</code></pre>
+<hr />
+<h2>When to Use Composition?</h2>
+<ul>
+<li>When building complex objects that consist of multiple components.</li>
+<li>When you want to achieve <strong>code reusability</strong> without rigid inheritance hierarchies.</li>
+<li>When different behaviors need to be swapped dynamically (e.g., using different types of engines in a vehicle).</li>
+<li>When following the <strong>favor composition over inheritance</strong> principle.</li>
+</ul></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Composition in C++</h1>
+<h2>Introduction</h2>
+<p>Composition is one of the key concepts of object-oriented programming (OOP). It allows objects to be built using other objects, promoting code reuse, flexibility, and better maintainability. Unlike inheritance, which establishes an "is-a" relationship, composition represents a "has-a" relationship.</p>
+<h2>What is Composition?</h2>
+<p>Composition is a design principle in OOP where one class contains an instance (or instances) of another class as a field. The contained class is often called a component, and the containing class is referred to as a composite class. This helps in building complex systems by combining simpler objects.</p>
+<h3>Example: A Car and its Components</h3>
+<p>Consider a <code>Car</code> that consists of multiple components like an <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code>. Instead of inheriting from these components, a <code>Car</code> object will contain them as fields.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+class Engine {
+private:
+    int horsepower;
+public:
+    Engine(int hp) : horsepower(hp) {}
+    void start() {
+        std::cout &lt;&lt; &quot;Engine started with &quot; &lt;&lt; horsepower &lt;&lt; &quot; HP.&quot; &lt;&lt; std::endl;
+    }
+};
+
+class Wheel {
+private:
+    std::string type;
+public:
+    Wheel(std::string t) : type(t) {}
+    void rotate() {
+        std::cout &lt;&lt; &quot;The &quot; &lt;&lt; type &lt;&lt; &quot; wheel is rotating.&quot; &lt;&lt; std::endl;
+    }
+};
+
+class Transmission {
+private:
+    std::string type;
+public:
+    Transmission(std::string t) : type(t) {}
+    void shiftGear() {
+        std::cout &lt;&lt; &quot;Transmission shifted: &quot; &lt;&lt; type &lt;&lt; std::endl;
+    }
+};
+
+class Car {
+private:
+    Engine engine;
+    Wheel wheel;
+    Transmission transmission;
+public:
+    Car() : engine(150), wheel(&quot;Alloy&quot;), transmission(&quot;Automatic&quot;) {}
+    void drive() {
+        engine.start();
+        wheel.rotate();
+        transmission.shiftGear();
+        std::cout &lt;&lt; &quot;Car is moving!&quot; &lt;&lt; std::endl;
+    }
+};
+
+int main() {
+    Car car;
+    car.drive();
+    return 0;
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Engine started with 150 HP.
+The Alloy wheel is rotating.
+Transmission shifted: Automatic
+Car is moving!
+</code></pre>
+<hr />
+<h2>Why Prefer Composition Over Inheritance?</h2>
+<h3>1. <strong>Encapsulation and Flexibility</strong></h3>
+<ul>
+<li>Composition allows us to change the behavior of an object dynamically by replacing components at runtime.</li>
+<li>Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.</li>
+</ul>
+<h3>2. <strong>Better Code Reusability</strong></h3>
+<ul>
+<li>Composition promotes reusable components. The <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code> classes can be used in multiple types of vehicles (Car, Bike, Truck) without modification.</li>
+</ul>
+<h3>3. <strong>Avoids Inheritance Pitfalls</strong></h3>
+<ul>
+<li>Inheritance can lead to deep class hierarchies, making maintenance difficult.</li>
+<li>It enforces strict parent-child relationships, which can be too rigid for some designs.</li>
+</ul>
+<h3>4. <strong>Supports Interface-Based Design</strong></h3>
+<ul>
+<li>Composition can be combined with abstract classes to achieve powerful decoupling.</li>
+</ul>
+<hr />
+<h2>Composition with Abstract Classes</h2>
+<p>Using abstract classes with composition allows for greater flexibility and loose coupling.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Engine {
+public:
+    virtual void start() = 0; // Pure virtual function
+};
+
+class PetrolEngine : public Engine {
+public:
+    void start() override {
+        cout &lt;&lt; &quot;Petrol Engine started.&quot; &lt;&lt; endl;
+    }
+};
+
+class DieselEngine : public Engine {
+public:
+    void start() override {
+        cout &lt;&lt; &quot;Diesel Engine started.&quot; &lt;&lt; endl;
+    }
+};
+
+class Car {
+private:
+    Engine* engine;
+public:
+    Car(Engine* e) : engine(e) {}
+    void startCar() {
+        engine-&gt;start();
+        cout &lt;&lt; &quot;Car is ready to go!&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    PetrolEngine petrolEngine;
+    DieselEngine dieselEngine;
+
+    Car petrolCar(&amp;petrolEngine);
+    petrolCar.startCar();
+
+    Car dieselCar(&amp;dieselEngine);
+    dieselCar.startCar();
+
+    return 0;
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Petrol Engine started.
+Car is ready to go!
+Diesel Engine started.
+Car is ready to go!
+</code></pre>
+<hr />
+<h2>When to Use Composition?</h2>
+<ul>
+<li>When building complex objects that consist of multiple components.</li>
+<li>When you want to achieve <strong>code reusability</strong> without rigid inheritance hierarchies.</li>
+<li>When different behaviors need to be swapped dynamically (e.g., using different types of engines in a vehicle).</li>
+<li>When following the <strong>favor composition over inheritance</strong> principle.</li>
+</ul></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Composition in Python</h1>
+<h2>Introduction</h2>
+<p>Composition is one of the key concepts of object-oriented programming (OOP). It allows objects to be built using other objects, promoting code reuse, flexibility, and better maintainability. Unlike inheritance, which establishes an "is-a" relationship, composition represents a "has-a" relationship.</p>
+<h2>What is Composition?</h2>
+<p>Composition is a design principle in OOP where one class contains an instance (or instances) of another class as a field. The contained class is often called a component, and the containing class is referred to as a composite class. This helps in building complex systems by combining simpler objects.</p>
+<h3>Example: A Car and its Components</h3>
+<p>Consider a <code>Car</code> that consists of multiple components like an <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code>. Instead of inheriting from these components, a <code>Car</code> object will contain them as fields.</p>
+<pre><code class="language-python">class Engine:
+    def __init__(self, horsepower):
+        self.horsepower = horsepower
+
+    def start(self):
+        print(f&quot;Engine started with {self.horsepower} HP.&quot;)
+
+
+class Wheel:
+    def __init__(self, type):
+        self.type = type
+
+    def rotate(self):
+        print(f&quot;The {self.type} wheel is rotating.&quot;)
+
+
+class Transmission:
+    def __init__(self, type):
+        self.type = type
+
+    def shift_gear(self):
+        print(f&quot;Transmission shifted: {self.type}&quot;)
+
+
+class Car:
+    def __init__(self):
+        self.engine = Engine(150)
+        self.wheel = Wheel(&quot;Alloy&quot;)
+        self.transmission = Transmission(&quot;Automatic&quot;)
+
+    def drive(self):
+        self.engine.start()
+        self.wheel.rotate()
+        self.transmission.shift_gear()
+        print(&quot;Car is moving!&quot;)
+
+
+# Example Usage
+if __name__ == &quot;__main__&quot;:
+    car = Car()
+    car.drive()
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Engine started with 150 HP.
+The Alloy wheel is rotating.
+Transmission shifted: Automatic
+Car is moving!
+</code></pre>
+<hr />
+<h2>Why Prefer Composition Over Inheritance?</h2>
+<h3>1. <strong>Encapsulation and Flexibility</strong></h3>
+<ul>
+<li>Composition allows us to change the behavior of an object dynamically by replacing components at runtime.</li>
+<li>Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.</li>
+</ul>
+<h3>2. <strong>Better Code Reusability</strong></h3>
+<ul>
+<li>Composition promotes reusable components. The <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code> classes can be used in multiple types of vehicles (Car, Bike, Truck) without modification.</li>
+</ul>
+<h3>3. <strong>Avoids Inheritance Pitfalls</strong></h3>
+<ul>
+<li>Inheritance can lead to deep class hierarchies, making maintenance difficult.</li>
+<li>It enforces strict parent-child relationships, which can be too rigid for some designs.</li>
+</ul>
+<h3>4. <strong>Supports Interface-Based Design</strong></h3>
+<ul>
+<li>Composition can be combined with interfaces (or abstract classes) to achieve powerful decoupling.</li>
+</ul>
+<hr />
+<h2>Composition with Abstract Classes</h2>
+<p>Using abstract base classes with composition allows for greater flexibility and loose coupling.</p>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Engine(ABC):
+    @abstractmethod
+    def start(self):
+        pass
+
+
+class PetrolEngine(Engine):
+    def start(self):
+        print(&quot;Petrol Engine started.&quot;)
+
+
+class DieselEngine(Engine):
+    def start(self):
+        print(&quot;Diesel Engine started.&quot;)
+
+
+class Car:
+    def __init__(self, engine: Engine):
+        self.engine = engine
+
+    def start_car(self):
+        self.engine.start()
+        print(&quot;Car is ready to go!&quot;)
+
+
+# Example Usage
+if __name__ == &quot;__main__&quot;:
+    petrol_car = Car(PetrolEngine())
+    petrol_car.start_car()
+
+    diesel_car = Car(DieselEngine())
+    diesel_car.start_car()
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Petrol Engine started.
+Car is ready to go!
+Diesel Engine started.
+Car is ready to go!
+</code></pre>
+<hr />
+<h2>When to Use Composition?</h2>
+<ul>
+<li>When building complex objects that consist of multiple components.</li>
+<li>When you want to achieve <strong>code reusability</strong> without rigid inheritance hierarchies.</li>
+<li>When different behaviors need to be swapped dynamically (e.g., using different types of engines in a vehicle).</li>
+<li>When following the <strong>favor composition over inheritance</strong> principle.</li>
+</ul></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Composition in C</h1>
+<h2>Introduction</h2>
+<p>Composition is one of the key concepts of object-oriented programming (OOP). It allows objects to be built using other objects, promoting code reuse, flexibility, and better maintainability. Unlike inheritance, which establishes an "is-a" relationship, composition represents a "has-a" relationship.</p>
+<h2>What is Composition?</h2>
+<p>Composition is a design principle in OOP where one class contains an instance (or instances) of another class as a field. The contained class is often called a component, and the containing class is referred to as a composite class. This helps in building complex systems by combining simpler objects.</p>
+<h3>Example: A Car and its Components</h3>
+<p>Consider a <code>Car</code> that consists of multiple components like an <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code>. Instead of inheriting from these components, a <code>Car</code> object will contain them as fields.</p>
+<pre><code class="language-csharp">using System;
+
+class Engine
+{
+    private int horsepower;
+
+    public Engine(int horsepower)
+    {
+        this.horsepower = horsepower;
+    }
+
+    public void Start()
+    {
+        Console.WriteLine($&quot;Engine started with {horsepower} HP.&quot;);
+    }
+}
+
+class Wheel
+{
+    private string type;
+
+    public Wheel(string type)
+    {
+        this.type = type;
+    }
+
+    public void Rotate()
+    {
+        Console.WriteLine($&quot;The {type} wheel is rotating.&quot;);
+    }
+}
+
+class Transmission
+{
+    private string type;
+
+    public Transmission(string type)
+    {
+        this.type = type;
+    }
+
+    public void ShiftGear()
+    {
+        Console.WriteLine($&quot;Transmission shifted: {type}&quot;);
+    }
+}
+
+class Car
+{
+    private Engine engine;
+    private Wheel wheel;
+    private Transmission transmission;
+
+    public Car(Engine engine, Wheel wheel, Transmission transmission)
+    {
+        this.engine = engine;
+        this.wheel = wheel;
+        this.transmission = transmission;
+    }
+
+    public void Drive()
+    {
+        engine.Start();
+        wheel.Rotate();
+        transmission.ShiftGear();
+        Console.WriteLine(&quot;Car is moving!&quot;);
+    }
+}
+
+class CompositionExample
+{
+    static void Main()
+    {   
+        Car car = new Car(new Engine(150), new Wheel(&quot;Alloy&quot;), new Transmission(&quot;Automatic&quot;));
+        car.Drive();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Engine started with 150 HP.
+The Alloy wheel is rotating.
+Transmission shifted: Automatic
+Car is moving!
+</code></pre>
+<hr />
+<h2>Why Prefer Composition Over Inheritance?</h2>
+<h3>1. <strong>Encapsulation and Flexibility</strong></h3>
+<ul>
+<li>Composition allows us to change the behavior of an object dynamically by replacing components at runtime.</li>
+<li>Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.</li>
+</ul>
+<h3>2. <strong>Better Code Reusability</strong></h3>
+<ul>
+<li>Composition promotes reusable components. The <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code> classes can be used in multiple types of vehicles (Car, Bike, Truck) without modification.</li>
+</ul>
+<h3>3. <strong>Avoids Inheritance Pitfalls</strong></h3>
+<ul>
+<li>Inheritance can lead to deep class hierarchies, making maintenance difficult.</li>
+<li>It enforces strict parent-child relationships, which can be too rigid for some designs.</li>
+</ul>
+<h3>4. <strong>Supports Interface-Based Design</strong></h3>
+<ul>
+<li>Composition can be combined with interfaces to achieve powerful decoupling.</li>
+</ul>
+<hr />
+<h2>Composition with Interfaces</h2>
+<p>Using interfaces with composition allows for greater flexibility and loose coupling.</p>
+<pre><code class="language-csharp">using System;
+
+interface IEngine
+{
+    void Start();
+}
+
+class PetrolEngine : IEngine
+{
+    public void Start()
+    {
+        Console.WriteLine(&quot;Petrol Engine started.&quot;);
+    }
+}
+
+class DieselEngine : IEngine
+{
+    public void Start()
+    {
+        Console.WriteLine(&quot;Diesel Engine started.&quot;);
+    }
+}
+
+class Car
+{
+    private IEngine engine;
+
+    public Car(IEngine engine)
+    {
+        this.engine = engine;
+    }
+
+    public void StartCar()
+    {
+        engine.Start();
+        Console.WriteLine(&quot;Car is ready to go!&quot;);
+    }
+}
+
+class InterfaceCompositionExample
+{
+    static void Main()
+    {
+        Car petrolCar = new Car(new PetrolEngine());
+        petrolCar.StartCar();
+
+        Car dieselCar = new Car(new DieselEngine());
+        dieselCar.StartCar();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Petrol Engine started.
+Car is ready to go!
+Diesel Engine started.
+Car is ready to go!
+</code></pre>
+<hr />
+<h2>When to Use Composition?</h2>
+<ul>
+<li>When building complex objects that consist of multiple components.</li>
+<li>When you want to achieve <strong>code reusability</strong> without rigid inheritance hierarchies.</li>
+<li>When different behaviors need to be swapped dynamically (e.g., using different types of engines in a vehicle).</li>
+<li>When following the <strong>favor composition over inheritance</strong> principle.</li>
+</ul></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Composition in Golang</h1>
+<h2>Introduction</h2>
+<p>Composition is one of the key concepts of object-oriented programming (OOP). It allows objects to be built using other objects, promoting code reuse, flexibility, and better maintainability. Unlike inheritance, which establishes an "is-a" relationship, composition represents a "has-a" relationship.</p>
+<h2>What is Composition?</h2>
+<p>Composition is a design principle in OOP where one struct contains an instance (or instances) of another struct as a field. The contained struct is often called a component, and the containing struct is referred to as a composite struct. This helps in building complex systems by combining simpler objects.</p>
+<h3>Example: A Car and its Components</h3>
+<p>Consider a <code>Car</code> that consists of multiple components like an <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code>. Instead of inheriting from these components, a <code>Car</code> object will contain them as fields.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+type Engine struct {
+    Horsepower int
+}
+
+func (e Engine) Start() {
+    fmt.Printf(&quot;Engine started with %d HP.\n&quot;, e.Horsepower)
+}
+
+type Wheel struct {
+    Type string
+}
+
+func (w Wheel) Rotate() {
+    fmt.Printf(&quot;The %s wheel is rotating.\n&quot;, w.Type)
+}
+
+type Transmission struct {
+    Type string
+}
+
+func (t Transmission) ShiftGear() {
+    fmt.Printf(&quot;Transmission shifted: %s\n&quot;, t.Type)
+}
+
+type Car struct {
+    Engine       Engine
+    Wheel        Wheel
+    Transmission Transmission
+}
+
+func NewCar() Car {
+    return Car{
+        Engine:       Engine{Horsepower: 150},
+        Wheel:        Wheel{Type: &quot;Alloy&quot;},
+        Transmission: Transmission{Type: &quot;Automatic&quot;},
+    }
+}
+
+func (c Car) Drive() {
+    c.Engine.Start()
+    c.Wheel.Rotate()
+    c.Transmission.ShiftGear()
+    fmt.Println(&quot;Car is moving!&quot;)
+}
+
+func main() {
+    car := NewCar()
+    car.Drive()
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Engine started with 150 HP.
+The Alloy wheel is rotating.
+Transmission shifted: Automatic
+Car is moving!
+</code></pre>
+<hr />
+<h2>Why Prefer Composition Over Inheritance?</h2>
+<h3>1. <strong>Encapsulation and Flexibility</strong></h3>
+<ul>
+<li>Composition allows us to change the behavior of an object dynamically by replacing components at runtime.</li>
+<li>Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.</li>
+</ul>
+<h3>2. <strong>Better Code Reusability</strong></h3>
+<ul>
+<li>Composition promotes reusable components. The <code>Engine</code>, <code>Wheel</code>, and <code>Transmission</code> structs can be used in multiple types of vehicles (Car, Bike, Truck) without modification.</li>
+</ul>
+<h3>3. <strong>Avoids Inheritance Pitfalls</strong></h3>
+<ul>
+<li>Inheritance can lead to deep struct hierarchies, making maintenance difficult.</li>
+<li>It enforces strict parent-child relationships, which can be too rigid for some designs.</li>
+</ul>
+<h3>4. <strong>Supports Interface-Based Design</strong></h3>
+<ul>
+<li>Composition can be combined with interfaces to achieve powerful decoupling.</li>
+</ul>
+<hr />
+<h2>Composition with Interfaces</h2>
+<p>Using interfaces with composition allows for greater flexibility and loose coupling.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+type Engine interface {
+    Start()
+}
+
+type PetrolEngine struct {}
+
+func (p PetrolEngine) Start() {
+    fmt.Println(&quot;Petrol Engine started.&quot;)
+}
+
+type DieselEngine struct {}
+
+func (d DieselEngine) Start() {
+    fmt.Println(&quot;Diesel Engine started.&quot;)
+}
+
+type Car struct {
+    engine Engine
+}
+
+func (c Car) StartCar() {
+    c.engine.Start()
+    fmt.Println(&quot;Car is ready to go!&quot;)
+}
+
+func main() {
+    petrolCar := Car{engine: PetrolEngine{}}
+    petrolCar.StartCar()
+
+    dieselCar := Car{engine: DieselEngine{}}
+    dieselCar.StartCar()
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Petrol Engine started.
+Car is ready to go!
+Diesel Engine started.
+Car is ready to go!
+</code></pre>
+<hr />
+<h2>When to Use Composition?</h2>
+<ul>
+<li>When building complex objects that consist of multiple components.</li>
+<li>When you want to achieve <strong>code reusability</strong> without rigid inheritance hierarchies.</li>
+<li>When different behaviors need to be swapped dynamically (e.g., using different types of engines in a vehicle).</li>
+<li>When following the <strong>favor composition over inheritance</strong> principle.</li>
+</ul></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Composition in Rust (Ownership &amp; Embedding)</h1>
+<h2>Introduction</h2>
+<p><strong>Composition</strong> is a fundamental Object-Oriented Programming (OOP) principle that represents a <strong>"Has-A"</strong> relationship. It allows complex objects to be built from simpler ones.</p>
+<p>In Rust, Composition is not just a design choice; it is the <strong>primary way</strong> to build data structures since Rust does not support Inheritance (<code>extends</code>).</p>
+<p><strong>The Core Rule of Composition in Rust:</strong><br />
+When Struct A contains Struct B, <strong>A owns B</strong>.<br />
+* They share the same lifecycle.<br />
+* They share the same memory region.<br />
+* When A is dropped (freed), B is automatically dropped.</p>
+<h2><strong>What is Composition?</strong></h2>
+<p>Composition is when one struct embeds another struct as a field.</p>
+<h3><strong>Example: A Car and its Components</strong></h3>
+<p>In this example, a <code>Car</code> is composed of an <code>Engine</code>, <code>Wheels</code>, and <code>Transmission</code>.<br />
+Unlike Aggregation (where we used references <code>&amp;</code>), here we use the concrete types directly. This means the <code>Car</code> takes full <strong>ownership</strong> of these components.</p>
+<pre><code class="language-rust">struct Engine { horsepower: u32 }
+
+struct Car {
+    // Direct Composition (Ownership)
+    // The Engine actually lives INSIDE the Car struct in memory.
+    engine: Engine, 
+    model: String,
+}
+
+</code></pre>
+<h3><strong>Memory Layout Difference</strong></h3>
+<ul>
+<li><strong>Java (Reference):</strong> <code>Car</code> -&gt; (pointer) -&gt; <code>Engine</code> (Heap)</li>
+<li><strong>Rust (Composition):</strong> <code>Car</code> [ <code>Engine</code> data ... <code>model</code> data ] (Stack or Heap, but contiguous)</li>
+</ul>
+<hr />
+<h2><strong>Why Prefer Composition Over Inheritance?</strong></h2>
+<p>Since Rust does not have Inheritance, Composition is the standard. However, even in languages that do have Inheritance, Composition is preferred because:</p>
+<ol>
+<li><strong>Flexibility:</strong> You can swap components (e.g., change a <code>GasEngine</code> to an <code>ElectricEngine</code>) without changing the <code>Car</code> class hierarchy.</li>
+<li><strong>Encapsulation:</strong> The wrapper (<code>Car</code>) controls exactly how the inner objects (<code>Engine</code>) are accessed. It can hide dangerous methods.</li>
+<li><strong>Loose Coupling:</strong> The <code>Car</code> doesn't need to know the internal details of how <code>Engine</code> works; it just calls public methods.</li>
+</ol>
+<hr />
+<h2><strong>Composition with Traits (Polymorphism)</strong></h2>
+<p>To achieve the flexibility of Java interfaces (e.g., swapping different engine types), Rust uses <strong>Trait Objects</strong> inside <code>Box</code>.</p>
+<p>Since different engines (Petrol vs Diesel) might have different sizes in memory, we cannot compose them directly on the stack if we want to swap them dynamically. We must put them in a <code>Box</code> (Pointer).</p>
+<pre><code class="language-rust">trait Engine {
+    fn start(&amp;self);
+}
+
+struct PetrolEngine;
+impl Engine for PetrolEngine { ... }
+
+struct Car {
+    // Box&lt;dyn Engine&gt; allows us to hold ANY struct that implements Engine
+    engine: Box&lt;dyn Engine&gt;,
+}
+
+</code></pre>
+<hr />
+<h2><strong>Composition vs Aggregation (The "Drop" Difference)</strong></h2>
+<p>The most important detail in Rust is <strong>Lifecycle</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Composition (Strong)</th>
+<th>Aggregation (Weak)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rust Syntax</strong></td>
+<td><code>struct A { b: B }</code></td>
+<td><code>struct A&lt;'a&gt; { b: &amp;'a B }</code></td>
+</tr>
+<tr>
+<td><strong>Ownership</strong></td>
+<td><strong>Owned</strong> (A owns B)</td>
+<td><strong>Borrowed</strong> (A borrows B)</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>B is stored <em>inside</em> A.</td>
+<td>B is stored elsewhere; A points to it.</td>
+</tr>
+<tr>
+<td><strong>Destruction</strong></td>
+<td>If A dies, <strong>B dies too.</strong></td>
+<td>If A dies, <strong>B lives on.</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>📚 New Terminology</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ownership</strong></td>
+<td>The Rust rule that says a value can only have one owner. In composition, the container is the owner.</td>
+</tr>
+<tr>
+<td><strong><code>Box&lt;T&gt;</code></strong></td>
+<td>A smart pointer that stores data on the Heap. Required when composing Dynamic Trait Objects (<code>dyn Trait</code>) because their size is unknown at compile time.</td>
+</tr>
+<tr>
+<td><strong>Contiguous Memory</strong></td>
+<td>In Rust composition, fields are stored side-by-side in memory. This improves CPU cache performance compared to Java's scattered pointers.</td>
+</tr>
+<tr>
+<td><strong>Delegate</strong></td>
+<td>A pattern where the wrapper struct (Car) calls a method on the inner struct (Engine). <code>car.start()</code> simply calls <code>self.engine.start()</code>.</td>
+</tr>
+</tbody>
+</table></div><details class="file"><summary>oop/rust/composition/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * COMPOSITION IN RUST</span>
+<span class="cm"> *</span>
+<span class="cm"> * Concept: "Has-a" relationship with Strong Ownership.</span>
+<span class="cm"> * Pattern: Structs embedding other Structs.</span>
+<span class="cm"> */</span>
+
+<span class="c1">// --- 1. COMPONENT STRUCTS ---</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Engine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">horsepower</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Engine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">horsepower</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Engine</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">horsepower</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"  -&gt; Engine started with {} HP."</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">horsepower</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Wheel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">wheel_type</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Wheel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">wheel_type</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Wheel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">wheel_type</span><span class="p">:</span><span class="w"> </span><span class="nc">wheel_type</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">rotate</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"  -&gt; The {} wheel is rotating."</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">wheel_type</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Transmission</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">trans_type</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Transmission</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">trans_type</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Transmission</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">trans_type</span><span class="p">:</span><span class="w"> </span><span class="nc">trans_type</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"  -&gt; Transmission shifted: {}"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">trans_type</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// --- 2. THE COMPOSITE STRUCT (Strong Ownership) ---</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The Car OWNS these objects. </span>
+<span class="w">    </span><span class="c1">// If Car is dropped, these are dropped.</span>
+<span class="w">    </span><span class="n">engine</span><span class="p">:</span><span class="w"> </span><span class="nc">Engine</span><span class="p">,</span>
+<span class="w">    </span><span class="n">wheels</span><span class="p">:</span><span class="w"> </span><span class="nc">Wheel</span><span class="p">,</span><span class="w"> </span><span class="c1">// Simplified to 1 wheel for demo</span>
+<span class="w">    </span><span class="n">transmission</span><span class="p">:</span><span class="w"> </span><span class="nc">Transmission</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">hp</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">wheel_type</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">trans_type</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">engine</span><span class="p">:</span><span class="w"> </span><span class="nc">Engine</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">hp</span><span class="p">),</span>
+<span class="w">            </span><span class="n">wheels</span><span class="p">:</span><span class="w"> </span><span class="nc">Wheel</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">wheel_type</span><span class="p">),</span>
+<span class="w">            </span><span class="n">transmission</span><span class="p">:</span><span class="w"> </span><span class="nc">Transmission</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">trans_type</span><span class="p">),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">drive</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Driving Car..."</span><span class="p">);</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">engine</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">wheels</span><span class="p">.</span><span class="n">rotate</span><span class="p">();</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">transmission</span><span class="p">.</span><span class="n">shift</span><span class="p">();</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Car is moving!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// --- 3. COMPOSITION WITH TRAITS (Dynamic Swapping) ---</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">PowerSource</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">power_up</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">ElectricMotor</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">PowerSource</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">ElectricMotor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">power_up</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"  -&gt; Electric motor humming silently... ⚡"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">DieselMotor</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">PowerSource</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">DieselMotor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">power_up</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"  -&gt; Diesel motor rumbling... ⛽"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">HybridVehicle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// We use Box&lt;dyn Trait&gt; to hold any type of engine</span>
+<span class="w">    </span><span class="n">power_source</span><span class="p">:</span><span class="w"> </span><span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span><span class="w"> </span><span class="n">PowerSource</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">HybridVehicle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">source</span><span class="p">:</span><span class="w"> </span><span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span><span class="w"> </span><span class="n">PowerSource</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">HybridVehicle</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">power_source</span><span class="p">:</span><span class="w"> </span><span class="nc">source</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">power_source</span><span class="p">.</span><span class="n">power_up</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 1. Direct Composition (Static) ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// We create the parts INSIDE the constructor call</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">my_car</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Car</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span><span class="w"> </span><span class="s">"Alloy"</span><span class="p">,</span><span class="w"> </span><span class="s">"Automatic"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">my_car</span><span class="p">.</span><span class="n">drive</span><span class="p">();</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 2. Composition with Interfaces (Dynamic) ---"</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// We can inject dependencies dynamically</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HybridVehicle</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="nb">Box</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">ElectricMotor</span><span class="p">));</span>
+<span class="w">    </span><span class="fm">print!</span><span class="p">(</span><span class="s">"EV: "</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ev</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">truck</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HybridVehicle</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="nb">Box</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">DieselMotor</span><span class="p">));</span>
+<span class="w">    </span><span class="fm">print!</span><span class="p">(</span><span class="s">"Truck: "</span><span class="p">);</span>
+<span class="w">    </span><span class="n">truck</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// PROOF OF OWNERSHIP</span>
+<span class="w">    </span><span class="c1">// Unlike Aggregation, we cannot access the 'ElectricMotor' independently </span>
+<span class="w">    </span><span class="c1">// after passing it to HybridVehicle. It has been moved inside.</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">(Note: The motors are now owned by the vehicles and cannot be accessed separately.)"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polymorphism · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Polymorphism</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Polymorphism</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Polymorphism in Java</h1>
+<h2>Introduction</h2>
+<p><strong>Polymorphism</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows a single interface to be used for different types of objects, enabling <strong>flexibility</strong>, <strong>scalability</strong>, and <strong>code reuse</strong>.</p>
+<p>Polymorphism in Java can be classified into two types:<br />
+1. <strong>Compile-time Polymorphism (Method Overloading)</strong><br />
+2. <strong>Run-time Polymorphism (Method Overriding)</strong></p>
+<h2><strong>What is Polymorphism?</strong></h2>
+<p><strong>Polymorphism</strong> means "many forms." It allows a method, function, or object to behave differently based on the context. Polymorphism enables <strong>dynamic method resolution</strong> and <strong>method flexibility</strong>, making applications easier to extend and maintain.</p>
+<h3><strong>Key Benefits of Polymorphism</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Write a single interface that works for multiple types.</li>
+<li><strong>Scalability</strong>: Add new functionalities with minimal code changes.</li>
+<li><strong>Maintainability</strong>: Reduce complexity and improve code clarity.</li>
+</ul>
+<hr />
+<h2><strong>1. Compile-Time Polymorphism (Method Overloading)</strong></h2>
+<p>Compile-time polymorphism occurs when multiple methods in the same class share the same name but have <strong>different method signatures</strong> (parameters). The method to be called is determined <strong>at compile time</strong>.</p>
+<h3><strong>Example of Method Overloading</strong></h3>
+<pre><code class="language-java">class MathOperations {
+    // Method with two parameters
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    // Method with three parameters (overloaded)
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MathOperations math = new MathOperations();
+        System.out.println(&quot;Sum (2 numbers): &quot; + math.add(5, 10));
+        System.out.println(&quot;Sum (3 numbers): &quot; + math.add(5, 10, 15));
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Sum (2 numbers): 15
+Sum (3 numbers): 30
+</code></pre>
+<p><strong>Why Use Method Overloading?</strong><br />
+- Provides a cleaner and more intuitive interface.<br />
+- Reduces redundancy by using a single method name for similar operations.</p>
+<hr />
+<h2><strong>2. Run-Time Polymorphism (Method Overriding)</strong></h2>
+<p>Run-time polymorphism occurs when a subclass provides a <strong>specific implementation</strong> of a method already defined in its parent class. The method to be called is determined <strong>at runtime</strong>.</p>
+<h3><strong>Example of Method Overriding</strong></h3>
+<pre><code class="language-java">class Animal {
+    void makeSound() {
+        System.out.println(&quot;Animal makes a sound&quot;);
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void makeSound() {
+        System.out.println(&quot;Dog barks&quot;);
+    }
+}
+
+class Cat extends Animal {
+    @Override
+    void makeSound() {
+        System.out.println(&quot;Cat meows&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Dog(); // Upcasting
+        myAnimal.makeSound();
+
+        myAnimal = new Cat(); // Dynamic method dispatch
+        myAnimal.makeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Method Overriding?</strong><br />
+- Enables <strong>dynamic method resolution</strong>.<br />
+- Supports <strong>polymorphic behavior</strong>, where one interface can be used for multiple implementations.<br />
+- Makes code <strong>extensible</strong> by allowing future modifications.</p>
+<hr />
+<h2><strong>Using Polymorphism with Interfaces</strong></h2>
+<p>Polymorphism is widely used with <strong>interfaces</strong>, allowing multiple classes to share a common contract.</p>
+<pre><code class="language-java">interface Vehicle {
+    void start();
+}
+
+class Car implements Vehicle {
+    public void start() {
+        System.out.println(&quot;Car is starting...&quot;);
+    }
+}
+
+class Bike implements Vehicle {
+    public void start() {
+        System.out.println(&quot;Bike is starting...&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Vehicle myVehicle = new Car();
+        myVehicle.start();
+
+        myVehicle = new Bike();
+        myVehicle.start();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Bike is starting...
+</code></pre>
+<p><strong>Why Use Interfaces with Polymorphism?</strong><br />
+- Promotes <strong>loose coupling</strong>, making code more flexible.<br />
+- Allows multiple implementations of the same behavior.<br />
+- Enables <strong>dependency injection</strong>, improving testability.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case of polymorphism is in <strong>payment processing</strong>.</p>
+<pre><code class="language-java">interface Payment {
+    void pay(double amount);
+}
+
+class CreditCardPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        System.out.println(&quot;Paid &quot; + amount + &quot; using Credit Card&quot;);
+    }
+}
+
+class PayPalPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        System.out.println(&quot;Paid &quot; + amount + &quot; using PayPal&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Payment payment;
+
+        payment = new CreditCardPayment();
+        payment.pay(100.50);
+
+        payment = new PayPalPayment();
+        payment.pay(200.75);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre>
+<p><strong>Why Use Polymorphism in Payment Systems?</strong><br />
+- Allows new payment methods to be added <strong>without modifying existing code</strong>.<br />
+- Provides a <strong>flexible and scalable</strong> design.<br />
+- Improves <strong>code readability and maintainability</strong>.</p></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Polymorphism in C++</h1>
+<h2>Introduction</h2>
+<p><strong>Polymorphism</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows a single interface to be used for different types of objects, enabling <strong>flexibility</strong>, <strong>scalability</strong>, and <strong>code reuse</strong>.</p>
+<p>Polymorphism in C++ can be classified into two types:<br />
+1. <strong>Compile-time Polymorphism (Function Overloading &amp; Operator Overloading)</strong><br />
+2. <strong>Run-time Polymorphism (Function Overriding &amp; Virtual Functions)</strong></p>
+<h2><strong>What is Polymorphism?</strong></h2>
+<p><strong>Polymorphism</strong> means "many forms." It allows a method, function, or object to behave differently based on the context. Polymorphism enables <strong>dynamic method resolution</strong> and <strong>method flexibility</strong>, making applications easier to extend and maintain.</p>
+<h3><strong>Key Benefits of Polymorphism</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Write a single interface that works for multiple types.</li>
+<li><strong>Scalability</strong>: Add new functionalities with minimal code changes.</li>
+<li><strong>Maintainability</strong>: Reduce complexity and improve code clarity.</li>
+</ul>
+<hr />
+<h2><strong>1. Compile-Time Polymorphism (Function Overloading)</strong></h2>
+<p>Compile-time polymorphism occurs when multiple functions in the same class share the same name but have <strong>different method signatures</strong> (parameters). The method to be called is determined <strong>at compile time</strong>.</p>
+<h3><strong>Example of Function Overloading</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class MathOperations {
+public:
+    // Function with two parameters
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    // Function with three parameters (overloaded)
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+};
+
+int main() {
+    MathOperations math;
+    cout &lt;&lt; &quot;Sum (2 numbers): &quot; &lt;&lt; math.add(5, 10) &lt;&lt; endl;
+    cout &lt;&lt; &quot;Sum (3 numbers): &quot; &lt;&lt; math.add(5, 10, 15) &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Sum (2 numbers): 15
+Sum (3 numbers): 30
+</code></pre>
+<p><strong>Why Use Function Overloading?</strong><br />
+- Provides a cleaner and more intuitive interface.<br />
+- Reduces redundancy by using a single function name for similar operations.</p>
+<hr />
+<h2><strong>2. Run-Time Polymorphism (Function Overriding &amp; Virtual Functions)</strong></h2>
+<p>Run-time polymorphism occurs when a subclass provides a <strong>specific implementation</strong> of a method already defined in its parent class. The method to be called is determined <strong>at runtime</strong> using <strong>virtual functions</strong>.</p>
+<h3><strong>Example of Function Overriding with Virtual Functions</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Animal {
+public:
+    virtual void makeSound() {
+        cout &lt;&lt; &quot;Animal makes a sound&quot; &lt;&lt; endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void makeSound() override {
+        cout &lt;&lt; &quot;Dog barks&quot; &lt;&lt; endl;
+    }
+};
+
+class Cat : public Animal {
+public:
+    void makeSound() override {
+        cout &lt;&lt; &quot;Cat meows&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    Animal* myAnimal = new Dog(); // Upcasting
+    myAnimal-&gt;makeSound();
+
+    myAnimal = new Cat(); // Dynamic method dispatch
+    myAnimal-&gt;makeSound();
+
+    delete myAnimal;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Function Overriding?</strong><br />
+- Enables <strong>dynamic method resolution</strong>.<br />
+- Supports <strong>polymorphic behavior</strong>, where one interface can be used for multiple implementations.<br />
+- Makes code <strong>extensible</strong> by allowing future modifications.</p>
+<hr />
+<h2><strong>Using Polymorphism with Abstract Classes</strong></h2>
+<p>Polymorphism is widely used with <strong>abstract classes</strong>, allowing multiple derived classes to share a common contract.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Vehicle {
+public:
+    virtual void start() = 0; // Pure virtual function
+};
+
+class Car : public Vehicle {
+public:
+    void start() override {
+        cout &lt;&lt; &quot;Car is starting...&quot; &lt;&lt; endl;
+    }
+};
+
+class Bike : public Vehicle {
+public:
+    void start() override {
+        cout &lt;&lt; &quot;Bike is starting...&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    Vehicle* myVehicle = new Car();
+    myVehicle-&gt;start();
+
+    myVehicle = new Bike();
+    myVehicle-&gt;start();
+
+    delete myVehicle;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Bike is starting...
+</code></pre>
+<p><strong>Why Use Abstract Classes with Polymorphism?</strong><br />
+- Promotes <strong>loose coupling</strong>, making code more flexible.<br />
+- Allows multiple implementations of the same behavior.<br />
+- Enforces common structure in derived classes.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case of polymorphism is in <strong>payment processing</strong>.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Payment {
+public:
+    virtual void pay(double amount) = 0; // Pure virtual function
+};
+
+class CreditCardPayment : public Payment {
+public:
+    void pay(double amount) override {
+        cout &lt;&lt; &quot;Paid &quot; &lt;&lt; amount &lt;&lt; &quot; using Credit Card&quot; &lt;&lt; endl;
+    }
+};
+
+class PayPalPayment : public Payment {
+public:
+    void pay(double amount) override {
+        cout &lt;&lt; &quot;Paid &quot; &lt;&lt; amount &lt;&lt; &quot; using PayPal&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    Payment* payment;
+
+    payment = new CreditCardPayment();
+    payment-&gt;pay(100.50);
+
+    payment = new PayPalPayment();
+    payment-&gt;pay(200.75);
+
+    delete payment;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre>
+<p><strong>Why Use Polymorphism in Payment Systems?</strong><br />
+- Allows new payment methods to be added <strong>without modifying existing code</strong>.<br />
+- Provides a <strong>flexible and scalable</strong> design.<br />
+- Improves <strong>code readability and maintainability</strong>.</p></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Polymorphism in Python</h1>
+<h2>Introduction</h2>
+<p><strong>Polymorphism</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows a single interface to be used for different types of objects, enabling <strong>flexibility</strong>, <strong>scalability</strong>, and <strong>code reuse</strong>.</p>
+<p>Polymorphism in Python can be classified into two types:<br />
+1. <strong>Compile-time Polymorphism (Method Overloading - Python handles it differently)</strong><br />
+2. <strong>Run-time Polymorphism (Method Overriding &amp; Duck Typing)</strong></p>
+<h2><strong>What is Polymorphism?</strong></h2>
+<p><strong>Polymorphism</strong> means "many forms." It allows a method, function, or object to behave differently based on the context. Polymorphism enables <strong>dynamic method resolution</strong> and <strong>method flexibility</strong>, making applications easier to extend and maintain.</p>
+<h3><strong>Key Benefits of Polymorphism</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Write a single interface that works for multiple types.</li>
+<li><strong>Scalability</strong>: Add new functionalities with minimal code changes.</li>
+<li><strong>Maintainability</strong>: Reduce complexity and improve code clarity.</li>
+</ul>
+<hr />
+<h2><strong>1. Compile-Time Polymorphism (Method Overloading in Python)</strong></h2>
+<p>Unlike Java or C++, Python does not support method overloading in the traditional sense. However, we can achieve similar functionality by using <strong>default parameters</strong> or variable arguments (<code>*args</code>).</p>
+<h3><strong>Example of Method Overloading using Default Arguments</strong></h3>
+<pre><code class="language-python">class MathOperations:
+    def add(self, a, b, c=0):
+        return a + b + c
+
+math = MathOperations()
+print(&quot;Sum (2 numbers):&quot;, math.add(5, 10))
+print(&quot;Sum (3 numbers):&quot;, math.add(5, 10, 15))
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Sum (2 numbers): 15
+Sum (3 numbers): 30
+</code></pre>
+<p><strong>Why Use Default Arguments?</strong><br />
+- Simulates method overloading by providing optional parameters.<br />
+- Reduces redundancy by using a single method name for similar operations.</p>
+<hr />
+<h2><strong>2. Run-Time Polymorphism (Method Overriding)</strong></h2>
+<p>Run-time polymorphism occurs when a subclass provides a <strong>specific implementation</strong> of a method already defined in its parent class. The method to be called is determined <strong>at runtime</strong>.</p>
+<h3><strong>Example of Method Overriding</strong></h3>
+<pre><code class="language-python">class Animal:
+    def make_sound(self):
+        print(&quot;Animal makes a sound&quot;)
+
+class Dog(Animal):
+    def make_sound(self):
+        print(&quot;Dog barks&quot;)
+
+class Cat(Animal):
+    def make_sound(self):
+        print(&quot;Cat meows&quot;)
+
+# Demonstrating runtime polymorphism
+animals = [Dog(), Cat()]
+for animal in animals:
+    animal.make_sound()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Method Overriding?</strong><br />
+- Enables <strong>dynamic method resolution</strong>.<br />
+- Supports <strong>polymorphic behavior</strong>, where one interface can be used for multiple implementations.<br />
+- Makes code <strong>extensible</strong> by allowing future modifications.</p>
+<hr />
+<h2><strong>Using Polymorphism with Duck Typing</strong></h2>
+<p>Python follows the <strong>Duck Typing</strong> principle: "If it looks like a duck and quacks like a duck, it is a duck." This means that Python does not require explicit implementation of interfaces.</p>
+<pre><code class="language-python">class Car:
+    def start(self):
+        print(&quot;Car is starting...&quot;)
+
+class Bike:
+    def start(self):
+        print(&quot;Bike is starting...&quot;)
+
+# Polymorphic function
+def vehicle_start(vehicle):
+    vehicle.start()
+
+vehicle_start(Car())
+vehicle_start(Bike())
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Bike is starting...
+</code></pre>
+<p><strong>Why Use Duck Typing?</strong><br />
+- Promotes <strong>loose coupling</strong>, making code more flexible.<br />
+- Allows multiple implementations of the same behavior without inheritance.<br />
+- Enables <strong>dependency injection</strong>, improving testability.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case of polymorphism is in <strong>payment processing</strong>.</p>
+<pre><code class="language-python">class Payment:
+    def pay(self, amount):
+        pass  # Abstract method
+
+class CreditCardPayment(Payment):
+    def pay(self, amount):
+        print(f&quot;Paid {amount} using Credit Card&quot;)
+
+class PayPalPayment(Payment):
+    def pay(self, amount):
+        print(f&quot;Paid {amount} using PayPal&quot;)
+
+# Demonstrating polymorphism
+payments = [CreditCardPayment(), PayPalPayment()]
+for payment in payments:
+    payment.pay(100.50)
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 100.5 using PayPal
+</code></pre>
+<p><strong>Why Use Polymorphism in Payment Systems?</strong><br />
+- Allows new payment methods to be added <strong>without modifying existing code</strong>.<br />
+- Provides a <strong>flexible and scalable</strong> design.<br />
+- Improves <strong>code readability and maintainability</strong>.</p></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Polymorphism in C</h1>
+<h2>Introduction</h2>
+<p><strong>Polymorphism</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows a single interface to be used for different types of objects, enabling <strong>flexibility</strong>, <strong>scalability</strong>, and <strong>code reuse</strong>.</p>
+<p>Polymorphism in C# can be classified into two types:<br />
+1. <strong>Compile-time Polymorphism (Method Overloading &amp; Operator Overloading)</strong><br />
+2. <strong>Run-time Polymorphism (Method Overriding &amp; Interfaces)</strong></p>
+<h2><strong>What is Polymorphism?</strong></h2>
+<p><strong>Polymorphism</strong> means "many forms." It allows a method, function, or object to behave differently based on the context. Polymorphism enables <strong>dynamic method resolution</strong> and <strong>method flexibility</strong>, making applications easier to extend and maintain.</p>
+<h3><strong>Key Benefits of Polymorphism</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Write a single interface that works for multiple types.</li>
+<li><strong>Scalability</strong>: Add new functionalities with minimal code changes.</li>
+<li><strong>Maintainability</strong>: Reduce complexity and improve code clarity.</li>
+</ul>
+<hr />
+<h2><strong>1. Compile-Time Polymorphism (Method Overloading)</strong></h2>
+<p>Compile-time polymorphism occurs when multiple methods in the same class share the same name but have <strong>different method signatures</strong> (parameters). The method to be called is determined <strong>at compile time</strong>.</p>
+<h3><strong>Example of Method Overloading</strong></h3>
+<pre><code class="language-csharp">using System;
+
+class MathOperations {
+    // Method with two parameters
+    public int Add(int a, int b) {
+        return a + b;
+    }
+
+    // Method with three parameters (overloaded)
+    public int Add(int a, int b, int c) {
+        return a + b + c;
+    }
+}
+
+class Program {
+    static void Main() {
+        MathOperations math = new MathOperations();
+        Console.WriteLine(&quot;Sum (2 numbers): &quot; + math.Add(5, 10));
+        Console.WriteLine(&quot;Sum (3 numbers): &quot; + math.Add(5, 10, 15));
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Sum (2 numbers): 15
+Sum (3 numbers): 30
+</code></pre>
+<p><strong>Why Use Method Overloading?</strong><br />
+- Provides a cleaner and more intuitive interface.<br />
+- Reduces redundancy by using a single method name for similar operations.</p>
+<hr />
+<h2><strong>2. Run-Time Polymorphism (Method Overriding)</strong></h2>
+<p>Run-time polymorphism occurs when a subclass provides a <strong>specific implementation</strong> of a method already defined in its parent class. The method to be called is determined <strong>at runtime</strong>.</p>
+<h3><strong>Example of Method Overriding</strong></h3>
+<pre><code class="language-csharp">using System;
+
+class Animal {
+    public virtual void MakeSound() {
+        Console.WriteLine(&quot;Animal makes a sound&quot;);
+    }
+}
+
+class Dog : Animal {
+    public override void MakeSound() {
+        Console.WriteLine(&quot;Dog barks&quot;);
+    }
+}
+
+class Cat : Animal {
+    public override void MakeSound() {
+        Console.WriteLine(&quot;Cat meows&quot;);
+    }
+}
+
+class Program {
+    static void Main() {
+        Animal myAnimal = new Dog(); // Upcasting
+        myAnimal.MakeSound();
+
+        myAnimal = new Cat(); // Dynamic method dispatch
+        myAnimal.MakeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Method Overriding?</strong><br />
+- Enables <strong>dynamic method resolution</strong>.<br />
+- Supports <strong>polymorphic behavior</strong>, where one interface can be used for multiple implementations.<br />
+- Makes code <strong>extensible</strong> by allowing future modifications.</p>
+<hr />
+<h2><strong>Using Polymorphism with Interfaces</strong></h2>
+<p>Polymorphism is widely used with <strong>interfaces</strong>, allowing multiple classes to share a common contract.</p>
+<pre><code class="language-csharp">using System;
+
+interface IVehicle {
+    void Start();
+}
+
+class Car : IVehicle {
+    public void Start() {
+        Console.WriteLine(&quot;Car is starting...&quot;);
+    }
+}
+
+class Bike : IVehicle {
+    public void Start() {
+        Console.WriteLine(&quot;Bike is starting...&quot;);
+    }
+}
+
+class Program {
+    static void Main() {
+        IVehicle myVehicle = new Car();
+        myVehicle.Start();
+
+        myVehicle = new Bike();
+        myVehicle.Start();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Bike is starting...
+</code></pre>
+<p><strong>Why Use Interfaces with Polymorphism?</strong><br />
+- Promotes <strong>loose coupling</strong>, making code more flexible.<br />
+- Allows multiple implementations of the same behavior.<br />
+- Enables <strong>dependency injection</strong>, improving testability.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case of polymorphism is in <strong>payment processing</strong>.</p>
+<pre><code class="language-csharp">using System;
+
+interface IPayment {
+    void Pay(double amount);
+}
+
+class CreditCardPayment : IPayment {
+    public void Pay(double amount) {
+        Console.WriteLine(&quot;Paid &quot; + amount + &quot; using Credit Card&quot;);
+    }
+}
+
+class PayPalPayment : IPayment {
+    public void Pay(double amount) {
+        Console.WriteLine(&quot;Paid &quot; + amount + &quot; using PayPal&quot;);
+    }
+}
+
+class Program {
+    static void Main() {
+        IPayment payment;
+
+        payment = new CreditCardPayment();
+        payment.Pay(100.50);
+
+        payment = new PayPalPayment();
+        payment.Pay(200.75);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.5 using Credit Card
+Paid 200.75 using PayPal
+</code></pre>
+<p><strong>Why Use Polymorphism in Payment Systems?</strong><br />
+- Allows new payment methods to be added <strong>without modifying existing code</strong>.<br />
+- Provides a <strong>flexible and scalable</strong> design.<br />
+- Improves <strong>code readability and maintainability</strong>.</p></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Polymorphism in Object-Oriented Programming (OOP) in Golang</h1>
+<h2>Introduction</h2>
+<p><strong>Polymorphism</strong> is one of the fundamental principles of Object-Oriented Programming (OOP). It allows a single interface to be used for different types of objects, enabling <strong>flexibility</strong>, <strong>scalability</strong>, and <strong>code reuse</strong>.</p>
+<p>Polymorphism in Go is primarily achieved using <strong>interfaces</strong>, as Go does not support method overloading or classical inheritance like Java or C#.</p>
+<hr />
+<h2><strong>What is Polymorphism?</strong></h2>
+<p><strong>Polymorphism</strong> means "many forms." It allows a method, function, or object to behave differently based on the context. Polymorphism enables <strong>dynamic method resolution</strong> and <strong>method flexibility</strong>, making applications easier to extend and maintain.</p>
+<h3><strong>Key Benefits of Polymorphism</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Write a single interface that works for multiple types.</li>
+<li><strong>Scalability</strong>: Add new functionalities with minimal code changes.</li>
+<li><strong>Maintainability</strong>: Reduce complexity and improve code clarity.</li>
+</ul>
+<hr />
+<h2><strong>Polymorphism using Interfaces in Go</strong></h2>
+<p>Go achieves polymorphism through <strong>interfaces</strong>. An interface defines a set of method signatures, and any type that implements those methods satisfies the interface.</p>
+<h3><strong>Example: Polymorphism using Interfaces</strong></h3>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Define an interface
+type Animal interface {
+    MakeSound()
+}
+
+// Implementing the interface in Dog
+type Dog struct{}
+
+func (d Dog) MakeSound() {
+    fmt.Println(&quot;Dog barks&quot;)
+}
+
+// Implementing the interface in Cat
+type Cat struct{}
+
+func (c Cat) MakeSound() {
+    fmt.Println(&quot;Cat meows&quot;)
+}
+
+func main() {
+    var animal Animal
+
+    animal = Dog{}
+    animal.MakeSound()
+
+    animal = Cat{}
+    animal.MakeSound()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Interfaces for Polymorphism?</strong><br />
+- Provides a flexible and modular design.<br />
+- Encourages dependency inversion and loose coupling.<br />
+- Allows multiple types to satisfy the same interface.</p>
+<hr />
+<h2><strong>Using Polymorphism with Functions</strong></h2>
+<p>A common use of polymorphism in Go is passing different types to the same function.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Define an interface
+type Vehicle interface {
+    Start()
+}
+
+// Implementing the interface in Car
+type Car struct{}
+
+func (c Car) Start() {
+    fmt.Println(&quot;Car is starting...&quot;)
+}
+
+// Implementing the interface in Bike
+type Bike struct{}
+
+func (b Bike) Start() {
+    fmt.Println(&quot;Bike is starting...&quot;)
+}
+
+// Function that takes any Vehicle
+func StartVehicle(v Vehicle) {
+    v.Start()
+}
+
+func main() {
+    car := Car{}
+    bike := Bike{}
+
+    StartVehicle(car)
+    StartVehicle(bike)
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Car is starting...
+Bike is starting...
+</code></pre>
+<p><strong>Why Use Function Parameters for Polymorphism?</strong><br />
+- Allows flexible function behavior based on the type passed.<br />
+- Enhances code modularity and testability.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case of polymorphism is in <strong>payment processing</strong>.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Define an interface
+type Payment interface {
+    Pay(amount float64)
+}
+
+// Implementing the interface in CreditCardPayment
+type CreditCardPayment struct{}
+
+func (c CreditCardPayment) Pay(amount float64) {
+    fmt.Printf(&quot;Paid %.2f using Credit Card\n&quot;, amount)
+}
+
+// Implementing the interface in PayPalPayment
+type PayPalPayment struct{}
+
+func (p PayPalPayment) Pay(amount float64) {
+    fmt.Printf(&quot;Paid %.2f using PayPal\n&quot;, amount)
+}
+
+func main() {
+    var payment Payment
+
+    payment = CreditCardPayment{}
+    payment.Pay(100.50)
+
+    payment = PayPalPayment{}
+    payment.Pay(200.75)
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 100.50 using Credit Card
+Paid 200.75 using PayPal
+</code></pre>
+<p><strong>Why Use Polymorphism in Payment Systems?</strong><br />
+- Allows new payment methods to be added <strong>without modifying existing code</strong>.<br />
+- Provides a <strong>flexible and scalable</strong> design.<br />
+- Improves <strong>code readability and maintainability</strong>.</p></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Polymorphism in Rust (Generics &amp; Trait Objects)</h1>
+<h2>Introduction</h2>
+<p><strong>Polymorphism</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows a single interface to be used for different types of objects, enabling <strong>flexibility</strong>, <strong>scalability</strong>, and <strong>code reuse</strong>.</p>
+<p>In Java, polymorphism is often divided into "Overloading" and "Overriding."<br />
+In Rust, we classify it based on <strong>when</strong> the decision is made:<br />
+1.  <strong>Compile-time Polymorphism (Static Dispatch):</strong> Using <strong>Generics</strong>. fast, zero-cost.<br />
+2.  <strong>Run-time Polymorphism (Dynamic Dispatch):</strong> Using <strong>Trait Objects</strong> (<code>dyn</code>). Flexible, like Java.</p>
+<h2><strong>What is Polymorphism?</strong></h2>
+<p><strong>Polymorphism</strong> means "many forms." It allows a function or method to operate on different types.</p>
+<h3><strong>Key Benefits of Polymorphism</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Write a single function that works for multiple types.</li>
+<li><strong>Scalability</strong>: Add new types with minimal code changes.</li>
+<li><strong>Maintainability</strong>: Reduce complexity and improve code clarity.</li>
+</ul>
+<hr />
+<h2><strong>1. Compile-Time Polymorphism (Static Dispatch)</strong></h2>
+<p>In Java, this is Method Overloading. Rust <strong>does not</strong> support traditional Method Overloading (same name, different args).</p>
+<p>Instead, Rust uses <strong>Generics</strong>.<br />
+When you write a generic function, the compiler generates a unique copy of that function for <em>every concrete type</em> you use. This is called <strong>Monomorphization</strong>.</p>
+<h3><strong>Example of Generics (Static Dispatch)</strong></h3>
+<pre><code class="language-rust">trait Addable {
+    fn add(&amp;self, other: i32) -&gt; i32;
+}
+
+struct Number { value: i32 }
+impl Addable for Number {
+    fn add(&amp;self, other: i32) -&gt; i32 { self.value + other }
+}
+
+// GENERIC FUNCTION:
+// The compiler creates separate machine code for every type 'T' used.
+// It effectively converts 'static_add(num)' into 'static_add_Number(num)'.
+fn static_add&lt;T: Addable&gt;(item: T, extra: i32) -&gt; i32 {
+    item.add(extra)
+}
+
+</code></pre>
+<p><strong>Why Use Generics?</strong></p>
+<ul>
+<li><strong>Zero Runtime Cost:</strong> The decision of which function to call happens during compilation.</li>
+<li><strong>Type Safety:</strong> Errors are caught at compile time.</li>
+</ul>
+<hr />
+<h2><strong>2. Run-Time Polymorphism (Dynamic Dispatch)</strong></h2>
+<p>This corresponds to Java's Method Overriding. The exact method to be called is determined <strong>at runtime</strong>.</p>
+<p>In Rust, we achieve this using <strong>Trait Objects</strong>.<br />
+A Trait Object involves a pointer (like <code>&amp;</code> or <code>Box</code>) combined with the <code>dyn</code> keyword (e.g., <code>Box&lt;dyn Animal&gt;</code>). This tells Rust: <em>"I don't know the exact size of this object, so look up its methods in a vtable (virtual table) at runtime."</em></p>
+<h3><strong>Example of Trait Objects</strong></h3>
+<pre><code class="language-rust">trait Animal {
+    fn make_sound(&amp;self);
+}
+
+struct Dog;
+impl Animal for Dog { fn make_sound(&amp;self) { println!(&quot;Bark&quot;); } }
+
+struct Cat;
+impl Animal for Cat { fn make_sound(&amp;self) { println!(&quot;Meow&quot;); } }
+
+fn main() {
+    // We store different types in the same list using Box&lt;dyn Animal&gt;
+    let animals: Vec&lt;Box&lt;dyn Animal&gt;&gt; = vec![
+        Box::new(Dog),
+        Box::new(Cat),
+    ];
+
+    for animal in animals {
+        // The specific method is decided dynamically at runtime via vtable lookup
+        animal.make_sound();
+    }
+}
+
+</code></pre>
+<p><strong>Why Use Trait Objects?</strong></p>
+<ul>
+<li>Enables <strong>heterogeneous collections</strong> (storing different types in one list).</li>
+<li>Supports <strong>polymorphic behavior</strong> where the type isn't known until runtime.</li>
+</ul>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case is <strong>payment processing</strong>, where we want to process payments regardless of the method (Credit Card, PayPal, etc.).</p>
+<pre><code class="language-rust">trait Payment {
+    fn pay(&amp;self, amount: f64);
+}
+
+struct CreditCard;
+impl Payment for CreditCard {
+    fn pay(&amp;self, amount: f64) { println!(&quot;Paid with Card: {}&quot;, amount); }
+}
+
+struct PayPal;
+impl Payment for PayPal {
+    fn pay(&amp;self, amount: f64) { println!(&quot;Paid with PayPal: {}&quot;, amount); }
+}
+
+// Accepts any type that implements Payment at runtime
+fn process(method: &amp;dyn Payment, amount: f64) {
+    method.pay(amount);
+}
+
+</code></pre>
+<hr />
+<h2>📚 New Terminology (Detailed Explanation)</h2>
+<p>Since you are moving from Java to Rust, here are the specific new terms introduced in this topic:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Java Equivalent</th>
+<th>Detailed Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Generics (<code>&lt;T&gt;</code>)</strong></td>
+<td>Generics</td>
+<td>In Java, generics are "erased" at runtime (Type Erasure). In Rust, they are "filled in" at compile time (Monomorphization), making them much faster.</td>
+</tr>
+<tr>
+<td><strong>Trait Bounds (<code>T: Animal</code>)</strong></td>
+<td><code>extends Interface</code></td>
+<td>A rule that says "I will accept any Type T, <em>as long as</em> it implements the Animal Trait."</td>
+</tr>
+<tr>
+<td><strong><code>dyn</code> Keyword</strong></td>
+<td>Runtime Type</td>
+<td>Short for "Dynamic". It tells the compiler: "I don't know the exact size of this object right now, so treat it as a generic object implementing this trait."</td>
+</tr>
+<tr>
+<td><strong>Trait Object</strong></td>
+<td>Interface Reference</td>
+<td>A combination of a pointer to data and a pointer to methods (vtable). Example: <code>Box&lt;dyn Animal&gt;</code> or <code>&amp;dyn Animal</code>.</td>
+</tr>
+<tr>
+<td><strong>Static Dispatch</strong></td>
+<td>N/A (Optimization)</td>
+<td>The compiler decides <em>exactly</em> which function to call while compiling. This is the default in Rust.</td>
+</tr>
+<tr>
+<td><strong>Dynamic Dispatch</strong></td>
+<td>Method Overriding</td>
+<td>The program decides which function to call while running. This is the default in Java.</td>
+</tr>
+<tr>
+<td><strong>Monomorphization</strong></td>
+<td>N/A</td>
+<td>The fancy word for the compiler copying your generic code for every concrete type you use.</td>
+</tr>
+<tr>
+<td><strong>VTable</strong></td>
+<td>Virtual Method Table</td>
+<td>A hidden table of function pointers used to look up methods at runtime for dynamic dispatch.</td>
+</tr>
+</tbody>
+</table>
+<hr /></div><details class="file"><summary>oop/rust/polymorphism/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * POLYMORPHISM IN RUST</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: Demonstrate Static Dispatch (Generics) and Dynamic Dispatch (Trait Objects).</span>
+<span class="cm"> */</span>
+
+<span class="c1">// --- 1. COMPILE-TIME POLYMORPHISM (GENERICS) ---</span>
+
+<span class="c1">// Define a trait</span>
+<span class="k">trait</span><span class="w"> </span><span class="n">Addable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">other</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">i32</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Implement for a struct</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Number</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Addable</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Number</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">other</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">other</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Generic Function (Static Dispatch)</span>
+<span class="c1">// T: Addable means "Any type T that implements Addable"</span>
+<span class="c1">// Compiler creates a specific version of this function for 'Number'</span>
+<span class="k">fn</span><span class="w"> </span><span class="nf">static_add</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span><span class="w"> </span><span class="nc">Addable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">extra</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">item</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span>
+<span class="p">}</span>
+
+
+<span class="c1">// --- 2. RUN-TIME POLYMORPHISM (TRAIT OBJECTS) ---</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Dog</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Dog</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Dog barks 🐶"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Cat</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Cat</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Cat meows 🐱"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// --- 3. POLYMORPHISM WITH TRAITS (INTERFACES) ---</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">Vehicle</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Car</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Vehicle</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Car is starting... 🚗"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Bike</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Vehicle</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Bike</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Bike is starting... 🏍️"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// --- 4. REAL WORLD EXAMPLE: PAYMENT SYSTEM ---</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">Payment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">CreditCardPayment</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Payment</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">CreditCardPayment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Paid ${:.2} using Credit Card 💳"</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">PayPalPayment</span><span class="p">;</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Payment</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">PayPalPayment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Paid ${:.2} using PayPal 🅿️"</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Helper function accepting a Trait Object (Dynamic Dispatch)</span>
+<span class="k">fn</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">payment_method</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">dyn</span><span class="w"> </span><span class="n">Payment</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">payment_method</span><span class="p">.</span><span class="n">pay</span><span class="p">(</span><span class="n">amount</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 1. Compile-Time Polymorphism (Generics) ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Number</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="c1">// The compiler generates a specific version of static_add for 'Number'</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">static_add</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w"> </span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Result: {}"</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 2. Run-Time Polymorphism (Dynamic Dispatch) ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// We use Box&lt;dyn Animal&gt; to store different types in one Vec</span>
+<span class="w">    </span><span class="c1">// This requires a vtable lookup at runtime</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">animals</span><span class="p">:</span><span class="w"> </span><span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Box</span><span class="o">&lt;</span><span class="k">dyn</span><span class="w"> </span><span class="n">Animal</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span>
+<span class="w">        </span><span class="nb">Box</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">Dog</span><span class="p">),</span>
+<span class="w">        </span><span class="nb">Box</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">Cat</span><span class="p">),</span>
+<span class="w">    </span><span class="p">];</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">animal</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">animals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Method called is determined at runtime</span>
+<span class="w">        </span><span class="n">animal</span><span class="p">.</span><span class="n">make_sound</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 3. Using Polymorphism with Traits ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">my_car</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Car</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">my_bike</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bike</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// References (&amp;dyn Vehicle) are also Trait Objects</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">vehicles</span><span class="p">:</span><span class="w"> </span><span class="nb">Vec</span><span class="o">&lt;&amp;</span><span class="k">dyn</span><span class="w"> </span><span class="n">Vehicle</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span><span class="o">&amp;</span><span class="n">my_car</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">my_bike</span><span class="p">];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">vehicles</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">v</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 4. Real-World Example: Payment System ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">cc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreditCardPayment</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">pp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PayPalPayment</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// We can swap implementations easily</span>
+<span class="w">    </span><span class="n">process</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cc</span><span class="p">,</span><span class="w"> </span><span class="mf">100.50</span><span class="p">);</span>
+<span class="w">    </span><span class="n">process</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pp</span><span class="p">,</span><span class="w"> </span><span class="mf">200.75</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

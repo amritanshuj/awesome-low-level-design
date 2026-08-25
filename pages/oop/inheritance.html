@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inheritance · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Inheritance</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Inheritance</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Inheritance in Object-Oriented Programming (OOP)</h1>
+<h2>Introduction</h2>
+<p><strong>Inheritance</strong> is one of the core principles of Object-Oriented Programming (OOP). It allows a class (subclass or child class) to acquire the properties and behaviors of another class (superclass or parent class). This promotes <strong>code reuse</strong>, <strong>scalability</strong>, and <strong>maintainability</strong>.</p>
+<h2><strong>What is Inheritance?</strong></h2>
+<p><strong>Inheritance</strong> is a mechanism where a child class derives properties and behaviors from a parent class. The child class can:</p>
+<ul>
+<li>Use the fields and methods of the parent class</li>
+<li>Override parent class methods to provide a specific implementation</li>
+<li>Add its own additional properties and methods</li>
+</ul>
+<h3><strong>Key Benefits of Inheritance</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Avoids code duplication by reusing fields and methods of the parent class.</li>
+<li><strong>Improves Maintainability</strong>: Reduces redundancy, making code easier to manage.</li>
+<li><strong>Enhances Extensibility</strong>: New functionality can be added easily without modifying existing code.</li>
+</ul>
+<hr />
+<h2><strong>How to Implement Inheritance in Java</strong></h2>
+<h3><strong>Step 1: Create a Parent Class</strong></h3>
+<p>The parent class contains common fields and methods.</p>
+<pre><code class="language-java">// Parent class
+public class Animal {
+    String name;
+
+    void eat() {
+        System.out.println(name + &quot; is eating...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Step 2: Create a Child Class using <code>extends</code></strong></h3>
+<p>The child class inherits the properties and methods of the parent class.</p>
+<pre><code class="language-java">// Child class
+public class Dog extends Animal {
+    void bark() {
+        System.out.println(name + &quot; is barking...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Step 3: Use the Child Class</strong></h3>
+<p>Now, let's create an object and use the inherited methods.</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Dog myDog = new Dog();
+        myDog.name = &quot;Buddy&quot;;
+        myDog.eat(); // Inherited from Animal class
+        myDog.bark(); // Defined in Dog class
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy is eating...
+Buddy is barking...
+</code></pre>
+<hr />
+<h2><strong>Types of Inheritance in Java</strong></h2>
+<p>Java supports different types of inheritance:</p>
+<h3><strong>1. Single Inheritance</strong></h3>
+<p>A subclass inherits from one superclass.</p>
+<pre><code class="language-java">class Parent {
+    void show() {
+        System.out.println(&quot;This is the parent class&quot;);
+    }
+}
+
+class Child extends Parent {
+    void display() {
+        System.out.println(&quot;This is the child class&quot;);
+    }
+}
+</code></pre>
+<h3><strong>2. Multilevel Inheritance</strong></h3>
+<p>A subclass inherits from another subclass, forming a chain.</p>
+<pre><code class="language-java">class Grandparent {
+    void show() {
+        System.out.println(&quot;Grandparent class&quot;);
+    }
+}
+
+class Parent extends Grandparent {
+    void display() {
+        System.out.println(&quot;Parent class&quot;);
+    }
+}
+
+class Child extends Parent {
+    void print() {
+        System.out.println(&quot;Child class&quot;);
+    }
+}
+</code></pre>
+<h3><strong>3. Hierarchical Inheritance</strong></h3>
+<p>A single parent class has multiple child classes.</p>
+<pre><code class="language-java">class Parent {
+    void show() {
+        System.out.println(&quot;Parent class&quot;);
+    }
+}
+
+class Child1 extends Parent {
+    void display() {
+        System.out.println(&quot;Child1 class&quot;);
+    }
+}
+
+class Child2 extends Parent {
+    void print() {
+        System.out.println(&quot;Child2 class&quot;);
+    }
+}
+</code></pre>
+<p><strong>Note:</strong> Java <strong>does not support multiple inheritance</strong> (i.e., a child class inheriting from multiple parents) due to ambiguity problems.</p>
+<hr />
+<h2><strong>Method Overriding in Inheritance</strong></h2>
+<p>Method overriding allows a child class to <strong>redefine</strong> a method from the parent class.</p>
+<pre><code class="language-java">class Animal {
+    void makeSound() {
+        System.out.println(&quot;Animal makes a sound&quot;);
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void makeSound() {
+        System.out.println(&quot;Dog barks&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Dog(); // Polymorphism
+        myAnimal.makeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+</code></pre>
+<hr />
+<h2><strong>The <code>super</code> Keyword in Inheritance</strong></h2>
+<p>The <code>super</code> keyword is used to <strong>refer to the parent class</strong>. It helps to:</p>
+<ol>
+<li>Call the parent class constructor.</li>
+<li>Access the parent class methods.</li>
+<li>Access the parent class fields.</li>
+</ol>
+<pre><code class="language-java">class Animal {
+    Animal() {
+        System.out.println(&quot;Animal Constructor&quot;);
+    }
+    void makeSound() {
+        System.out.println(&quot;Animal makes a sound&quot;);
+    }
+}
+
+class Dog extends Animal {
+    Dog() {
+        super(); // Calls the parent class constructor
+        System.out.println(&quot;Dog Constructor&quot;);
+    }
+    void makeSound() {
+        super.makeSound(); // Calls parent method
+        System.out.println(&quot;Dog barks&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        Dog myDog = new Dog();
+        myDog.makeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Animal Constructor
+Dog Constructor
+Animal makes a sound
+Dog barks
+</code></pre></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Inheritance in C++</h1>
+<h2>Introduction</h2>
+<p><strong>Inheritance</strong> is one of the core principles of Object-Oriented Programming (OOP). It allows a class (subclass or child class) to acquire the properties and behaviors of another class (superclass or parent class). This promotes <strong>code reuse</strong>, <strong>scalability</strong>, and <strong>maintainability</strong>.</p>
+<hr />
+<h2><strong>What is Inheritance?</strong></h2>
+<p><strong>Inheritance</strong> is a mechanism where a child class derives properties and behaviors from a parent class. The child class can:</p>
+<ul>
+<li>Use the fields and methods of the parent class</li>
+<li>Override parent class methods to provide a specific implementation</li>
+<li>Add its own additional properties and methods</li>
+</ul>
+<h3><strong>Key Benefits of Inheritance</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Avoids code duplication by reusing fields and methods of the parent class.</li>
+<li><strong>Improves Maintainability</strong>: Reduces redundancy, making code easier to manage.</li>
+<li><strong>Enhances Extensibility</strong>: New functionality can be added easily without modifying existing code.</li>
+</ul>
+<hr />
+<h2><strong>How to Implement Inheritance in C++</strong></h2>
+<h3><strong>Step 1: Create a Parent Class</strong></h3>
+<p>The parent class contains common fields and methods.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// Parent class
+class Animal {
+public:
+    string name;
+    void eat() {
+        cout &lt;&lt; name &lt;&lt; &quot; is eating...&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Step 2: Create a Child Class using <code>public</code> Inheritance</strong></h3>
+<p>The child class inherits the properties and methods of the parent class.</p>
+<pre><code class="language-cpp">// Child class
+class Dog : public Animal {
+public:
+    void bark() {
+        cout &lt;&lt; name &lt;&lt; &quot; is barking...&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Step 3: Use the Child Class</strong></h3>
+<p>Now, let's create an object and use the inherited methods.</p>
+<pre><code class="language-cpp">int main() {
+    Dog myDog;
+    myDog.name = &quot;Buddy&quot;;
+    myDog.eat(); // Inherited from Animal class
+    myDog.bark(); // Defined in Dog class
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy is eating...
+Buddy is barking...
+</code></pre>
+<hr />
+<h2><strong>Types of Inheritance in C++</strong></h2>
+<p>C++ supports different types of inheritance:</p>
+<h3><strong>1. Single Inheritance</strong></h3>
+<p>A subclass inherits from one superclass.</p>
+<pre><code class="language-cpp">class Parent {
+public:
+    void show() {
+        cout &lt;&lt; &quot;This is the parent class&quot; &lt;&lt; endl;
+    }
+};
+
+class Child : public Parent {
+public:
+    void display() {
+        cout &lt;&lt; &quot;This is the child class&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>2. Multilevel Inheritance</strong></h3>
+<p>A subclass inherits from another subclass, forming a chain.</p>
+<pre><code class="language-cpp">class Grandparent {
+public:
+    void show() {
+        cout &lt;&lt; &quot;Grandparent class&quot; &lt;&lt; endl;
+    }
+};
+
+class Parent : public Grandparent {
+public:
+    void display() {
+        cout &lt;&lt; &quot;Parent class&quot; &lt;&lt; endl;
+    }
+};
+
+class Child : public Parent {
+public:
+    void print() {
+        cout &lt;&lt; &quot;Child class&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>3. Hierarchical Inheritance</strong></h3>
+<p>A single parent class has multiple child classes.</p>
+<pre><code class="language-cpp">class Parent {
+public:
+    void show() {
+        cout &lt;&lt; &quot;Parent class&quot; &lt;&lt; endl;
+    }
+};
+
+class Child1 : public Parent {
+public:
+    void display() {
+        cout &lt;&lt; &quot;Child1 class&quot; &lt;&lt; endl;
+    }
+};
+
+class Child2 : public Parent {
+public:
+    void print() {
+        cout &lt;&lt; &quot;Child2 class&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>4. Multiple Inheritance</strong> (Supported in C++)</h3>
+<p>Unlike Java, C++ allows a child class to inherit from multiple parent classes.</p>
+<pre><code class="language-cpp">class Parent1 {
+public:
+    void show1() {
+        cout &lt;&lt; &quot;Parent1 class&quot; &lt;&lt; endl;
+    }
+};
+
+class Parent2 {
+public:
+    void show2() {
+        cout &lt;&lt; &quot;Parent2 class&quot; &lt;&lt; endl;
+    }
+};
+
+class Child : public Parent1, public Parent2 {
+};
+</code></pre>
+<hr />
+<h2><strong>Method Overriding in Inheritance</strong></h2>
+<p>Method overriding allows a child class to <strong>redefine</strong> a method from the parent class.</p>
+<pre><code class="language-cpp">class Animal {
+public:
+    virtual void makeSound() {
+        cout &lt;&lt; &quot;Animal makes a sound&quot; &lt;&lt; endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void makeSound() override {
+        cout &lt;&lt; &quot;Dog barks&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-cpp">int main() {
+    Animal* myAnimal = new Dog(); // Polymorphism
+    myAnimal-&gt;makeSound();
+    delete myAnimal;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+</code></pre>
+<hr />
+<h2><strong>The <code>super</code> Equivalent: Using <code>Base Class</code> Constructor in C++</strong></h2>
+<p>C++ uses the <strong>constructor of the base class</strong> to initialize inherited fields.</p>
+<pre><code class="language-cpp">class Animal {
+public:
+    Animal() {
+        cout &lt;&lt; &quot;Animal Constructor&quot; &lt;&lt; endl;
+    }
+    void makeSound() {
+        cout &lt;&lt; &quot;Animal makes a sound&quot; &lt;&lt; endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    Dog() {
+        cout &lt;&lt; &quot;Dog Constructor&quot; &lt;&lt; endl;
+    }
+    void makeSound() {
+        Animal::makeSound(); // Calls parent method
+        cout &lt;&lt; &quot;Dog barks&quot; &lt;&lt; endl;
+    }
+};
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-cpp">int main() {
+    Dog myDog;
+    myDog.makeSound();
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Animal Constructor
+Dog Constructor
+Animal makes a sound
+Dog barks
+</code></pre></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Inheritance in Python</h1>
+<h2>Introduction</h2>
+<p><strong>Inheritance</strong> is one of the core principles of Object-Oriented Programming (OOP). It allows a class (subclass or child class) to acquire the properties and behaviors of another class (superclass or parent class). This promotes <strong>code reuse</strong>, <strong>scalability</strong>, and <strong>maintainability</strong>.</p>
+<h2><strong>What is Inheritance?</strong></h2>
+<p><strong>Inheritance</strong> is a mechanism where a child class derives properties and behaviors from a parent class. The child class can:</p>
+<ul>
+<li>Use the attributes and methods of the parent class</li>
+<li>Override parent class methods to provide a specific implementation</li>
+<li>Add its own additional attributes and methods</li>
+</ul>
+<h3><strong>Key Benefits of Inheritance</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Avoids code duplication by reusing attributes and methods of the parent class.</li>
+<li><strong>Improves Maintainability</strong>: Reduces redundancy, making code easier to manage.</li>
+<li><strong>Enhances Extensibility</strong>: New functionality can be added easily without modifying existing code.</li>
+</ul>
+<hr />
+<h2><strong>How to Implement Inheritance in Python</strong></h2>
+<h3><strong>Step 1: Create a Parent Class</strong></h3>
+<p>The parent class contains common attributes and methods.</p>
+<pre><code class="language-python"># Parent class
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def eat(self):
+        print(f&quot;{self.name} is eating...&quot;)
+</code></pre>
+<h3><strong>Step 2: Create a Child Class using Parent Class</strong></h3>
+<p>The child class inherits the properties and methods of the parent class.</p>
+<pre><code class="language-python"># Child class
+class Dog(Animal):
+    def bark(self):
+        print(f&quot;{self.name} is barking...&quot;)
+</code></pre>
+<h3><strong>Step 3: Use the Child Class</strong></h3>
+<p>Now, let's create an object and use the inherited methods.</p>
+<pre><code class="language-python"># Using the child class
+if __name__ == &quot;__main__&quot;:
+    my_dog = Dog(&quot;Buddy&quot;)
+    my_dog.eat()  # Inherited from Animal class
+    my_dog.bark()  # Defined in Dog class
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy is eating...
+Buddy is barking...
+</code></pre>
+<hr />
+<h2><strong>Types of Inheritance in Python</strong></h2>
+<p>Python supports different types of inheritance:</p>
+<h3><strong>1. Single Inheritance</strong></h3>
+<p>A subclass inherits from one superclass.</p>
+<pre><code class="language-python">class Parent:
+    def show(self):
+        print(&quot;This is the parent class&quot;)
+
+class Child(Parent):
+    def display(self):
+        print(&quot;This is the child class&quot;)
+</code></pre>
+<h3><strong>2. Multilevel Inheritance</strong></h3>
+<p>A subclass inherits from another subclass, forming a chain.</p>
+<pre><code class="language-python">class Grandparent:
+    def show(self):
+        print(&quot;Grandparent class&quot;)
+
+class Parent(Grandparent):
+    def display(self):
+        print(&quot;Parent class&quot;)
+
+class Child(Parent):
+    def print_info(self):
+        print(&quot;Child class&quot;)
+</code></pre>
+<h3><strong>3. Hierarchical Inheritance</strong></h3>
+<p>A single parent class has multiple child classes.</p>
+<pre><code class="language-python">class Parent:
+    def show(self):
+        print(&quot;Parent class&quot;)
+
+class Child1(Parent):
+    def display(self):
+        print(&quot;Child1 class&quot;)
+
+class Child2(Parent):
+    def print_info(self):
+        print(&quot;Child2 class&quot;)
+</code></pre>
+<h3><strong>4. Multiple Inheritance</strong></h3>
+<p>Unlike Java, Python <strong>supports multiple inheritance</strong>, allowing a subclass to inherit from multiple parent classes.</p>
+<pre><code class="language-python">class Parent1:
+    def show1(self):
+        print(&quot;Parent1 class&quot;)
+
+class Parent2:
+    def show2(self):
+        print(&quot;Parent2 class&quot;)
+
+class Child(Parent1, Parent2):
+    def display(self):
+        print(&quot;Child class&quot;)
+</code></pre>
+<hr />
+<h2><strong>Method Overriding in Inheritance</strong></h2>
+<p>Method overriding allows a child class to <strong>redefine</strong> a method from the parent class.</p>
+<pre><code class="language-python">class Animal:
+    def make_sound(self):
+        print(&quot;Animal makes a sound&quot;)
+
+class Dog(Animal):
+    def make_sound(self):
+        print(&quot;Dog barks&quot;)
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-python">if __name__ == &quot;__main__&quot;:
+    my_animal = Dog()  # Polymorphism
+    my_animal.make_sound()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+</code></pre>
+<hr />
+<h2><strong>The <code>super()</code> Function in Inheritance</strong></h2>
+<p>The <code>super()</code> function is used to <strong>refer to the parent class</strong>. It helps to:</p>
+<ol>
+<li>Call the parent class constructor.</li>
+<li>Access the parent class methods.</li>
+</ol>
+<pre><code class="language-python">class Animal:
+    def __init__(self):
+        print(&quot;Animal Constructor&quot;)
+
+    def make_sound(self):
+        print(&quot;Animal makes a sound&quot;)
+
+class Dog(Animal):
+    def __init__(self):
+        super().__init__()  # Calls the parent class constructor
+        print(&quot;Dog Constructor&quot;)
+
+    def make_sound(self):
+        super().make_sound()  # Calls parent method
+        print(&quot;Dog barks&quot;)
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-python">if __name__ == &quot;__main__&quot;:
+    my_dog = Dog()
+    my_dog.make_sound()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Animal Constructor
+Dog Constructor
+Animal makes a sound
+Dog barks
+</code></pre></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Inheritance in C</h1>
+<h2>Introduction</h2>
+<p><strong>Inheritance</strong> is one of the core principles of Object-Oriented Programming (OOP). It allows a class (subclass or child class) to acquire the properties and behaviors of another class (superclass or parent class). This promotes <strong>code reuse</strong>, <strong>scalability</strong>, and <strong>maintainability</strong>.</p>
+<hr />
+<h2><strong>What is Inheritance?</strong></h2>
+<p><strong>Inheritance</strong> is a mechanism where a child class derives properties and behaviors from a parent class. The child class can:<br />
+- Use the fields and methods of the parent class<br />
+- Override parent class methods to provide a specific implementation<br />
+- Add its own additional properties and methods</p>
+<h3><strong>Key Benefits of Inheritance</strong></h3>
+<ul>
+<li><strong>Code Reusability</strong>: Avoids code duplication by reusing fields and methods of the parent class.</li>
+<li><strong>Improves Maintainability</strong>: Reduces redundancy, making code easier to manage.</li>
+<li><strong>Enhances Extensibility</strong>: New functionality can be added easily without modifying existing code.</li>
+</ul>
+<hr />
+<h2><strong>How to Implement Inheritance in C#</strong></h2>
+<h3><strong>Step 1: Create a Parent Class</strong></h3>
+<p>The parent class contains common fields and methods.</p>
+<pre><code class="language-csharp">using System;
+
+// Parent class
+class Animal {
+    public string Name;
+
+    public void Eat() {
+        Console.WriteLine(Name + &quot; is eating...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Step 2: Create a Child Class using <code>:</code></strong></h3>
+<p>The child class inherits the properties and methods of the parent class.</p>
+<pre><code class="language-csharp">// Child class
+class Dog : Animal {
+    public void Bark() {
+        Console.WriteLine(Name + &quot; is barking...&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Step 3: Use the Child Class</strong></h3>
+<p>Now, let's create an object and use the inherited methods.</p>
+<pre><code class="language-csharp">class Program {
+    static void Main() {
+        Dog myDog = new Dog();
+        myDog.Name = &quot;Buddy&quot;;
+        myDog.Eat(); // Inherited from Animal class
+        myDog.Bark(); // Defined in Dog class
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy is eating...
+Buddy is barking...
+</code></pre>
+<hr />
+<h2><strong>Types of Inheritance in C#</strong></h2>
+<p>C# supports different types of inheritance:</p>
+<h3><strong>1. Single Inheritance</strong></h3>
+<p>A subclass inherits from one superclass.</p>
+<pre><code class="language-csharp">class Parent {
+    public void Show() {
+        Console.WriteLine(&quot;This is the parent class&quot;);
+    }
+}
+
+class Child : Parent {
+    public void Display() {
+        Console.WriteLine(&quot;This is the child class&quot;);
+    }
+}
+</code></pre>
+<h3><strong>2. Multilevel Inheritance</strong></h3>
+<p>A subclass inherits from another subclass, forming a chain.</p>
+<pre><code class="language-csharp">class Grandparent {
+    public void Show() {
+        Console.WriteLine(&quot;Grandparent class&quot;);
+    }
+}
+
+class Parent : Grandparent {
+    public void Display() {
+        Console.WriteLine(&quot;Parent class&quot;);
+    }
+}
+
+class Child : Parent {
+    public void Print() {
+        Console.WriteLine(&quot;Child class&quot;);
+    }
+}
+</code></pre>
+<h3><strong>3. Hierarchical Inheritance</strong></h3>
+<p>A single parent class has multiple child classes.</p>
+<pre><code class="language-csharp">class Parent {
+    public void Show() {
+        Console.WriteLine(&quot;Parent class&quot;);
+    }
+}
+
+class Child1 : Parent {
+    public void Display() {
+        Console.WriteLine(&quot;Child1 class&quot;);
+    }
+}
+
+class Child2 : Parent {
+    public void Print() {
+        Console.WriteLine(&quot;Child2 class&quot;);
+    }
+}
+</code></pre>
+<p><strong>Note:</strong> C# <strong>does not support multiple inheritance</strong> (i.e., a child class inheriting from multiple parents) due to ambiguity problems.</p>
+<hr />
+<h2><strong>Method Overriding in Inheritance</strong></h2>
+<p>Method overriding allows a child class to <strong>redefine</strong> a method from the parent class.</p>
+<pre><code class="language-csharp">class Animal {
+    public virtual void MakeSound() {
+        Console.WriteLine(&quot;Animal makes a sound&quot;);
+    }
+}
+
+class Dog : Animal {
+    public override void MakeSound() {
+        Console.WriteLine(&quot;Dog barks&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-csharp">class Program {
+    static void Main() {
+        Animal myAnimal = new Dog(); // Polymorphism
+        myAnimal.MakeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+</code></pre>
+<hr />
+<h2><strong>The <code>base</code> Keyword in Inheritance</strong></h2>
+<p>The <code>base</code> keyword is used to <strong>refer to the parent class</strong>. It helps to:<br />
+1. Call the parent class constructor.<br />
+2. Access the parent class methods.<br />
+3. Access the parent class fields.</p>
+<pre><code class="language-csharp">class Animal {
+    public Animal() {
+        Console.WriteLine(&quot;Animal Constructor&quot;);
+    }
+    public virtual void MakeSound() {
+        Console.WriteLine(&quot;Animal makes a sound&quot;);
+    }
+}
+
+class Dog : Animal {
+    public Dog() {
+        Console.WriteLine(&quot;Dog Constructor&quot;);
+    }
+    public override void MakeSound() {
+        base.MakeSound(); // Calls parent method
+        Console.WriteLine(&quot;Dog barks&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-csharp">class Program {
+    static void Main() {
+        Dog myDog = new Dog();
+        myDog.MakeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Animal Constructor
+Dog Constructor
+Animal makes a sound
+Dog barks
+</code></pre></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Inheritance in Go</h1>
+<h2>Introduction</h2>
+<p>Unlike traditional OOP languages like Java and C++, <strong>Go does not have classical inheritance</strong>. Instead, Go achieves similar functionality using <strong>struct embedding and interfaces</strong>. This promotes <strong>code reuse</strong>, <strong>composition over inheritance</strong>, and <strong>flexibility</strong>.</p>
+<hr />
+<h2><strong>What is Inheritance (or its Alternative in Go)?</strong></h2>
+<p>Go does not support class-based inheritance. Instead, it uses <strong>struct embedding</strong>, which allows one struct to include another, inheriting its fields and methods. This achieves a similar effect to traditional inheritance.</p>
+<h3><strong>Key Benefits of Struct Embedding in Go</strong></h3>
+<ul>
+<li><strong>Composition over Inheritance</strong>: Encourages modular and maintainable design.</li>
+<li><strong>Code Reusability</strong>: Allows reusing functionality without rigid class hierarchies.</li>
+<li><strong>Method Overriding</strong>: Embedded structs’ methods can be overridden in the outer struct.</li>
+<li><strong>Polymorphism</strong>: Achieved using interfaces rather than class-based inheritance.</li>
+</ul>
+<hr />
+<h2><strong>How to Implement Inheritance-like Behavior in Go</strong></h2>
+<h3><strong>Step 1: Define a Parent Struct</strong></h3>
+<p>A struct in Go acts like a class with fields and methods.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Parent struct
+type Animal struct {
+    Name string
+}
+
+func (a Animal) Eat() {
+    fmt.Println(a.Name, &quot;is eating...&quot;)
+}
+</code></pre>
+<h3><strong>Step 2: Embed the Parent Struct in a Child Struct</strong></h3>
+<p>The <code>Dog</code> struct embeds <code>Animal</code>, inheriting its fields and methods.</p>
+<pre><code class="language-go">// Child struct embedding Animal
+type Dog struct {
+    Animal // Embedding Animal struct
+}
+
+func (d Dog) Bark() {
+    fmt.Println(d.Name, &quot;is barking...&quot;)
+}
+</code></pre>
+<h3><strong>Step 3: Use the Child Struct</strong></h3>
+<p>We create an instance of <code>Dog</code>, which has access to both <code>Animal</code> and <code>Dog</code> methods.</p>
+<pre><code class="language-go">func main() {
+    myDog := Dog{Animal{Name: &quot;Buddy&quot;}}
+    myDog.Eat()  // Inherited from Animal struct
+    myDog.Bark() // Defined in Dog struct
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy is eating...
+Buddy is barking...
+</code></pre>
+<hr />
+<h2><strong>Multiple Inheritance Alternative: Composition</strong></h2>
+<p>Go does not support multiple inheritance, but struct embedding allows a struct to include multiple embedded structs.</p>
+<pre><code class="language-go">// First embedded struct
+type Engine struct {
+    Horsepower int
+}
+
+// Second embedded struct
+type Wheels struct {
+    Count int
+}
+
+// Car struct embedding Engine and Wheels
+type Car struct {
+    Engine
+    Wheels
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-go">func main() {
+    myCar := Car{Engine{200}, Wheels{4}}
+    fmt.Println(&quot;Horsepower:&quot;, myCar.Horsepower)
+    fmt.Println(&quot;Wheels:&quot;, myCar.Count)
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Horsepower: 200
+Wheels: 4
+</code></pre>
+<hr />
+<h2><strong>Method Overriding in Struct Embedding</strong></h2>
+<p>A child struct can override an inherited method by defining a new method with the same name.</p>
+<pre><code class="language-go">type Animal struct {
+    Name string
+}
+
+func (a Animal) Speak() {
+    fmt.Println(a.Name, &quot;makes a sound&quot;)
+}
+
+// Overriding Speak method
+type Dog struct {
+    Animal
+}
+
+func (d Dog) Speak() {
+    fmt.Println(d.Name, &quot;barks&quot;)
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-go">func main() {
+    myDog := Dog{Animal{Name: &quot;Buddy&quot;}}
+    myDog.Speak() // Calls the overridden method
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy barks
+</code></pre>
+<hr />
+<h2><strong>Using Interfaces for Polymorphism</strong></h2>
+<p>In Go, <strong>interfaces</strong> allow struct-based polymorphism, similar to inheritance in OOP languages.</p>
+<pre><code class="language-go">type Animal interface {
+    Speak()
+}
+
+type Dog struct {
+    Name string
+}
+
+func (d Dog) Speak() {
+    fmt.Println(d.Name, &quot;barks&quot;)
+}
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-go">func main() {
+    var myAnimal Animal = Dog{Name: &quot;Buddy&quot;}
+    myAnimal.Speak()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy barks
+</code></pre></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Inheritance in Rust (Traits &amp; Composition)</h1>
+<h2>Introduction</h2>
+<p><strong>Inheritance</strong> is one of the core principles of Object-Oriented Programming (OOP). It allows a class (subclass or child class) to acquire the properties and behaviors of another class (superclass or parent class). This promotes <strong>code reuse</strong>, <strong>scalability</strong>, and <strong>maintainability</strong>.</p>
+<p><strong>Does Rust support Inheritance?</strong><br />
+No, Rust does <strong>not</strong> support classical inheritance (e.g., <code>class Dog extends Animal</code>). Rust takes a different approach called <strong>Composition over Inheritance</strong>.</p>
+<p>Instead of inheriting fields and methods from a parent class, Rust uses:<br />
+1.  <strong>Traits:</strong> To share behavior (methods).<br />
+2.  <strong>Composition:</strong> To share state (data/fields).</p>
+<h2><strong>What is Inheritance?</strong></h2>
+<p>In traditional OOP (Java), <strong>Inheritance</strong> is a mechanism where a child class derives properties and behaviors from a parent class.</p>
+<p>In Rust, since we cannot use <code>extends</code>, we achieve the same functionality by:<br />
+- <strong>Implementing Traits:</strong> A struct implements a specific trait to gain its behavior.<br />
+- <strong>Embedding Structs:</strong> A struct contains another struct as a field to reuse its data.</p>
+<h3><strong>Key Benefits of the Rust Approach</strong></h3>
+<ul>
+<li><strong>Avoids the "Diamond Problem":</strong> Multiple inheritance of state is impossible, preventing complex conflicts.</li>
+<li><strong>Explicit Dependencies:</strong> You clearly see what data a struct depends on (it's listed in the fields).</li>
+<li><strong>Flexible Behavior:</strong> You can implement many traits for a single struct, offering more flexibility than single inheritance.</li>
+</ul>
+<hr />
+<h2><strong>How to Implement "Inheritance" in Rust</strong></h2>
+<p>Since Rust does not have <code>extends</code>, we use <strong>Traits</strong> for behavior and <strong>Composition</strong> for data.</p>
+<h3><strong>Step 1: Create a Parent Behavior (Trait)</strong></h3>
+<p>The parent trait contains common method signatures and default implementations.</p>
+<pre><code class="language-rust">// Parent Trait (Behavior)
+pub trait Animal {
+    fn name(&amp;self) -&gt; &amp;String; // Abstract method (getter)
+
+    // Default implementation (Shared Behavior)
+    fn eat(&amp;self) {
+        println!(&quot;{} is eating...&quot;, self.name());
+    }
+}
+
+</code></pre>
+<h3><strong>Step 2: Create a Child Struct using <code>impl</code></strong></h3>
+<p>The child struct implements the properties and methods of the parent trait.</p>
+<pre><code class="language-rust">// Child Struct (Data)
+pub struct Dog {
+    pub name: String,
+    pub breed: String,
+}
+
+// Implementing the Trait (The &quot;Inheritance&quot; link)
+impl Animal for Dog {
+    fn name(&amp;self) -&gt; &amp;String {
+        &amp;self.name
+    }
+
+    // 'eat()' is inherited automatically from the Trait
+}
+
+impl Dog {
+    // Dog-specific method
+    fn bark(&amp;self) {
+        println!(&quot;{} is barking...&quot;, self.name);
+    }
+}
+
+</code></pre>
+<h3><strong>Step 3: Use the Child Struct</strong></h3>
+<p>Now, let's create an object and use the inherited methods.</p>
+<pre><code class="language-rust">fn main() {
+    let my_dog = Dog { 
+        name: &quot;Buddy&quot;.to_string(),
+        breed: &quot;Golden Retriever&quot;.to_string(),
+    };
+
+    // Inherited from Animal trait
+    my_dog.eat(); 
+
+    // Defined in Dog impl block
+    my_dog.bark(); 
+}
+
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Buddy is eating...
+Buddy is barking...
+
+</code></pre>
+<hr />
+<h2><strong>Types of "Inheritance" Patterns in Rust</strong></h2>
+<p>Although Rust lacks class inheritance, we can replicate standard OOP patterns.</p>
+<h3><strong>1. Single Inheritance (Trait Implementation)</strong></h3>
+<p>A struct implements a single trait.</p>
+<pre><code class="language-rust">trait Parent {
+    fn show(&amp;self) {
+        println!(&quot;This is the parent behavior&quot;);
+    }
+}
+
+struct Child;
+
+impl Parent for Child {} // Inherits 'show'
+
+</code></pre>
+<h3><strong>2. Multilevel Inheritance (Supertraits)</strong></h3>
+<p>A trait inherits from another trait. This is called a <strong>Supertrait</strong>.</p>
+<pre><code class="language-rust">trait Grandparent {
+    fn show_grand(&amp;self);
+}
+
+// Parent requires Grandparent to be implemented first
+trait Parent: Grandparent {
+    fn show_parent(&amp;self);
+}
+
+struct Child;
+
+// You must implement both
+impl Grandparent for Child { 
+    fn show_grand(&amp;self) { println!(&quot;Grandparent&quot;); } 
+}
+impl Parent for Child { 
+    fn show_parent(&amp;self) { println!(&quot;Parent&quot;); } 
+}
+
+</code></pre>
+<h3><strong>3. Hierarchical Inheritance</strong></h3>
+<p>A single parent trait is implemented by multiple different structs.</p>
+<pre><code class="language-rust">trait Entity {
+    fn id(&amp;self) -&gt; u32;
+}
+
+struct User { id: u32 }
+impl Entity for User { fn id(&amp;self) -&gt; u32 { self.id } }
+
+struct Product { id: u32 }
+impl Entity for Product { fn id(&amp;self) -&gt; u32 { self.id } }
+
+</code></pre>
+<hr />
+<h2><strong>Method Overriding in Rust</strong></h2>
+<p>Method overriding allows a struct to <strong>redefine</strong> a default method provided by a Trait.</p>
+<pre><code class="language-rust">trait Animal {
+    fn make_sound(&amp;self) {
+        println!(&quot;Generic Animal Sound&quot;);
+    }
+}
+
+struct Dog;
+
+impl Animal for Dog {
+    // Overriding the default method
+    fn make_sound(&amp;self) {
+        println!(&quot;Dog barks! 🐶&quot;);
+    }
+}
+
+</code></pre>
+<h3><strong>Usage</strong></h3>
+<pre><code class="language-rust">fn main() {
+    let my_animal = Dog;
+    my_animal.make_sound(); // Runs overridden version
+}
+
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks! 🐶
+
+</code></pre>
+<hr />
+<h2><strong>The <code>super</code> Concept in Rust (Accessing Parent)</strong></h2>
+<p>In Java, <code>super</code> calls the parent class. In Rust, we use <strong>Composition</strong> to access "parent" data explicitly.</p>
+<ol>
+<li><strong>Composition:</strong> Embedding one struct inside another.</li>
+<li><strong>Delegation:</strong> Calling the inner struct's methods.</li>
+</ol>
+<pre><code class="language-rust">// The &quot;Parent&quot; Data
+struct Organism {
+    age: u8,
+}
+
+impl Organism {
+    fn breathe(&amp;self) { println!(&quot;Breathing...&quot;); }
+}
+
+// The &quot;Child&quot; Struct
+struct Dog {
+    organism: Organism, // Composition (Has-a)
+}
+
+impl Dog {
+    fn breathe(&amp;self) {
+        // Explicitly calling the &quot;Parent&quot; (inner struct)
+        self.organism.breathe(); 
+        println!(&quot;...and panting!&quot;);
+    }
+}
+
+</code></pre>
+<h3><strong>Summary Table</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Java (Inheritance)</th>
+<th>Rust (Idiomatic)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Relationship</strong></td>
+<td><code>Dog extends Animal</code></td>
+<td><code>Dog implements Animal</code> (Trait)</td>
+</tr>
+<tr>
+<td><strong>Data Sharing</strong></td>
+<td>Inherited automatically</td>
+<td>Composition (<code>dog.animal.field</code>)</td>
+</tr>
+<tr>
+<td><strong>Method Sharing</strong></td>
+<td>Inherited from Parent Class</td>
+<td>Default Trait Methods</td>
+</tr>
+<tr>
+<td><strong>Overriding</strong></td>
+<td><code>@Override</code></td>
+<td><code>impl Trait</code> block</td>
+</tr>
+<tr>
+<td><strong>Philosophy</strong></td>
+<td><strong>Is-a</strong> relationship</td>
+<td><strong>Has-a</strong> &amp; <strong>Can-do</strong> relationship</td>
+</tr>
+</tbody>
+</table></div><details class="file"><summary>oop/rust/inheritance/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * INHERITANCE IN RUST (TRAITS &amp; COMPOSITION)</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: Demonstrate how to achieve OOP Inheritance patterns using Rust.</span>
+<span class="cm"> * * 1. Behavior Inheritance -&gt; Traits</span>
+<span class="cm"> * 2. Data Inheritance -&gt; Composition</span>
+<span class="cm"> */</span>
+
+<span class="c1">// --- 1. BASIC INHERITANCE (TRAITS) ---</span>
+
+<span class="c1">// Parent Trait</span>
+<span class="k">trait</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="nb">String</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Default method (Acts like a Parent Class method)</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">eat</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"{} is eating..."</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">name</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Child Struct</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Dog</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">breed</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// Implement the Trait</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Dog</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="nb">String</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">&amp;</span><span class="bp">self</span><span class="p">.</span><span class="n">name</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Dog</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">bark</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"{} (a {}) is barking!"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">breed</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// --- 2. MULTILEVEL INHERITANCE (SUPERTRAITS) ---</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">Living</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">live</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="fm">println!</span><span class="p">(</span><span class="s">"I am alive."</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 'Mammal' requires 'Living' to be implemented</span>
+<span class="k">trait</span><span class="w"> </span><span class="n">Mammal</span><span class="p">:</span><span class="w"> </span><span class="nc">Living</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="fm">println!</span><span class="p">(</span><span class="s">"I can walk."</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Cat</span><span class="p">;</span>
+
+<span class="c1">// Must implement the base trait</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Living</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Cat</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="c1">// Can now implement the sub-trait</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Mammal</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Cat</span><span class="w"> </span><span class="p">{}</span>
+
+
+<span class="c1">// --- 3. METHOD OVERRIDING ---</span>
+
+<span class="k">trait</span><span class="w"> </span><span class="n">SoundMaker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"(Generic Sound)"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Cow</span><span class="p">;</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">SoundMaker</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Cow</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Override the default implementation</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Moo! 🐮"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// --- 4. COMPOSITION (THE 'SUPER' REPLACEMENT) ---</span>
+
+<span class="c1">// The "Parent" Data</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">BaseEntity</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">BaseEntity</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Saving Entity ID: {} to database..."</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// The "Child" Data</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">base</span><span class="p">:</span><span class="w"> </span><span class="nc">BaseEntity</span><span class="p">,</span><span class="w"> </span><span class="c1">// Composition: User HAS-A BaseEntity</span>
+<span class="w">    </span><span class="n">username</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">base</span><span class="p">:</span><span class="w"> </span><span class="nc">BaseEntity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="n">username</span><span class="p">:</span><span class="w"> </span><span class="nc">username</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">save_user</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Preparing user {}..."</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">username</span><span class="p">);</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">base</span><span class="p">.</span><span class="n">save</span><span class="p">();</span><span class="w"> </span><span class="c1">// Call "super" method explicitly</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 1. Basic Inheritance (Traits) ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">dog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dog</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">        </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Buddy"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="n">breed</span><span class="p">:</span><span class="w"> </span><span class="s">"Golden Retriever"</span><span class="p">.</span><span class="n">to_string</span><span class="p">()</span><span class="w"> </span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="n">dog</span><span class="p">.</span><span class="n">eat</span><span class="p">();</span><span class="w"> </span><span class="c1">// Inherited behavior</span>
+<span class="w">    </span><span class="n">dog</span><span class="p">.</span><span class="n">bark</span><span class="p">();</span><span class="w"> </span><span class="c1">// Specific behavior</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 2. Multilevel Inheritance ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cat</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cat</span><span class="p">.</span><span class="n">live</span><span class="p">();</span><span class="w"> </span><span class="c1">// From Base Trait</span>
+<span class="w">    </span><span class="n">cat</span><span class="p">.</span><span class="n">walk</span><span class="p">();</span><span class="w"> </span><span class="c1">// From Sub Trait</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 3. Method Overriding ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">cow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cow</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cow</span><span class="p">.</span><span class="n">make_sound</span><span class="p">();</span><span class="w"> </span><span class="c1">// Overridden behavior</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 4. Composition (Data Inheritance) ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="mi">101</span><span class="p">,</span><span class="w"> </span><span class="s">"Alice"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">user</span><span class="p">.</span><span class="n">save_user</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

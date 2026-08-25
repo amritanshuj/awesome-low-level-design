@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aggregation vs Composition · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Aggregation vs Composition</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Aggregation vs Composition</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Aggregation vs Composition in Java (Code-Focused)</h1>
+<p>In OOP, <strong>Aggregation</strong> and <strong>Composition</strong> both express "has-a" relationships, but they differ in <strong>ownership</strong>, <strong>object lifecycle</strong>, and <strong>instantiation strategy</strong>.</p>
+<hr />
+<h2>🔗 Aggregation — External Object Reference</h2>
+<h3>✅ Key Code Characteristic:</h3>
+<blockquote>
+<p>The referenced object is <strong>passed from outside</strong> and can exist independently.</p>
+</blockquote>
+<pre><code class="language-java">class Engine {
+    String type;
+    Engine(String type) {
+        this.type = type;
+    }
+}
+
+class Car {
+    Engine engine; // Aggregation - reference passed from outside
+
+    Car(Engine engine) {
+        this.engine = engine;
+    }
+
+    void showEngineType() {
+        System.out.println(&quot;Engine: &quot; + engine.type);
+    }
+}
+
+public class AggregationDemo {
+    public static void main(String[] args) {
+        Engine e1 = new Engine(&quot;V8&quot;);       // Created externally
+        Car car1 = new Car(e1);             // Shared with car1
+
+        Engine e2 = new Engine(&quot;V6&quot;);
+        Car car2 = new Car(e2);             // Shared with car2
+
+        car1.showEngineType(); // Engine: V8
+        car2.showEngineType(); // Engine: V6
+    }
+}
+</code></pre>
+<p><strong>🧠 Key Point:</strong><br />
+- <code>Car</code> does <strong>not own</strong> <code>Engine</code>.<br />
+- The same <code>Engine</code> can be reused across multiple <code>Car</code> objects.<br />
+- <code>Engine</code> can outlive or live independently of <code>Car</code>.</p>
+<hr />
+<h2>🔒 Composition — Object Created Internally</h2>
+<h3>✅ Key Code Characteristic:</h3>
+<blockquote>
+<p>The referenced object is <strong>created inside</strong> the constructor. It <strong>cannot exist without the parent.</strong></p>
+</blockquote>
+<pre><code class="language-java">class Engine {
+    String type;
+    Engine(String type) {
+        this.type = type;
+    }
+}
+
+class Car {
+    private Engine engine; // Composition - created inside
+
+    Car(String engineType) {
+        this.engine = new Engine(engineType); // tightly coupled
+    }
+
+    void showEngineType() {
+        System.out.println(&quot;Engine: &quot; + engine.type);
+    }
+}
+
+public class CompositionDemo {
+    public static void main(String[] args) {
+        Car car = new Car(&quot;Electric&quot;);  // Engine is part of Car
+        car.showEngineType();           // Engine: Electric
+    }
+}
+</code></pre>
+<p><strong>🧠 Key Point:</strong><br />
+- <code>Car</code> <strong>fully owns</strong> <code>Engine</code>.<br />
+- <code>Engine</code> cannot be reused or accessed independently.<br />
+- Lifecycle of <code>Engine</code> is strictly bound to <code>Car</code>.</p>
+<hr />
+<h2>🔍 Code-Level Differences Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object creation</td>
+<td>Object is passed from outside</td>
+<td>Object is created internally</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Parent has a reference</td>
+<td>Parent owns the object</td>
+</tr>
+<tr>
+<td>Lifecycle dependency</td>
+<td>Child can live without parent</td>
+<td>Child dies with parent</td>
+</tr>
+<tr>
+<td>Reusability</td>
+<td>Child can be reused by multiple parents</td>
+<td>Child is bound to one parent only</td>
+</tr>
+<tr>
+<td>Code style</td>
+<td><code>this.child = child;</code></td>
+<td><code>this.child = new Child();</code> or similar</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>💡 When to Use</h2>
+<ul>
+<li><strong>Use Aggregation</strong> when you want to share or reuse the same instance.</li>
+<li><strong>Use Composition</strong> when you want a part to be a core, non-detachable component of the object.</li>
+</ul>
+<hr /></div></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classes and Objects · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Classes and Objects</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Classes and Objects</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Classes and Objects</h1>
+<p>Classes and objects form the foundation of Object-Oriented Programming (OOP).</p>
+<h2>What is a Class?</h2>
+<p>A class is a blueprint or template. It defines the attributes (fields) and behaviors (methods) of an object.</p>
+<h3>Defining a Class in Java</h3>
+<p>To define a class in Java, you use the <code>class</code> keyword followed by the name of the class. </p>
+<p>Here's a simple example:</p>
+<pre><code class="language-java">public class Car {
+    // Attributes
+    private String color;
+    private String make;
+    private String model;
+    private int year;
+
+    // Constructor
+    public Car(String color, String make, String model, int year) {
+        this.color = color;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    // Method to display car details
+    public void displayInfo() {
+        System.out.println(&quot;Car Make: &quot; + make);
+        System.out.println(&quot;Car Model: &quot; + model);
+        System.out.println(&quot;Car Year: &quot; + year);
+        System.out.println(&quot;Car Color: &quot; + color);
+    }
+}
+</code></pre>
+<ul>
+<li><strong>Attributes</strong>: The class <code>Car</code> has four attributes that describe its state: <code>color</code>, <code>make</code>, <code>model</code>, and <code>year</code>.</li>
+<li><strong>Constructor</strong>: The constructor <code>Car(String color, String make, String model, int year)</code> initializes new objects of the class.</li>
+<li><strong>Methods</strong>: The <code>displayInfo</code> method is responsible for showcasing the car details.</li>
+</ul>
+<h2>What is an Object?</h2>
+<p>An object is an instance of a class. When you create an object, you are bringing the blueprint of the class into reality. It consists of state and behavior defined by the class, with each object holding its own copy of the data.</p>
+<h3>Creating Objects in Java</h3>
+<p>To create an object, you use the <code>new</code> keyword followed by the class constructor. </p>
+<p>Here's how you can instantiate objects from the <code>Car</code> class:</p>
+<pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        // Creating an object of the Car class
+        Car car1 = new Car(&quot;Red&quot;, &quot;Toyota&quot;, &quot;Corolla&quot;, 2020);
+        Car car2 = new Car(&quot;Blue&quot;, &quot;Ford&quot;, &quot;Mustang&quot;, 2021);
+
+        // Displaying information of each car
+        car1.displayInfo();
+        System.out.println(&quot;-----------------&quot;);
+        car2.displayInfo();
+    }
+}
+</code></pre>
+<ol>
+<li><strong>Instantiation</strong>: The <code>new</code> keyword is used to create an object, which allocates memory for it.</li>
+<li><strong>Initialization</strong>: The constructor (<code>Car</code>) initializes the object state with given parameters.</li>
+<li><strong>Reference</strong>: The object is referenced through a variable (<code>car1</code>, <code>car2</code>) that points to its memory location.</li>
+</ol></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Classes and Objects</h1>
+<p>Classes and objects form the foundation of Object-Oriented Programming (OOP).</p>
+<h2>What is a Class?</h2>
+<p>A class is a blueprint or template. It defines the attributes (fields) and behaviors (methods) of an object.</p>
+<h3>Defining a Class in C++</h3>
+<p>To define a class in C++, you use the <code>class</code> keyword followed by the name of the class. </p>
+<p>Here's a simple example:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Car {
+    // Attributes
+    private:
+    string color;
+    string make;
+    string model;
+    int year;
+
+    public:
+    // Constructor
+    Car(string color, string make, string model, int year) {
+        this-&gt;color = color;
+        this-&gt;make = make;
+        this-&gt;model = model;
+        this-&gt;year = year;
+    }
+
+    // Method to display car details
+    void displayInfo() {
+        cout &lt;&lt; &quot;Car Make: &quot; &lt;&lt; make &lt;&lt; endl;
+        cout &lt;&lt; &quot;Car Model: &quot; &lt;&lt; model &lt;&lt; endl;
+        cout &lt;&lt; &quot;Car Year: &quot; &lt;&lt; year &lt;&lt; endl;
+        cout &lt;&lt; &quot;Car Color: &quot; &lt;&lt; color &lt;&lt; endl;
+    }
+};
+</code></pre>
+<ul>
+<li><strong>Attributes</strong>: The class <code>Car</code> has four attributes that describe its state: <code>color</code>, <code>make</code>, <code>model</code>, and <code>year</code>.</li>
+<li><strong>Constructor</strong>: The constructor <code>Car(string color, string make, string model, int year)</code> initializes new objects of the class.</li>
+<li><strong>Methods</strong>: The <code>displayInfo</code> method is responsible for showcasing the car details.</li>
+</ul>
+<h2>What is an Object?</h2>
+<p>An object is an instance of a class. When you create an object, you are bringing the blueprint of the class into reality. It consists of state and behavior defined by the class, with each object holding its own copy of the data.</p>
+<h3>Creating Objects in C++</h3>
+<p>To create an object, you use the class constructor. </p>
+<p>Here's how you can instantiate objects from the <code>Car</code> class:</p>
+<pre><code class="language-cpp">int main() {
+    // Creating an object of the Car class
+    Car car1 = Car(&quot;Red&quot;, &quot;Toyota&quot;, &quot;Corolla&quot;, 2020);
+    Car car2 = Car(&quot;Blue&quot;, &quot;Ford&quot;, &quot;Mustang&quot;, 2021);
+
+    // Displaying information of each car
+    car1.displayInfo();
+    cout &lt;&lt; &quot;-----------------&quot;;
+    car2.displayInfo();
+
+    return 0;
+}
+</code></pre>
+<ol>
+<li><strong>Instantiation</strong>: The <code>Car</code> constructor is used to create an object, which allocates memory for it.</li>
+<li><strong>Initialization</strong>: The constructor (<code>Car</code>) initializes the object state with given parameters.</li>
+<li><strong>Reference</strong>: The object is referenced through a variable (<code>car1</code>, <code>car2</code>) that points to its memory location.</li>
+</ol></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Classes and Objects</h1>
+<p>Classes and objects form the foundation of Object-Oriented Programming (OOP).</p>
+<h2>What is a Class?</h2>
+<p>A class is a blueprint or template. It defines the attributes (fields) and behaviors (methods) of an object.</p>
+<h3>Defining a Class in Python</h3>
+<p>To define a class in Python, you use the <code>class</code> keyword followed by the name of the class. </p>
+<p>Here's a simple example:</p>
+<pre><code class="language-python">class Car:
+    # Constructor
+    def __init__(self, color, make, model, year):
+        self.color = color
+        self.make = make
+        self.model = model
+        self.year = year
+
+    # Method to display car details
+    def display_info(self):
+        print(f&quot;Car Make: {self.make}&quot;)
+        print(f&quot;Car Model: {self.model}&quot;)
+        print(f&quot;Car Year: {self.year}&quot;)
+        print(f&quot;Car Color: {self.color}&quot;)
+</code></pre>
+<ul>
+<li><strong>Attributes</strong>: The class <code>Car</code> has four attributes that describe its state: <code>color</code>, <code>make</code>, <code>model</code>, and <code>year</code>.</li>
+<li><strong>Constructor</strong>: The constructor <code>__init__(self, color, make, model, year)</code> initializes new objects of the class.</li>
+<li><strong>Methods</strong>: The <code>display_info</code> method is responsible for showcasing the car details.</li>
+</ul>
+<h2>What is an Object?</h2>
+<p>An object is an instance of a class. When you create an object, you are bringing the blueprint of the class into reality. It consists of state and behavior defined by the class, with each object holding its own copy of the data.</p>
+<h3>Creating Objects in Python</h3>
+<p>To create an object, you call the class constructor. </p>
+<p>Here's how you can instantiate objects from the <code>Car</code> class:</p>
+<pre><code class="language-python">car1 = Car(&quot;Red&quot;, &quot;Toyota&quot;, &quot;Corolla&quot;, 2020)
+car2 = Car(&quot;Blue&quot;, &quot;Ford&quot;, &quot;Mustang&quot;, 2021)
+
+# Displaying information of each car
+car1.display_info()
+print(&quot;-----------------&quot;)
+car2.display_info()
+</code></pre>
+<ol>
+<li><strong>Initialization</strong>: The constructor (<code>Car</code>) initializes the object state with given parameters.</li>
+<li><strong>Reference</strong>: The object is referenced through a variable (<code>car1</code>, <code>car2</code>) that points to its memory location.</li>
+</ol></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Classes and Objects</h1>
+<p>Classes and objects form the foundation of Object-Oriented Programming (OOP).</p>
+<h2>What is a Class?</h2>
+<p>A class is a blueprint or template. It defines the attributes (fields) and behaviors (methods) of an object.</p>
+<h3>Defining a Class in C</h3>
+<p>To define a class in C#, you use the <code>class</code> keyword followed by the name of the class. </p>
+<p>Here's a simple example:</p>
+<pre><code class="language-csharp">public class Car {
+    // Attributes
+    private string color;
+    private string make;
+    private string model;
+    private int year;
+
+    // Constructor
+    public Car(string color, string make, string model, int year) {
+        this.color = color;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    // Method to display car details
+    public void displayInfo() {
+        Console.WriteLine(&quot;Car Make: &quot; + make);
+        Console.WriteLine(&quot;Car Model: &quot; + model);
+        Console.WriteLine(&quot;Car Year: &quot; + year);
+        Console.WriteLine(&quot;Car Color: &quot; + color);
+    }
+}
+</code></pre>
+<ul>
+<li><strong>Attributes</strong>: The class <code>Car</code> has four attributes that describe its state: <code>color</code>, <code>make</code>, <code>model</code>, and <code>year</code>.</li>
+<li><strong>Constructor</strong>: The constructor <code>Car(string color, string make, string model, int year)</code> initializes new objects of the class.</li>
+<li><strong>Methods</strong>: The <code>displayInfo</code> method is responsible for showcasing the car details.</li>
+</ul>
+<h2>What is an Object?</h2>
+<p>An object is an instance of a class. When you create an object, you are bringing the blueprint of the class into reality. It consists of state and behavior defined by the class, with each object holding its own copy of the data.</p>
+<h3>Creating Objects in C</h3>
+<p>To create an object, you use the <code>new</code> keyword followed by the class constructor. </p>
+<p>Here's how you can instantiate objects from the <code>Car</code> class:</p>
+<pre><code class="language-csharp">public class Main {
+    public static void main(string[] args) {
+        // Creating an object of the Car class
+        Car car1 = new Car(&quot;Red&quot;, &quot;Toyota&quot;, &quot;Corolla&quot;, 2020);
+        Car car2 = new Car(&quot;Blue&quot;, &quot;Ford&quot;, &quot;Mustang&quot;, 2021);
+
+        // Displaying information of each car
+        car1.displayInfo();
+        Console.WriteLine(&quot;-----------------&quot;);
+        car2.displayInfo();
+    }
+}
+</code></pre>
+<ol>
+<li><strong>Instantiation</strong>: The <code>new</code> keyword is used to create an object, which allocates memory for it.</li>
+<li><strong>Initialization</strong>: The constructor (<code>Car</code>) initializes the object state with given parameters.</li>
+<li><strong>Reference</strong>: The object is referenced through a variable (<code>car1</code>, <code>car2</code>) that points to its memory location.</li>
+</ol></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Classes and Objects</h1>
+<p>Classes and objects form the foundation of Object-Oriented Programming (OOP).</p>
+<h2>What is a Class?</h2>
+<p>A class is a blueprint or template. It defines the attributes (fields) and behaviors (methods) of an object.</p>
+<h3>Defining a Class in Go</h3>
+<p>Go does not have traditional classes, but you can achieve similar behavior using <code>struct</code> and methods.</p>
+<p>Here's a simple example:</p>
+<pre><code class="language-go">type Car struct {
+    // Attributes
+    Color string
+    Make string
+    Model string
+    Year int
+}
+
+// Method defined with Car as the receiver
+func (c Car) DisplayInfo() {
+    fmt.Println(&quot;Car Make: &quot; + c.Make)
+    fmt.Println(&quot;Car Model: &quot; + c.Model)
+    fmt.Println(&quot;Car Year:&quot;, c.Year)
+    fmt.Println(&quot;Car Color: &quot; + c.Color)
+}
+</code></pre>
+<ul>
+<li><strong>Attributes</strong>: The struct <code>Car</code> has four attributes that describe its state: <code>Color</code>, <code>Make</code>, <code>Model</code>, and <code>Year</code>.</li>
+<li><strong>Methods</strong>: The <code>DisplayInfo</code> function is responsible for showcasing the car details.</li>
+</ul>
+<h2>What is an Object?</h2>
+<p>An object is an instance of a struct. When you create an object, you are bringing the blueprint of the struct into reality. It consists of state and behavior defined by the struct, with each object holding its own copy of the data.</p>
+<h3>Creating Objects in Go</h3>
+<p>To create an object, you instantiate the struct <code>Car</code>. </p>
+<p>Here's how you can instantiate objects from the <code>Car</code> struct:</p>
+<pre><code class="language-go">func main() {
+    // Creating an object of the Car class
+    car1 := Car{&quot;Red&quot;, &quot;Toyota&quot;, &quot;Corolla&quot;, 2020}
+    car2 := Car{&quot;Blue&quot;, &quot;Ford&quot;, &quot;Mustang&quot;, 2021}
+
+    // Displaying information of each car
+    car1.DisplayInfo()
+    fmt.Println(&quot;-----------------&quot;)
+    car2.DisplayInfo()
+}
+</code></pre>
+<ol>
+<li><strong>Instantiation</strong>: The struct <code>Car</code> is used to create an object, which allocates memory for it.</li>
+<li><strong>Initialization</strong>: The struct instance holds its own set of values.</li>
+<li><strong>Reference</strong>: The object is referenced using a variable (<code>car1</code>, <code>car2</code>) that holds its memory location.</li>
+</ol></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Classes and Objects</h1>
+<p>Classes and objects form the foundation of Object-Oriented Programming (OOP).</p>
+<h2>What is a Class?</h2>
+<p>In traditional OOP languages (like Java/C++), a <strong>Class</strong> is a blueprint that bundles data (attributes) and behavior (methods) together.</p>
+<p><strong>Rust is different.</strong> It separates these two concepts:<br />
+1.  <strong>Data</strong> is defined in a <code>struct</code>.<br />
+2.  <strong>Behavior</strong> is defined in an <code>impl</code> (implementation) block.</p>
+<h3>Defining a Class (Struct + Impl) in Rust</h3>
+<p>To define the equivalent of a class in Rust, we use the <code>struct</code> keyword for the data layout and the <code>impl</code> keyword to define methods.</p>
+<p>Here's the <code>Car</code> example translated to idiomatic Rust:</p>
+<pre><code class="language-rust">// 1. The Blueprint (Data only)
+// We use 'pub' to make the struct and fields accessible to other modules.
+pub struct Car {
+    // Attributes
+    pub color: String,
+    pub make: String,
+    pub model: String,
+    pub year: u32,
+}
+
+// 2. The Behavior (Methods)
+impl Car {
+    // Constructor-like function (Associated Function)
+    // Rust does not have a 'new' keyword. We create a static function typically named 'new'.
+    pub fn new(color: String, make: String, model: String, year: u32) -&gt; Self {
+        Car {
+            color, // Shorthand initialization (same as color: color)
+            make,
+            model,
+            year,
+        }
+    }
+
+    // Method to display car details
+    // '&amp;self' is a reference to the current object instance (like 'this' in Java)
+    pub fn display_info(&amp;self) {
+        println!(&quot;Car Make: {}&quot;, self.make);
+        println!(&quot;Car Model: {}&quot;, self.model);
+        println!(&quot;Car Year: {}&quot;, self.year);
+        println!(&quot;Car Color: {}&quot;, self.color);
+    }
+}
+</code></pre>
+<h3>🧠 New Rust Terminology</h3>
+<ul>
+<li><strong><code>struct</code></strong>: Defines the "shape" of the object (the fields).</li>
+<li><strong><code>impl</code></strong>: A block where we define functions and methods for a specific struct.</li>
+<li><strong><code>&amp;self</code></strong>: A reference to the instance itself. It means "read-only access to my own data". It is equivalent to <code>this</code> in Java.</li>
+<li><strong>Associated Function (<code>new</code>)</strong>: Functions defined inside <code>impl</code> that do <strong>not</strong> take <code>self</code>. They are like <code>static</code> methods in Java. We use them as constructors.</li>
+</ul>
+<hr />
+<h2>What is an Object?</h2>
+<p>An object is an <strong>instance</strong> of a struct. When you create an instance, you are allocating memory for that specific blueprint and filling it with real data.</p>
+<h3>Creating Objects in Rust</h3>
+<p>In Rust, we don't use the <code>new</code> keyword to instantiate. Instead, we call the associated function we created (<code>Car::new</code>) or initialize the struct directly.</p>
+<p>Here's how you can instantiate objects from the <code>Car</code> struct:</p>
+<pre><code class="language-rust">fn main() {
+    // Creating an object (Instance) of the Car struct
+    // We use &quot;::&quot; to call static methods (associated functions)
+    // Note: We use .to_string() because &quot;Red&quot; is a string slice (&amp;str), 
+    // but our Struct expects an owned String.
+    let car1 = Car::new(
+        &quot;Red&quot;.to_string(), 
+        &quot;Toyota&quot;.to_string(), 
+        &quot;Corolla&quot;.to_string(), 
+        2020
+    );
+
+    let car2 = Car::new(
+        &quot;Blue&quot;.to_string(), 
+        &quot;Ford&quot;.to_string(), 
+        &quot;Mustang&quot;.to_string(), 
+        2021
+    );
+
+    // Displaying information of each car
+    // We use &quot;.&quot; to call instance methods
+    car1.display_info();
+    println!(&quot;-----------------&quot;);
+    car2.display_info();
+}
+</code></pre>
+<h3>Key Differences from Java/Go</h3>
+<ol>
+<li><strong>Instantiation</strong>: No <code>new Car(...)</code>. We call <code>Car::new(...)</code> which is just a normal function we wrote.</li>
+<li><strong>Reference</strong>: Variables (<code>car1</code>) <strong>own</strong> the data by default. In Java, variables are just references (pointers).</li>
+<li><strong>Strings</strong>: We use <code>.to_string()</code> because string literals (<code>"Red"</code>) are string slices (<code>&amp;str</code>), but our struct wants an owned <code>String</code>.</li>
+</ol>
+<hr />
+<h2>💡 Why Rust prefers Structs over Classes?</h2>
+<p>If you are coming from Java or C++, you might wonder: <em>"Why didn't Rust just add Classes?"</em></p>
+<p>The answer lies in <strong>Composition over Inheritance</strong>.</p>
+<h3>1. The "Banana in the Jungle" Problem</h3>
+<p>In traditional OOP (Classes), you often create deep inheritance hierarchies (<code>Animal</code> -&gt; <code>Mammal</code> -&gt; <code>Dog</code>).<br />
+Joe Armstrong (creator of Erlang) famously said:</p>
+<blockquote>
+<p>"The problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. <strong>You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.</strong>"</p>
+</blockquote>
+<p>In Rust:<br />
+* <strong>Structs</strong> are just data (The Banana).<br />
+* <strong>Traits</strong> are just behavior (Eating).<br />
+* You don't inherit the "Gorilla" just to get the "Banana."</p>
+<h3>2. No "Diamond Problem"</h3>
+<p>In languages like C++, allowing a class to inherit from two parents leads to conflicts (The Diamond Problem). Rust avoids this entirely because <strong>Structs cannot inherit from other Structs</strong>. You strictly use <strong>Traits</strong> (Interfaces) to share behavior, which is much cleaner and safer.</p>
+<h3>3. Better Memory Control</h3>
+<ul>
+<li><strong>Classes</strong> (in Java/Python) are usually references (pointers) to memory on the Heap. This is slower and causes "Garbage Collection" pauses.</li>
+<li><strong>Structs</strong> in Rust are values; they can live on the stack or heap depending on how you store them (<code>Box</code>, <code>Rc</code>, etc.). Some fields (like <code>String</code>) include heap pointers, so layout depends on the data you put inside.</li>
+</ul>
+<h3>Summary</h3>
+<p>Rust replaces <strong>"Is-A"</strong> relationships (Inheritance) with <strong>"Has-A"</strong> and <strong>"Can-Do"</strong> relationships (Composition and Traits).</p>
+<ul>
+<li><strong>Bad (OOP):</strong> A <code>Car</code> <strong>is a</strong> <code>Vehicle</code>. (Forces rigid hierarchy)</li>
+<li><strong>Good (Rust):</strong> A <code>Car</code> <strong>has</strong> <code>Engine</code> data (Struct) and <strong>can</strong> <code>drive</code> (Trait).</li>
+</ul></div><details class="file"><summary>oop/rust/classes_and_objects/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * CLASSES AND OBJECTS IN RUST</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: Demonstrate how Rust replaces the "Class" keyword with:</span>
+<span class="cm"> * 1. Struct (for Data)</span>
+<span class="cm"> * 2. Impl (for Behavior)</span>
+<span class="cm"> */</span>
+
+<span class="c1">// 1. THE CLASS BLUEPRINT (Data Only)</span>
+<span class="c1">// In Java, this would be the fields inside 'public class Car'.</span>
+<span class="c1">// In Rust, we use a Struct to define the "shape" of the data.</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">make</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">year</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// 2. THE CLASS BEHAVIOR (Methods)</span>
+<span class="c1">// In Java, these methods would be inside the class curly braces {}.</span>
+<span class="c1">// In Rust, we use an 'impl' block to attach functions to the Struct.</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// A. CONSTRUCTOR</span>
+<span class="w">    </span><span class="c1">// Rust has no 'new' keyword for objects. We create a static function</span>
+<span class="w">    </span><span class="c1">// (Associated Function) that returns a new instance of Self.</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="n">make</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="n">year</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Car</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">color</span><span class="p">:</span><span class="w"> </span><span class="nc">color</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">make</span><span class="p">:</span><span class="w"> </span><span class="nc">make</span><span class="p">,</span>
+<span class="w">            </span><span class="n">model</span><span class="p">:</span><span class="w"> </span><span class="nc">model</span><span class="p">,</span>
+<span class="w">            </span><span class="n">year</span><span class="p">:</span><span class="w"> </span><span class="nc">year</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// B. INSTANCE METHOD</span>
+<span class="w">    </span><span class="c1">// '&amp;self' allows this function to read the data of the specific object calling it.</span>
+<span class="w">    </span><span class="c1">// It is exactly like 'this' in Java/C++.</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">display_info</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"----------------------------"</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Car Details:"</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Make:  {}"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">make</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Model: {}"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">model</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Year:  {}"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">year</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Color: {}"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"----------------------------"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. CREATING OBJECTS (Instances)</span>
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Instantiation</span>
+<span class="w">    </span><span class="c1">// We call the associated function 'Car::new' to create an object.</span>
+<span class="w">    </span><span class="c1">// 'car1' is now the Owner of this data.</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">car1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Car</span><span class="p">::</span><span class="n">new</span><span class="p">(</span>
+<span class="w">        </span><span class="s">"Red"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="s">"Toyota"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="s">"Corolla"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="mi">2020</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">car2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Car</span><span class="p">::</span><span class="n">new</span><span class="p">(</span>
+<span class="w">        </span><span class="s">"Blue"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="s">"Ford"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="s">"Mustang"</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span><span class="w"> </span>
+<span class="w">        </span><span class="mi">2021</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Usage</span>
+<span class="w">    </span><span class="c1">// We access methods using the dot operator, just like Java.</span>
+<span class="w">    </span><span class="n">car1</span><span class="p">.</span><span class="n">display_info</span><span class="p">();</span>
+<span class="w">    </span><span class="n">car2</span><span class="p">.</span><span class="n">display_info</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

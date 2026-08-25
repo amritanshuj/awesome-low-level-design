@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facade · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Facade</p>
+    
+    <span class="badge">Structural Pattern</span>
+    <h1>Facade</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/facade/BuildSystem.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">BuildSystem</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">compileProject</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"BuildSystem: Compiling project..."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"BuildSystem: Build successful."</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getArtifactPath</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"target/myapplication-1.0.jar"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"BuildSystem: Artifact located at "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">path</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">InterruptedException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/DeploymentAppDirect.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeploymentAppDirect</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DeploymentOrchestrator</span><span class="w"> </span><span class="n">orchestrator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeploymentOrchestrator</span><span class="p">();</span>
+<span class="w">        </span><span class="n">orchestrator</span><span class="p">.</span><span class="na">deployApplication</span><span class="p">(</span><span class="s">"main"</span><span class="p">,</span><span class="w"> </span><span class="s">"prod.server.example.com"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Attempting another deployment ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">orchestrator</span><span class="p">.</span><span class="na">deployApplication</span><span class="p">(</span><span class="s">"feature/new-ui"</span><span class="p">,</span><span class="w"> </span><span class="s">"staging.server.example.com"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/DeploymentAppFacade.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeploymentAppFacade</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DeploymentFacade</span><span class="w"> </span><span class="n">deploymentFacade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeploymentFacade</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Deploy to production</span>
+<span class="w">        </span><span class="n">deploymentFacade</span><span class="p">.</span><span class="na">deployApplication</span><span class="p">(</span><span class="s">"main"</span><span class="p">,</span><span class="w"> </span><span class="s">"prod.server.example.com"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Deploy a feature branch to staging</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Deploying feature branch to staging ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">deploymentFacade</span><span class="p">.</span><span class="na">deployApplication</span><span class="p">(</span><span class="s">"feature/new-ui"</span><span class="p">,</span><span class="w"> </span><span class="s">"staging.server.example.com"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/DeploymentFacade.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeploymentFacade</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Instances of all the subsystem components</span>
+<span class="w">    </span><span class="c1">// or they can be injected (e.g., via constructor for better testability).</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VersionControlSystem</span><span class="w"> </span><span class="n">vcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VersionControlSystem</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">BuildSystem</span><span class="w"> </span><span class="n">buildSystem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BuildSystem</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">TestingFramework</span><span class="w"> </span><span class="n">testingFramework</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TestingFramework</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DeploymentTarget</span><span class="w"> </span><span class="n">deploymentTarget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeploymentTarget</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Perform a full standard deployment: pull, build, test, deploy.</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">deployApplication</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\nFACADE: --- Initiating FULL DEPLOYMENT for branch: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" to "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">            </span><span class="n">vcs</span><span class="p">.</span><span class="na">pullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Step 2: Build the project</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="p">.</span><span class="na">compileProject</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Build compilation failed."</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"> </span><span class="c1">// Exit early on critical failure</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">.</span><span class="na">getArtifactPath</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Step 3: Run tests</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testingFramework</span><span class="p">.</span><span class="na">runUnitTests</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Unit tests failed."</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testingFramework</span><span class="p">.</span><span class="na">runIntegrationTests</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Integration tests failed."</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">            </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="na">transferArtifact</span><span class="p">(</span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">            </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="na">activateNewVersion</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: APPLICATION DEPLOYED SUCCESSFULLY TO "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"!"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - An unexpected error occurred: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+<span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w"> </span><span class="c1">// Log the full stack trace</span>
+<span class="w">            </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">deployHotfix</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\nFACADE: --- Initiating HOTFIX DEPLOYMENT for branch: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" to "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">            </span><span class="n">vcs</span><span class="p">.</span><span class="na">pullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Step 2: Build the project</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="p">.</span><span class="na">compileProject</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: HOTFIX FAILED - Build compilation failed."</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">.</span><span class="na">getArtifactPath</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Step 3: For a hotfix, we might skip extensive tests or run a specific "smoke test" suite.</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: Skipping full test suite for hotfix deployment (or running minimal smoke tests)."</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// if (!testingFramework.runSmokeTests()) { return false; } // Example</span>
+
+<span class="w">            </span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">            </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="na">transferArtifact</span><span class="p">(</span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">            </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="na">activateNewVersion</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: HOTFIX DEPLOYED SUCCESSFULLY TO "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"!"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"FACADE: HOTFIX FAILED - An unexpected error occurred: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getMessage</span><span class="p">());</span>
+<span class="w">            </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// We could add other simplified methods: rollbackLastDeployment(), checkDeploymentStatus(), etc.</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/DeploymentOrchestrator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeploymentOrchestrator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">VersionControlSystem</span><span class="w"> </span><span class="n">vcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VersionControlSystem</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">BuildSystem</span><span class="w"> </span><span class="n">buildSystem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BuildSystem</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">TestingFramework</span><span class="w"> </span><span class="n">testFramework</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TestingFramework</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DeploymentTarget</span><span class="w"> </span><span class="n">deployTarget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeploymentTarget</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">deployApplication</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prodServer</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n[Orchestrator] Starting deployment for branch: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">vcs</span><span class="p">.</span><span class="na">pullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="p">.</span><span class="na">compileProject</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Build failed. Deployment aborted."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">artifact</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">.</span><span class="na">getArtifactPath</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testFramework</span><span class="p">.</span><span class="na">runUnitTests</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">testFramework</span><span class="p">.</span><span class="na">runIntegrationTests</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">err</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Tests failed. Deployment aborted."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">deployTarget</span><span class="p">.</span><span class="na">transferArtifact</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span><span class="w"> </span><span class="n">prodServer</span><span class="p">);</span>
+<span class="w">        </span><span class="n">deployTarget</span><span class="p">.</span><span class="na">activateNewVersion</span><span class="p">(</span><span class="n">prodServer</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"[Orchestrator] Deployment successful!"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/DeploymentTarget.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeploymentTarget</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">transferArtifact</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Deployment: Transferring "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" to "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"..."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Deployment: Transfer complete."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">activateNewVersion</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Deployment: Activating new version on "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"..."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Deployment: Now live on "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"!"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">InterruptedException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/TestingFramework.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TestingFramework</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">runUnitTests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Testing: Running unit tests..."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">1500</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Testing: Unit tests passed."</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">runIntegrationTests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Testing: Running integration tests..."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Testing: Integration tests passed."</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">InterruptedException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/facade/VersionControlSystem.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">VersionControlSystem</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">pullLatestChanges</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">branch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"VCS: Pulling latest changes from '"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"'..."</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simulateDelay</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"VCS: Pull complete."</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">simulateDelay</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">InterruptedException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">e</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/facade/__init__.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.version_control_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">VersionControlSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.build_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuildSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.testing_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestingFramework</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.deployment_target</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeploymentTarget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.deployment_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeploymentFacade</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'VersionControlSystem'</span><span class="p">,</span>
+    <span class="s1">'BuildSystem'</span><span class="p">,</span>
+    <span class="s1">'TestingFramework'</span><span class="p">,</span>
+    <span class="s1">'DeploymentTarget'</span><span class="p">,</span>
+    <span class="s1">'DeploymentFacade'</span>
+<span class="p">]</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/build_system.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BuildSystem</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_project</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"BuildSystem: Compiling project..."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_delay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"BuildSystem: Build successful."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_artifact_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s2">"target/myapplication-1.0.jar"</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"BuildSystem: Artifact located at </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_simulate_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/deployment_app_direct.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.version_control_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">VersionControlSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.build_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuildSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.testing_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestingFramework</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.deployment_target</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeploymentTarget</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create all the components</span>
+    <span class="n">vcs</span> <span class="o">=</span> <span class="n">VersionControlSystem</span><span class="p">()</span>
+    <span class="n">build_system</span> <span class="o">=</span> <span class="n">BuildSystem</span><span class="p">()</span>
+    <span class="n">testing</span> <span class="o">=</span> <span class="n">TestingFramework</span><span class="p">()</span>
+    <span class="n">deployment</span> <span class="o">=</span> <span class="n">DeploymentTarget</span><span class="p">()</span>
+    
+    <span class="c1"># Deploy to production</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Deploying to production..."</span><span class="p">)</span>
+    
+    <span class="c1"># Step 1: Get latest code</span>
+    <span class="n">vcs</span><span class="o">.</span><span class="n">pull_latest_changes</span><span class="p">(</span><span class="s2">"main"</span><span class="p">)</span>
+    
+    <span class="c1"># Step 2: Build the project</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">build_system</span><span class="o">.</span><span class="n">compile_project</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment failed: Build error"</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="c1"># Step 3: Run tests</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">testing</span><span class="o">.</span><span class="n">run_unit_tests</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment failed: Unit tests failed"</span><span class="p">)</span>
+        <span class="k">return</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">testing</span><span class="o">.</span><span class="n">run_integration_tests</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment failed: Integration tests failed"</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="c1"># Step 4: Deploy to server</span>
+    <span class="n">artifact_path</span> <span class="o">=</span> <span class="n">build_system</span><span class="o">.</span><span class="n">get_artifact_path</span><span class="p">()</span>
+    <span class="n">deployment</span><span class="o">.</span><span class="n">transfer_artifact</span><span class="p">(</span><span class="n">artifact_path</span><span class="p">,</span> <span class="s2">"production-server"</span><span class="p">)</span>
+    <span class="n">deployment</span><span class="o">.</span><span class="n">activate_new_version</span><span class="p">(</span><span class="s2">"production-server"</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment completed successfully!"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/deployment_app_facade.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.deployment_facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeploymentFacade</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create the facade</span>
+    <span class="n">deployment</span> <span class="o">=</span> <span class="n">DeploymentFacade</span><span class="p">()</span>
+    
+    <span class="c1"># Deploy to production</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Deploying to production..."</span><span class="p">)</span>
+    <span class="n">deployment</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="s2">"main"</span><span class="p">,</span> <span class="s2">"production-server"</span><span class="p">)</span>
+    
+    <span class="c1"># Deploy to staging</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Deploying to staging..."</span><span class="p">)</span>
+    <span class="n">deployment</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="s2">"develop"</span><span class="p">,</span> <span class="s2">"staging-server"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/deployment_facade.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.version_control_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">VersionControlSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.build_system</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuildSystem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.testing_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestingFramework</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.deployment_target</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeploymentTarget</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeploymentFacade</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vcs</span> <span class="o">=</span> <span class="n">VersionControlSystem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">build_system</span> <span class="o">=</span> <span class="n">BuildSystem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">testing</span> <span class="o">=</span> <span class="n">TestingFramework</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deployment</span> <span class="o">=</span> <span class="n">DeploymentTarget</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">deploy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Starting deployment process..."</span><span class="p">)</span>
+        
+        <span class="c1"># Step 1: Get latest code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vcs</span><span class="o">.</span><span class="n">pull_latest_changes</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+        
+        <span class="c1"># Step 2: Build the project</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_system</span><span class="o">.</span><span class="n">compile_project</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment failed: Build error"</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Step 3: Run tests</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">run_unit_tests</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment failed: Unit tests failed"</span><span class="p">)</span>
+            <span class="k">return</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">run_integration_tests</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment failed: Integration tests failed"</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Step 4: Deploy to server</span>
+        <span class="n">artifact_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_system</span><span class="o">.</span><span class="n">get_artifact_path</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deployment</span><span class="o">.</span><span class="n">transfer_artifact</span><span class="p">(</span><span class="n">artifact_path</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deployment</span><span class="o">.</span><span class="n">activate_new_version</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment completed successfully!"</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/deployment_target.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeploymentTarget</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transfer_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artifact_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Deployment: Transferring </span><span class="si">{</span><span class="n">artifact_path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_delay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Deployment: Transfer complete."</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">activate_new_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Deployment: Activating new version on </span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_delay</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Deployment: Now live on </span><span class="si">{</span><span class="n">server</span><span class="si">}</span><span class="s2">!"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_simulate_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/testing_framework.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestingFramework</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_unit_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Testing: Running unit tests..."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_delay</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Testing: Unit tests passed."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_integration_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Testing: Running integration tests..."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_delay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Testing: Integration tests passed."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_simulate_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/facade/version_control_system.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">VersionControlSystem</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pull_latest_changes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"VCS: Pulling latest changes from '</span><span class="si">{</span><span class="n">branch</span><span class="si">}</span><span class="s2">'..."</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_delay</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"VCS: Pull complete."</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_simulate_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> 
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/facade/main.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"deployment_facade.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DeploymentFacade</span><span class="w"> </span><span class="n">facade</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Example 1: Full deployment</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"=== Full Deployment Example ==="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">facade</span><span class="p">.</span><span class="n">deployApplication</span><span class="p">(</span><span class="s">"main"</span><span class="p">,</span><span class="w"> </span><span class="s">"production-server"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Example 2: Hotfix deployment</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">=== Hotfix Deployment Example ==="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">facade</span><span class="p">.</span><span class="n">deployHotfix</span><span class="p">(</span><span class="s">"hotfix/security-patch"</span><span class="p">,</span><span class="w"> </span><span class="s">"production-server"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/build_system.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"build_system.h"</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">BuildSystem::compileProject</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"BuildSystem: Compiling project..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"BuildSystem: Build successful."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">BuildSystem::getArtifactPath</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"target/myapplication-1.0.jar"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"BuildSystem: Artifact located at "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">BuildSystem::simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="n">ms</span><span class="p">));</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/build_system.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BuildSystem</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">compileProject</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getArtifactPath</span><span class="p">();</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/deployment_facade.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"deployment_facade.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">DeploymentFacade</span><span class="o">::</span><span class="n">DeploymentFacade</span><span class="p">()</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">vcs</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">VersionControlSystem</span><span class="o">&gt;</span><span class="p">())</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">BuildSystem</span><span class="o">&gt;</span><span class="p">())</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">testingFramework</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">TestingFramework</span><span class="o">&gt;</span><span class="p">())</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="n">deploymentTarget</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">DeploymentTarget</span><span class="o">&gt;</span><span class="p">())</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">DeploymentFacade</span><span class="o">::</span><span class="n">deployApplication</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">FACADE: --- Initiating FULL DEPLOYMENT for branch: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" to "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" ---"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">        </span><span class="n">vcs</span><span class="o">-&gt;</span><span class="n">pullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Step 2: Build the project</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="o">-&gt;</span><span class="n">compileProject</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: DEPLOYMENT FAILED - Build compilation failed."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="o">-&gt;</span><span class="n">getArtifactPath</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Step 3: Run tests</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testingFramework</span><span class="o">-&gt;</span><span class="n">runUnitTests</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: DEPLOYMENT FAILED - Unit tests failed."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testingFramework</span><span class="o">-&gt;</span><span class="n">runIntegrationTests</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: DEPLOYMENT FAILED - Integration tests failed."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">        </span><span class="n">deploymentTarget</span><span class="o">-&gt;</span><span class="n">transferArtifact</span><span class="p">(</span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">        </span><span class="n">deploymentTarget</span><span class="o">-&gt;</span><span class="n">activateNewVersion</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: APPLICATION DEPLOYED SUCCESSFULLY TO "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: DEPLOYMENT FAILED - An unexpected error occurred: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">DeploymentFacade</span><span class="o">::</span><span class="n">deployHotfix</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">FACADE: --- Initiating HOTFIX DEPLOYMENT for branch: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" to "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" ---"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">        </span><span class="n">vcs</span><span class="o">-&gt;</span><span class="n">pullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Step 2: Build the project</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="o">-&gt;</span><span class="n">compileProject</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: HOTFIX FAILED - Build compilation failed."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="o">-&gt;</span><span class="n">getArtifactPath</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Step 3: For a hotfix, we skip extensive tests</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: Skipping full test suite for hotfix deployment (or running minimal smoke tests)."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">        </span><span class="n">deploymentTarget</span><span class="o">-&gt;</span><span class="n">transferArtifact</span><span class="p">(</span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">        </span><span class="n">deploymentTarget</span><span class="o">-&gt;</span><span class="n">activateNewVersion</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: HOTFIX DEPLOYED SUCCESSFULLY TO "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">serverAddress</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"FACADE: HOTFIX FAILED - An unexpected error occurred: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/deployment_facade.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"version_control_system.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"build_system.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"testing_framework.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"deployment_target.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeploymentFacade</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">DeploymentFacade</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">deployApplication</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">deployHotfix</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">VersionControlSystem</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vcs</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">BuildSystem</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">TestingFramework</span><span class="o">&gt;</span><span class="w"> </span><span class="n">testingFramework</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">DeploymentTarget</span><span class="o">&gt;</span><span class="w"> </span><span class="n">deploymentTarget</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/deployment_target.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"deployment_target.h"</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">DeploymentTarget::transferArtifact</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Deployment: Transferring "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" to "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Deployment: Transfer complete."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">DeploymentTarget::activateNewVersion</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">server</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Deployment: Activating new version on "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Deployment: Now live on "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">DeploymentTarget::simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="n">ms</span><span class="p">));</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/deployment_target.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeploymentTarget</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">transferArtifact</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">server</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">activateNewVersion</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">server</span><span class="p">);</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/testing_framework.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"testing_framework.h"</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">TestingFramework::runUnitTests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Testing: Running unit tests..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">1500</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Testing: Unit tests passed."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">TestingFramework::runIntegrationTests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Testing: Running integration tests..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">simulateDelay</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Testing: Integration tests passed."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TestingFramework::simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="n">ms</span><span class="p">));</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/testing_framework.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestingFramework</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">runUnitTests</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">runIntegrationTests</span><span class="p">();</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">simulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">);</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/version_control_system.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"version_control_system.h"</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">VersionControlSystem::pullLatestChanges</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">branch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"VCS: Pulling latest changes from '"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">branch</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"'..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">simulateDelay</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"VCS: Pull complete."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">VersionControlSystem::simulateDelay</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/facade/version_control_system.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">VersionControlSystem</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">pullLatestChanges</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">branch</span><span class="p">);</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">simulateDelay</span><span class="p">();</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/facade/BuildSystem.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Facade</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BuildSystem</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">CompileProject</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"BuildSystem: Compiling project..."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">SimulateDelay</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"BuildSystem: Build successful."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetArtifactPath</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"target/myapplication-1.0.jar"</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"BuildSystem: Artifact located at {path}"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SimulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/facade/DeploymentFacade.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Facade</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DeploymentFacade</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">VersionControlSystem</span><span class="w"> </span><span class="n">vcs</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">BuildSystem</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">TestingFramework</span><span class="w"> </span><span class="n">testingFramework</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">DeploymentTarget</span><span class="w"> </span><span class="n">deploymentTarget</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">DeploymentFacade</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">vcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">VersionControlSystem</span><span class="p">();</span>
+<span class="w">            </span><span class="n">buildSystem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BuildSystem</span><span class="p">();</span>
+<span class="w">            </span><span class="n">testingFramework</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TestingFramework</span><span class="p">();</span>
+<span class="w">            </span><span class="n">deploymentTarget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeploymentTarget</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">DeployApplication</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"\nFACADE: --- Initiating FULL DEPLOYMENT for branch: {branch} to {serverAddress} ---"</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">                </span><span class="n">vcs</span><span class="p">.</span><span class="n">PullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Step 2: Build the project</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="p">.</span><span class="n">CompileProject</span><span class="p">())</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Build compilation failed."</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="kt">string</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">.</span><span class="n">GetArtifactPath</span><span class="p">();</span>
+
+<span class="w">                </span><span class="c1">// Step 3: Run tests</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testingFramework</span><span class="p">.</span><span class="n">RunUnitTests</span><span class="p">())</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Unit tests failed."</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">testingFramework</span><span class="p">.</span><span class="n">RunIntegrationTests</span><span class="p">())</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Integration tests failed."</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">                </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="n">TransferArtifact</span><span class="p">(</span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">                </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="n">ActivateNewVersion</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"FACADE: APPLICATION DEPLOYED SUCCESSFULLY TO {serverAddress}!"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"FACADE: DEPLOYMENT FAILED - An unexpected error occurred: {e.Message}"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">DeployHotfix</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">branch</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"\nFACADE: --- Initiating HOTFIX DEPLOYMENT for branch: {branch} to {serverAddress} ---"</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">                </span><span class="n">vcs</span><span class="p">.</span><span class="n">PullLatestChanges</span><span class="p">(</span><span class="n">branch</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Step 2: Build the project</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buildSystem</span><span class="p">.</span><span class="n">CompileProject</span><span class="p">())</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"FACADE: HOTFIX FAILED - Build compilation failed."</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="kt">string</span><span class="w"> </span><span class="n">artifactPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildSystem</span><span class="p">.</span><span class="n">GetArtifactPath</span><span class="p">();</span>
+
+<span class="w">                </span><span class="c1">// Step 3: For a hotfix, we might skip extensive tests or run a specific "smoke test" suite.</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"FACADE: Skipping full test suite for hotfix deployment (or running minimal smoke tests)."</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">                </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="n">TransferArtifact</span><span class="p">(</span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="n">serverAddress</span><span class="p">);</span>
+<span class="w">                </span><span class="n">deploymentTarget</span><span class="p">.</span><span class="n">ActivateNewVersion</span><span class="p">(</span><span class="n">serverAddress</span><span class="p">);</span>
+
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"FACADE: HOTFIX DEPLOYED SUCCESSFULLY TO {serverAddress}!"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">Error</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"FACADE: HOTFIX FAILED - An unexpected error occurred: {e.Message}"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/facade/DeploymentTarget.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Facade</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DeploymentTarget</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">TransferArtifact</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">server</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Deployment: Transferring {artifactPath} to {server}..."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">SimulateDelay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Deployment: Transfer complete."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ActivateNewVersion</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">server</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Deployment: Activating new version on {server}..."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">SimulateDelay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Deployment: Now live on {server}!"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SimulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/facade/Program.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Facade</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">deploymentFacade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeploymentFacade</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Demonstrate full deployment</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"=== Full Deployment Example ==="</span><span class="p">);</span>
+<span class="w">            </span><span class="n">deploymentFacade</span><span class="p">.</span><span class="n">DeployApplication</span><span class="p">(</span><span class="s">"main"</span><span class="p">,</span><span class="w"> </span><span class="s">"production-server"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Demonstrate hotfix deployment</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\n=== Hotfix Deployment Example ==="</span><span class="p">);</span>
+<span class="w">            </span><span class="n">deploymentFacade</span><span class="p">.</span><span class="n">DeployHotfix</span><span class="p">(</span><span class="s">"hotfix/security-patch"</span><span class="p">,</span><span class="w"> </span><span class="s">"production-server"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/facade/TestingFramework.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Facade</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TestingFramework</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">RunUnitTests</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Testing: Running unit tests..."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">SimulateDelay</span><span class="p">(</span><span class="mi">1500</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Testing: Unit tests passed."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">RunIntegrationTests</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Testing: Running integration tests..."</span><span class="p">);</span>
+<span class="w">            </span><span class="n">SimulateDelay</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Testing: Integration tests passed."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SimulateDelay</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ms</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/facade/VersionControlSystem.cs</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/facade/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">facade</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="c1">// Create the deployment facade</span>
+<span class="w">	</span><span class="nx">deploymentFacade</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewDeploymentFacade</span><span class="p">()</span>
+
+<span class="w">	</span><span class="c1">// Perform a full deployment</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"=== Performing Full Deployment ==="</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">success</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">deploymentFacade</span><span class="p">.</span><span class="nx">DeployApplication</span><span class="p">(</span><span class="s">"main"</span><span class="p">,</span><span class="w"> </span><span class="s">"production-server"</span><span class="p">)</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="nx">success</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Full deployment failed!"</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="c1">// Perform a hotfix deployment</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"\n=== Performing Hotfix Deployment ==="</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">deploymentFacade</span><span class="p">.</span><span class="nx">DeployHotfix</span><span class="p">(</span><span class="s">"hotfix-123"</span><span class="p">,</span><span class="w"> </span><span class="s">"production-server"</span><span class="p">)</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="nx">success</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Hotfix deployment failed!"</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/facade/build_system.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">facade</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="c1">// BuildSystem handles project compilation</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">BuildSystem</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+
+<span class="c1">// NewBuildSystem creates a new BuildSystem instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewBuildSystem</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">BuildSystem</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">BuildSystem</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// CompileProject compiles the project</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="o">*</span><span class="nx">BuildSystem</span><span class="p">)</span><span class="w"> </span><span class="nx">CompileProject</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Build: Compiling project..."</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">simulateDelay</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Build: Compilation complete."</span><span class="p">)</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+
+<span class="c1">// GetArtifactPath returns the path to the compiled artifact</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="o">*</span><span class="nx">BuildSystem</span><span class="p">)</span><span class="w"> </span><span class="nx">GetArtifactPath</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="s">"/path/to/artifact"</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/facade/deployment_facade.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">facade</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// DeploymentFacade provides a simplified interface to the deployment system</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">DeploymentFacade</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">vcs</span><span class="w">              </span><span class="o">*</span><span class="nx">VersionControlSystem</span>
+<span class="w">	</span><span class="nx">buildSystem</span><span class="w">      </span><span class="o">*</span><span class="nx">BuildSystem</span>
+<span class="w">	</span><span class="nx">testingFramework</span><span class="w"> </span><span class="o">*</span><span class="nx">TestingFramework</span>
+<span class="w">	</span><span class="nx">deploymentTarget</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentTarget</span>
+<span class="p">}</span>
+
+<span class="c1">// NewDeploymentFacade creates a new DeploymentFacade instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewDeploymentFacade</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentFacade</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">DeploymentFacade</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">vcs</span><span class="p">:</span><span class="w">              </span><span class="nx">NewVersionControlSystem</span><span class="p">(),</span>
+<span class="w">		</span><span class="nx">buildSystem</span><span class="p">:</span><span class="w">      </span><span class="nx">NewBuildSystem</span><span class="p">(),</span>
+<span class="w">		</span><span class="nx">testingFramework</span><span class="p">:</span><span class="w"> </span><span class="nx">NewTestingFramework</span><span class="p">(),</span>
+<span class="w">		</span><span class="nx">deploymentTarget</span><span class="p">:</span><span class="w"> </span><span class="nx">NewDeploymentTarget</span><span class="p">(),</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// DeployApplication performs a full standard deployment</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentFacade</span><span class="p">)</span><span class="w"> </span><span class="nx">DeployApplication</span><span class="p">(</span><span class="nx">branch</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"\nFACADE: --- Initiating FULL DEPLOYMENT for branch: %s to %s ---\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">branch</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">success</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="w">	</span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">	</span><span class="nx">f</span><span class="p">.</span><span class="nx">vcs</span><span class="p">.</span><span class="nx">PullLatestChanges</span><span class="p">(</span><span class="nx">branch</span><span class="p">)</span>
+
+<span class="w">	</span><span class="c1">// Step 2: Build the project</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="nx">f</span><span class="p">.</span><span class="nx">buildSystem</span><span class="p">.</span><span class="nx">CompileProject</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Build compilation failed."</span><span class="p">)</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">	</span><span class="nx">artifactPath</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">buildSystem</span><span class="p">.</span><span class="nx">GetArtifactPath</span><span class="p">()</span>
+
+<span class="w">	</span><span class="c1">// Step 3: Run tests</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="nx">f</span><span class="p">.</span><span class="nx">testingFramework</span><span class="p">.</span><span class="nx">RunUnitTests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Unit tests failed."</span><span class="p">)</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="nx">f</span><span class="p">.</span><span class="nx">testingFramework</span><span class="p">.</span><span class="nx">RunIntegrationTests</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"FACADE: DEPLOYMENT FAILED - Integration tests failed."</span><span class="p">)</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">	</span><span class="p">}</span>
+
+<span class="w">	</span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">	</span><span class="nx">f</span><span class="p">.</span><span class="nx">deploymentTarget</span><span class="p">.</span><span class="nx">TransferArtifact</span><span class="p">(</span><span class="nx">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">f</span><span class="p">.</span><span class="nx">deploymentTarget</span><span class="p">.</span><span class="nx">ActivateNewVersion</span><span class="p">(</span><span class="nx">serverAddress</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"FACADE: APPLICATION DEPLOYED SUCCESSFULLY TO %s!\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">success</span>
+<span class="p">}</span>
+
+<span class="c1">// DeployHotfix performs a hotfix deployment</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentFacade</span><span class="p">)</span><span class="w"> </span><span class="nx">DeployHotfix</span><span class="p">(</span><span class="nx">branch</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"\nFACADE: --- Initiating HOTFIX DEPLOYMENT for branch: %s to %s ---\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">branch</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">success</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="w">	</span><span class="c1">// Step 1: Pull latest code</span>
+<span class="w">	</span><span class="nx">f</span><span class="p">.</span><span class="nx">vcs</span><span class="p">.</span><span class="nx">PullLatestChanges</span><span class="p">(</span><span class="nx">branch</span><span class="p">)</span>
+
+<span class="w">	</span><span class="c1">// Step 2: Build the project</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="nx">f</span><span class="p">.</span><span class="nx">buildSystem</span><span class="p">.</span><span class="nx">CompileProject</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"FACADE: HOTFIX FAILED - Build compilation failed."</span><span class="p">)</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">	</span><span class="nx">artifactPath</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">buildSystem</span><span class="p">.</span><span class="nx">GetArtifactPath</span><span class="p">()</span>
+
+<span class="w">	</span><span class="c1">// Step 3: Skip extensive tests for hotfix</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"FACADE: Skipping full test suite for hotfix deployment (or running minimal smoke tests)."</span><span class="p">)</span>
+
+<span class="w">	</span><span class="c1">// Step 4: Deploy to production</span>
+<span class="w">	</span><span class="nx">f</span><span class="p">.</span><span class="nx">deploymentTarget</span><span class="p">.</span><span class="nx">TransferArtifact</span><span class="p">(</span><span class="nx">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">f</span><span class="p">.</span><span class="nx">deploymentTarget</span><span class="p">.</span><span class="nx">ActivateNewVersion</span><span class="p">(</span><span class="nx">serverAddress</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"FACADE: HOTFIX DEPLOYED SUCCESSFULLY TO %s!\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">success</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/facade/deployment_target.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">facade</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="c1">// DeploymentTarget handles artifact deployment</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">DeploymentTarget</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+
+<span class="c1">// NewDeploymentTarget creates a new DeploymentTarget instance</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewDeploymentTarget</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentTarget</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">DeploymentTarget</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// TransferArtifact transfers the artifact to the target server</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">d</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentTarget</span><span class="p">)</span><span class="w"> </span><span class="nx">TransferArtifact</span><span class="p">(</span><span class="nx">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Deployment: Transferring artifact from %s to %s...\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">artifactPath</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">simulateDelay</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Deployment: Transfer complete."</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// ActivateNewVersion activates the new version on the target server</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">d</span><span class="w"> </span><span class="o">*</span><span class="nx">DeploymentTarget</span><span class="p">)</span><span class="w"> </span><span class="nx">ActivateNewVersion</span><span class="p">(</span><span class="nx">serverAddress</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Deployment: Activating new version on %s...\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">serverAddress</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">simulateDelay</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Deployment: Activation complete."</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/facade/testing_framework.go</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/facade/version_control_system.go</summary><div class="highlight"><pre><span></span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="c1">// client code for facade design pattern</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">MovieFacade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./movieFacade"</span><span class="p">);</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">movieFacade</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">MovieFacade</span><span class="p">();</span>
+<span class="c1">// By getting the required data, we can proceed all the functionality using facade design pattern.</span>
+
+<span class="nx">movieFacade</span><span class="p">.</span><span class="nx">watchMovie</span><span class="p">(</span><span class="s2">"Goat 🍾🎉"</span><span class="p">);</span>
+<span class="nx">movieFacade</span><span class="p">.</span><span class="nx">getSnacks</span><span class="p">(</span><span class="s2">"Popcorn"</span><span class="p">);</span>
+<span class="nx">movieFacade</span><span class="p">.</span><span class="nx">endMovie</span><span class="p">();</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/dvdPlayer.js</summary><div class="highlight"><pre><span></span><span class="c1">// Class for DVD player functionality</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">DVDPlayer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">on</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"DVD player is on"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">play</span><span class="p">(</span><span class="nx">movie</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Playing </span><span class="si">${</span><span class="nx">movie</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">off</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"DVD player is off"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DVDPlayer</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/lights.js</summary><div class="highlight"><pre><span></span><span class="c1">// Class for lights functionality</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">Lights</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">on</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Lights on, take you're seat!"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">off</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Lights off, get ready to see the show!"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Lights</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/movieFacade.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">SoundSystem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./soundSystem"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">DVDPlayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./dvdPlayer"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Projector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./projector"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Lights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./lights"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Snacks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./snacks"</span><span class="p">);</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">MovieFacade</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">soundSystem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">SoundSystem</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">dvdPlayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">DVDPlayer</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">projector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Projector</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">lights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Lights</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">snacks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Snacks</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">watchMovie</span><span class="p">(</span><span class="nx">movie</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Starting to watch a movie </span><span class="si">${</span><span class="nx">movie</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">lights</span><span class="p">.</span><span class="nx">on</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">projector</span><span class="p">.</span><span class="nx">on</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">projector</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">"DVD Player"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">dvdPlayer</span><span class="p">.</span><span class="nx">on</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">soundSystem</span><span class="p">.</span><span class="nx">on</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">dvdPlayer</span><span class="p">.</span><span class="nx">play</span><span class="p">(</span><span class="nx">movie</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">soundSystem</span><span class="p">.</span><span class="nx">setVolume</span><span class="p">(</span><span class="s2">"High"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">getSnacks</span><span class="p">(</span><span class="nx">snacks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"1st part of the movie is great! Let's order some snacks"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">snacks</span><span class="p">.</span><span class="nx">noteOrder</span><span class="p">(</span><span class="nx">snacks</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">snacks</span><span class="p">.</span><span class="nx">prepare</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">snacks</span><span class="p">.</span><span class="nx">serve</span><span class="p">(</span><span class="nx">snacks</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">endMovie</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"End of the movie, shutting down"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">lights</span><span class="p">.</span><span class="nx">off</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">projector</span><span class="p">.</span><span class="nx">off</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">dvdPlayer</span><span class="p">.</span><span class="nx">off</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">soundSystem</span><span class="p">.</span><span class="nx">off</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">MovieFacade</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/projector.js</summary><div class="highlight"><pre><span></span><span class="c1">// Class for projector functionality</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">Projector</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">on</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Projector on"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">connect</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Connecting projector to </span><span class="si">${</span><span class="nx">source</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">off</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Projector off"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Projector</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/snacks.js</summary><div class="highlight"><pre><span></span><span class="c1">// Class for snacks functionality</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">Snacks</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">noteOrder</span><span class="p">(</span><span class="nx">snacks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Ordering </span><span class="si">${</span><span class="nx">snacks</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">prepare</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Preparing snacks 🍿"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">serve</span><span class="p">(</span><span class="nx">snacks</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Here is your </span><span class="si">${</span><span class="nx">snacks</span><span class="si">}</span><span class="sb"> sir!, enjoy your movie 😊`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Snacks</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Facade Design Pattern/soundSystem.js</summary><div class="highlight"><pre><span></span><span class="c1">// Class for sound system functionality</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">SoundSystem</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">on</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Sound system is on"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">setVolume</span><span class="p">(</span><span class="nx">volume</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Setting volume to </span><span class="si">${</span><span class="nx">volume</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">off</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Sound system is off"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">SoundSystem</span><span class="p">;</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

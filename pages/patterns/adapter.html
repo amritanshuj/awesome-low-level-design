@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adapter · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Adapter</p>
+    
+    <span class="badge">Structural Pattern</span>
+    <h1>Adapter</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/adapter/CheckoutService.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CheckoutService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">CheckoutService</span><span class="p">(</span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">paymentProcessor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"CheckoutService: Attempting to process order for $"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">        </span><span class="n">paymentProcessor</span><span class="p">.</span><span class="na">processPayment</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">paymentProcessor</span><span class="p">.</span><span class="na">isPaymentSuccessful</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"CheckoutService: Order successful! Transaction ID: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">.</span><span class="na">getTransactionId</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"CheckoutService: Order failed. Payment was not successful."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/adapter/ECommerceAppV1.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ECommerceAppV1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="n">processor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InHousePaymentProcessor</span><span class="p">();</span>
+<span class="w">        </span><span class="n">CheckoutService</span><span class="w"> </span><span class="n">checkout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CheckoutService</span><span class="p">(</span><span class="n">processor</span><span class="p">);</span>
+<span class="w">        </span><span class="n">checkout</span><span class="p">.</span><span class="na">checkout</span><span class="p">(</span><span class="mf">199.99</span><span class="p">,</span><span class="w"> </span><span class="s">"USD"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/adapter/ECommerceAppV2.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ECommerceAppV2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="n">inHouseProcessor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InHousePaymentProcessor</span><span class="p">();</span>
+<span class="w">        </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="n">legacyProcessor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">LegacyGateway</span><span class="p">());</span>
+
+<span class="w">        </span><span class="n">CheckoutService</span><span class="w"> </span><span class="n">checkoutService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CheckoutService</span><span class="p">(</span><span class="n">inHouseProcessor</span><span class="p">);</span>
+<span class="w">        </span><span class="n">checkoutService</span><span class="p">.</span><span class="na">checkout</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s">"USD"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"--------------------------------"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">checkoutService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CheckoutService</span><span class="p">(</span><span class="n">legacyProcessor</span><span class="p">);</span>
+<span class="w">        </span><span class="n">checkoutService</span><span class="p">.</span><span class="na">checkout</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s">"USD"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/adapter/InHousePaymentProcessor.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">InHousePaymentProcessor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">transactionId</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"InHousePaymentProcessor: Processing payment of "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Process payment logic</span>
+<span class="w">        </span><span class="n">transactionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"TXN_"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">();</span>
+<span class="w">        </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"InHousePaymentProcessor: Payment successful. Txn ID: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">transactionId</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">transactionId</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/adapter/LegacyGateway.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LegacyGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">executeTransaction</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">totalAmount</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"LegacyGateway: Executing transaction for "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">currency</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">totalAmount</span><span class="p">);</span>
+<span class="w">        </span><span class="n">transactionReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">nanoTime</span><span class="p">();</span>
+<span class="w">        </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"LegacyGateway: Transaction executed successfully. Txn ID: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">checkStatus</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"LegacyGateway: Checking status for ref: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">getReferenceNumber</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/adapter/LegacyGatewayAdapter.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LegacyGatewayAdapter</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">LegacyGateway</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">LegacyGatewayAdapter</span><span class="p">(</span><span class="n">LegacyGateway</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">legacyGateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"LegacyGatewayAdapter: Processing payment of "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">        </span><span class="n">legacyGateway</span><span class="p">.</span><span class="na">executeTransaction</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"LegacyGatewayAdapter: Payment processed successfully. Txn ID: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">.</span><span class="na">getReferenceNumber</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">.</span><span class="na">checkStatus</span><span class="p">(</span><span class="n">legacyGateway</span><span class="p">.</span><span class="na">getReferenceNumber</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">legacyGateway</span><span class="p">.</span><span class="na">getReferenceNumber</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/adapter/PaymentProcessor.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">PaymentProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isPaymentSuccessful</span><span class="p">();</span>
+<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="nf">getTransactionId</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Adapter Design Pattern in Python</h1>
+<h2>Problem Statement</h2>
+<p>The Adapter pattern allows incompatible interfaces to work together. It acts as a bridge between two incompatible interfaces by converting the interface of one class into another interface that clients expect.</p>
+<hr />
+<h2>Core Components</h2>
+<h3>1. Target Interface (PaymentProcessor)</h3>
+<pre><code class="language-python">class PaymentProcessor(ABC):
+    @abstractmethod
+    def process_payment(self, amount: float, currency: str) -&gt; None:
+        pass
+</code></pre>
+<h3>2. Adaptee (LegacyGateway)</h3>
+<pre><code class="language-python">class LegacyGateway:
+    def make_payment(self, currency: str, amount: float) -&gt; None:
+        # Legacy payment processing logic
+        pass
+</code></pre>
+<h3>3. Adapter (LegacyGatewayAdapter)</h3>
+<pre><code class="language-python">class LegacyGatewayAdapter(PaymentProcessor):
+    def __init__(self, legacy_gateway: LegacyGateway):
+        self.legacy_gateway = legacy_gateway
+
+    def process_payment(self, amount: float, currency: str) -&gt; None:
+        self.legacy_gateway.make_payment(currency, amount)
+</code></pre>
+<h3>4. Client (CheckoutService)</h3>
+<pre><code class="language-python">class CheckoutService:
+    def __init__(self, payment_processor: PaymentProcessor):
+        self.payment_processor = payment_processor
+
+    def checkout(self, amount: float, currency: str) -&gt; None:
+        self.payment_processor.process_payment(amount, currency)
+</code></pre>
+<hr />
+<h2>Example Usage</h2>
+<pre><code class="language-python">def main():
+    # Using the in-house payment processor
+    in_house_processor = InHousePaymentProcessor()
+    checkout_service = CheckoutService(in_house_processor)
+    checkout_service.checkout(100, &quot;USD&quot;)
+
+    # Using the legacy payment gateway through adapter
+    legacy_processor = LegacyGatewayAdapter(LegacyGateway())
+    checkout_service = CheckoutService(legacy_processor)
+    checkout_service.checkout(100, &quot;USD&quot;)
+</code></pre>
+<hr />
+<h2>Benefits</h2>
+<ol>
+<li>
+<p><strong>Single Responsibility Principle:</strong><br />
+   - Separates the interface conversion logic from the business logic<br />
+   - Each class has a single responsibility</p>
+</li>
+<li>
+<p><strong>Open/Closed Principle:</strong><br />
+   - New adapters can be added without modifying existing code<br />
+   - System remains open for extension but closed for modification</p>
+</li>
+<li>
+<p><strong>Reusability:</strong><br />
+   - Existing classes can be reused with new interfaces<br />
+   - Reduces code duplication</p>
+</li>
+<li>
+<p><strong>Flexibility:</strong><br />
+   - Multiple adapters can be created for different purposes<br />
+   - Easy to switch between different implementations</p>
+</li>
+</ol>
+<hr />
+<h2>When to Use</h2>
+<ol>
+<li>
+<p><strong>When integrating incompatible interfaces:</strong><br />
+   - Working with legacy systems<br />
+   - Using third-party libraries<br />
+   - Migrating between different versions</p>
+</li>
+<li>
+<p><strong>When creating a reusable class:</strong><br />
+   - The class needs to work with unrelated classes<br />
+   - The class needs to work with classes that don't have compatible interfaces</p>
+</li>
+<li>
+<p><strong>When implementing multiple interfaces:</strong><br />
+   - A class needs to implement multiple interfaces<br />
+   - Different clients need different views of the same class</p>
+</li>
+</ol>
+<hr />
+<h2>Best Practices</h2>
+<ol>
+<li>
+<p><strong>Keep it Simple:</strong><br />
+   - Adapters should be simple and focused<br />
+   - Avoid adding unnecessary functionality</p>
+</li>
+<li>
+<p><strong>Documentation:</strong><br />
+   - Clearly document the purpose of the adapter<br />
+   - Explain the conversion logic</p>
+</li>
+<li>
+<p><strong>Testing:</strong><br />
+   - Test the adapter thoroughly<br />
+   - Ensure it works with both the target and adaptee</p>
+</li>
+<li>
+<p><strong>Error Handling:</strong><br />
+   - Handle conversion errors gracefully<br />
+   - Provide meaningful error messages</p>
+</li>
+</ol>
+<hr />
+<h2>Common Pitfalls</h2>
+<ol>
+<li>
+<p><strong>Over-engineering:</strong><br />
+   - Creating adapters when not needed<br />
+   - Adding unnecessary complexity</p>
+</li>
+<li>
+<p><strong>Tight Coupling:</strong><br />
+   - Creating dependencies between adapters<br />
+   - Making the system less flexible</p>
+</li>
+<li>
+<p><strong>Performance Issues:</strong><br />
+   - Adding too many layers of adaptation<br />
+   - Impacting system performance</p>
+</li>
+</ol>
+<hr /></div><details class="file"><summary>design-patterns/python/adapter/__init__.py</summary><div class="highlight"><pre><span></span><span class="c1"># Adapter Pattern Package</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/adapter/checkout_service.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.payment_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">PaymentProcessor</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CheckoutService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Client - Uses the PaymentProcessor interface"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payment_processor</span><span class="p">:</span> <span class="n">PaymentProcessor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_payment_processor</span> <span class="o">=</span> <span class="n">payment_processor</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CheckoutService: Attempting to process order for $</span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_payment_processor</span><span class="o">.</span><span class="n">process_payment</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">currency</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_payment_processor</span><span class="o">.</span><span class="n">is_payment_successful</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CheckoutService: Order successful! Transaction ID: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_payment_processor</span><span class="o">.</span><span class="n">get_transaction_id</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"CheckoutService: Order failed. Payment was not successful."</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/adapter/ecommerce_app.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.in_house_payment_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">InHousePaymentProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.legacy_gateway</span><span class="w"> </span><span class="kn">import</span> <span class="n">LegacyGateway</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.legacy_gateway_adapter</span><span class="w"> </span><span class="kn">import</span> <span class="n">LegacyGatewayAdapter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.checkout_service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CheckoutService</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ecommerce_app_v1</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demo using in-house payment processor only"""</span>
+    <span class="n">processor</span> <span class="o">=</span> <span class="n">InHousePaymentProcessor</span><span class="p">()</span>
+    <span class="n">checkout</span> <span class="o">=</span> <span class="n">CheckoutService</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span>
+    <span class="n">checkout</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="mf">199.99</span><span class="p">,</span> <span class="s2">"USD"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ecommerce_app_v2</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Demo using both in-house and legacy payment processors"""</span>
+    <span class="n">in_house_processor</span> <span class="o">=</span> <span class="n">InHousePaymentProcessor</span><span class="p">()</span>
+    <span class="n">legacy_processor</span> <span class="o">=</span> <span class="n">LegacyGatewayAdapter</span><span class="p">(</span><span class="n">LegacyGateway</span><span class="p">())</span>
+
+    <span class="n">checkout_service</span> <span class="o">=</span> <span class="n">CheckoutService</span><span class="p">(</span><span class="n">in_house_processor</span><span class="p">)</span>
+    <span class="n">checkout_service</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s2">"USD"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"--------------------------------"</span><span class="p">)</span>
+
+    <span class="n">checkout_service</span> <span class="o">=</span> <span class="n">CheckoutService</span><span class="p">(</span><span class="n">legacy_processor</span><span class="p">)</span>
+    <span class="n">checkout_service</span><span class="o">.</span><span class="n">checkout</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s2">"USD"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== ECommerce App V1 ==="</span><span class="p">)</span>
+    <span class="n">ecommerce_app_v1</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== ECommerce App V2 ==="</span><span class="p">)</span>
+    <span class="n">ecommerce_app_v2</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/adapter/in_house_payment_processor.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.payment_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">PaymentProcessor</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">InHousePaymentProcessor</span><span class="p">(</span><span class="n">PaymentProcessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Concrete implementation of the target interface"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transaction_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_payment_successful</span> <span class="o">=</span> <span class="kc">False</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_payment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"InHousePaymentProcessor: Processing payment of </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="c1"># Process payment logic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transaction_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"TXN_</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_payment_successful</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"InHousePaymentProcessor: Payment successful. Txn ID: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_transaction_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_payment_successful</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_payment_successful</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transaction_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transaction_id</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/adapter/legacy_gateway.py</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LegacyGateway</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Adaptee - The old interface that needs to be adapted"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transaction_reference</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_payment_successful</span> <span class="o">=</span> <span class="kc">False</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total_amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"LegacyGateway: Executing transaction for </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">total_amount</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transaction_reference</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000000</span><span class="p">)</span>  <span class="c1"># Using microseconds for uniqueness</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_payment_successful</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"LegacyGateway: Transaction executed successfully. Txn ID: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_transaction_reference</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transaction_reference</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"LegacyGateway: Checking status for ref: </span><span class="si">{</span><span class="n">transaction_reference</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_payment_successful</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_reference_number</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transaction_reference</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/adapter/legacy_gateway_adapter.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.payment_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">PaymentProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.legacy_gateway</span><span class="w"> </span><span class="kn">import</span> <span class="n">LegacyGateway</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LegacyGatewayAdapter</span><span class="p">(</span><span class="n">PaymentProcessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Adapter - Adapts the LegacyGateway to the PaymentProcessor interface"""</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legacy_gateway</span><span class="p">:</span> <span class="n">LegacyGateway</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_gateway</span> <span class="o">=</span> <span class="n">legacy_gateway</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_payment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"LegacyGatewayAdapter: Processing payment of </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_gateway</span><span class="o">.</span><span class="n">execute_transaction</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">currency</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"LegacyGatewayAdapter: Payment processed successfully. Txn ID: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_legacy_gateway</span><span class="o">.</span><span class="n">get_reference_number</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_payment_successful</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legacy_gateway</span><span class="o">.</span><span class="n">check_status</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_legacy_gateway</span><span class="o">.</span><span class="n">get_reference_number</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transaction_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_legacy_gateway</span><span class="o">.</span><span class="n">get_reference_number</span><span class="p">())</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/adapter/payment_processor.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PaymentProcessor</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Target Interface"""</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_payment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_payment_successful</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_transaction_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">pass</span> 
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/adapter/main.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"in_house_payment_processor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"legacy_gateway.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"legacy_gateway_adapter.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Adapter Pattern Demo</span><span class="se">\n</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Using the new payment processor</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Using InHousePaymentProcessor:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">PaymentProcessor</span><span class="o">*</span><span class="w"> </span><span class="n">processor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InHousePaymentProcessor</span><span class="p">();</span>
+<span class="w">    </span><span class="n">processor</span><span class="o">-&gt;</span><span class="n">processPayment</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span><span class="w"> </span><span class="s">"USD"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Payment successful: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">processor</span><span class="o">-&gt;</span><span class="n">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"Yes"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"No"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Transaction ID: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">processor</span><span class="o">-&gt;</span><span class="n">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">processor</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Using LegacyGateway through adapter:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">LegacyGateway</span><span class="o">*</span><span class="w"> </span><span class="n">legacyGateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LegacyGateway</span><span class="p">();</span>
+<span class="w">    </span><span class="n">PaymentProcessor</span><span class="o">*</span><span class="w"> </span><span class="n">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="p">(</span><span class="n">legacyGateway</span><span class="p">);</span>
+<span class="w">    </span><span class="n">adapter</span><span class="o">-&gt;</span><span class="n">processPayment</span><span class="p">(</span><span class="mf">200.0</span><span class="p">,</span><span class="w"> </span><span class="s">"EUR"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Payment successful: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">adapter</span><span class="o">-&gt;</span><span class="n">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"Yes"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"No"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Transaction ID: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">adapter</span><span class="o">-&gt;</span><span class="n">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">adapter</span><span class="p">;</span>
+<span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/in_house_payment_processor.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"in_house_payment_processor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sstream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">InHousePaymentProcessor::processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"InHousePaymentProcessor: Processing payment of "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">currency</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Process payment logic</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">system_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">now_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">now</span><span class="p">.</span><span class="n">time_since_epoch</span><span class="p">());</span>
+<span class="w">    </span><span class="n">transactionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"TXN_"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">now_ms</span><span class="p">.</span><span class="n">count</span><span class="p">());</span>
+<span class="w">    </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"InHousePaymentProcessor: Payment successful. Txn ID: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">transactionId</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">InHousePaymentProcessor::isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">InHousePaymentProcessor::getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">transactionId</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/in_house_payment_processor.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"payment_processor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">InHousePaymentProcessor</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">transactionId</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/legacy_gateway.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"legacy_gateway.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">LegacyGateway::executeTransaction</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">totalAmount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"LegacyGateway: Executing transaction for "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">currency</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">totalAmount</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="n">transactionReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">time_since_epoch</span><span class="p">().</span><span class="n">count</span><span class="p">();</span>
+<span class="w">    </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"LegacyGateway: Transaction executed successfully. Txn ID: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">transactionReference</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">LegacyGateway::checkStatus</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"LegacyGateway: Checking status for ref: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">transactionReference</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="nf">LegacyGateway::getReferenceNumber</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/legacy_gateway.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LegacyGateway</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">executeTransaction</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">totalAmount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">checkStatus</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="nf">getReferenceNumber</span><span class="p">();</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/legacy_gateway_adapter.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"legacy_gateway_adapter.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">LegacyGatewayAdapter</span><span class="o">::</span><span class="n">LegacyGatewayAdapter</span><span class="p">(</span><span class="n">LegacyGateway</span><span class="o">*</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">)</span><span class="w"> </span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">(</span><span class="n">legacyGateway</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="o">::</span><span class="n">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"LegacyGatewayAdapter: Processing payment of "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">currency</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">legacyGateway</span><span class="o">-&gt;</span><span class="n">executeTransaction</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"LegacyGatewayAdapter: Payment processed successfully. Txn ID: "</span><span class="w"> </span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">legacyGateway</span><span class="o">-&gt;</span><span class="n">getReferenceNumber</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="o">::</span><span class="n">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">legacyGateway</span><span class="o">-&gt;</span><span class="n">checkStatus</span><span class="p">(</span><span class="n">legacyGateway</span><span class="o">-&gt;</span><span class="n">getReferenceNumber</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="o">::</span><span class="n">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">legacyGateway</span><span class="o">-&gt;</span><span class="n">getReferenceNumber</span><span class="p">());</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/legacy_gateway_adapter.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"payment_processor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"legacy_gateway.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">LegacyGatewayAdapter</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">PaymentProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="p">(</span><span class="n">LegacyGateway</span><span class="o">*</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">LegacyGateway</span><span class="o">*</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/adapter/payment_processor.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PaymentProcessor</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">PaymentProcessor</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">processPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getTransactionId</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/adapter/CheckoutService.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Adapter</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CheckoutService</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IPaymentProcessor</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">CheckoutService</span><span class="p">(</span><span class="n">IPaymentProcessor</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">paymentProcessor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">paymentProcessor</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Checkout</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"CheckoutService: Initiating checkout for {currency} {amount}"</span><span class="p">);</span>
+<span class="w">            </span>
+<span class="w">            </span><span class="n">paymentProcessor</span><span class="p">.</span><span class="n">ProcessPayment</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">            </span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">paymentProcessor</span><span class="p">.</span><span class="n">IsPaymentSuccessful</span><span class="p">())</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"CheckoutService: Payment successful. Transaction ID: {paymentProcessor.GetTransactionId()}"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"CheckoutService: Payment failed."</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/adapter/InHousePaymentProcessor.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Adapter</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">InHousePaymentProcessor</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IPaymentProcessor</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">transactionId</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"InHousePaymentProcessor: Processing payment of {currency} {amount}"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">transactionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">();</span>
+<span class="w">                </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"InHousePaymentProcessor: Payment processed successfully. Txn ID: {transactionId}"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Error processing payment: {ex.Message}"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsPaymentSuccessful</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetTransactionId</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transactionId</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/adapter/IPaymentProcessor.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Adapter</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IPaymentProcessor</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsPaymentSuccessful</span><span class="p">();</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetTransactionId</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/adapter/LegacyGateway.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Adapter</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">LegacyGateway</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ExecuteTransaction</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">totalAmount</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"LegacyGateway: Executing transaction for {currency} {totalAmount}"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">transactionReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTimeOffset</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="n">ToUnixTimeMilliseconds</span><span class="p">();</span>
+<span class="w">            </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"LegacyGateway: Transaction executed successfully. Txn ID: {transactionReference}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">CheckStatus</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"LegacyGateway: Checking status for ref: {transactionReference}"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">GetReferenceNumber</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">transactionReference</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/adapter/LegacyGatewayAdapter.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Adapter</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">LegacyGatewayAdapter</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IPaymentProcessor</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">LegacyGateway</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">LegacyGatewayAdapter</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">legacyGateway</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LegacyGateway</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessPayment</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">currency</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">legacyGateway</span><span class="p">.</span><span class="n">ExecuteTransaction</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">currency</span><span class="p">);</span>
+<span class="w">                </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Error processing payment: {ex.Message}"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">IsPaymentSuccessful</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">isPaymentSuccessful</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>
+<span class="w">                   </span><span class="n">legacyGateway</span><span class="p">.</span><span class="n">CheckStatus</span><span class="p">(</span><span class="n">legacyGateway</span><span class="p">.</span><span class="n">GetReferenceNumber</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetTransactionId</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">legacyGateway</span><span class="p">.</span><span class="n">GetReferenceNumber</span><span class="p">().</span><span class="n">ToString</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/adapter/Program.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Adapter</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Example 1: Using the in-house payment processor</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"=== Using In-House Payment Processor ==="</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">inHouseProcessor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InHousePaymentProcessor</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">checkoutService1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CheckoutService</span><span class="p">(</span><span class="n">inHouseProcessor</span><span class="p">);</span>
+<span class="w">            </span><span class="n">checkoutService1</span><span class="p">.</span><span class="n">Checkout</span><span class="p">(</span><span class="mf">100.00</span><span class="p">,</span><span class="w"> </span><span class="s">"USD"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\n=== Using Legacy Gateway Adapter ==="</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">legacyAdapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LegacyGatewayAdapter</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">checkoutService2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CheckoutService</span><span class="p">(</span><span class="n">legacyAdapter</span><span class="p">);</span>
+<span class="w">            </span><span class="n">checkoutService2</span><span class="p">.</span><span class="n">Checkout</span><span class="p">(</span><span class="mf">200.00</span><span class="p">,</span><span class="w"> </span><span class="s">"EUR"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/adapter/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">"design-patterns/golang/adapter"</span>
+<span class="w">	</span><span class="s">"fmt"</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="c1">// Using the in-house payment processor</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Using In-House Payment Processor:"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">inHouseProcessor</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">InHousePaymentProcessor</span><span class="p">{}</span>
+<span class="w">	</span><span class="nx">checkoutService</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">adapter</span><span class="p">.</span><span class="nx">NewCheckoutService</span><span class="p">(</span><span class="nx">inHouseProcessor</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">checkoutService</span><span class="p">.</span><span class="nx">ProcessCheckout</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span><span class="w"> </span><span class="s">"USD"</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"\nUsing Legacy Gateway (via Adapter):"</span><span class="p">)</span>
+<span class="w">	</span><span class="c1">// Using the legacy gateway through the adapter</span>
+<span class="w">	</span><span class="nx">legacyGateway</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">LegacyGateway</span><span class="p">{}</span>
+<span class="w">	</span><span class="nx">legacyAdapter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">adapter</span><span class="p">.</span><span class="nx">NewLegacyGatewayAdapter</span><span class="p">(</span><span class="nx">legacyGateway</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">checkoutService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">adapter</span><span class="p">.</span><span class="nx">NewCheckoutService</span><span class="p">(</span><span class="nx">legacyAdapter</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">checkoutService</span><span class="p">.</span><span class="nx">ProcessCheckout</span><span class="p">(</span><span class="mf">150.0</span><span class="p">,</span><span class="w"> </span><span class="s">"EUR"</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/adapter/checkout_service.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">adapter</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// CheckoutService handles the checkout process</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">CheckoutService</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">paymentProcessor</span><span class="w"> </span><span class="nx">PaymentProcessor</span>
+<span class="p">}</span>
+
+<span class="c1">// NewCheckoutService creates a new CheckoutService</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewCheckoutService</span><span class="p">(</span><span class="nx">paymentProcessor</span><span class="w"> </span><span class="nx">PaymentProcessor</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">CheckoutService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">CheckoutService</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">paymentProcessor</span><span class="p">:</span><span class="w"> </span><span class="nx">paymentProcessor</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ProcessCheckout processes a checkout with the given amount and currency</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">cs</span><span class="w"> </span><span class="o">*</span><span class="nx">CheckoutService</span><span class="p">)</span><span class="w"> </span><span class="nx">ProcessCheckout</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">cs</span><span class="p">.</span><span class="nx">paymentProcessor</span><span class="p">.</span><span class="nx">ProcessPayment</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="p">)</span>
+
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">cs</span><span class="p">.</span><span class="nx">paymentProcessor</span><span class="p">.</span><span class="nx">IsPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Checkout successful! Transaction ID: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">cs</span><span class="p">.</span><span class="nx">paymentProcessor</span><span class="p">.</span><span class="nx">GetTransactionID</span><span class="p">())</span>
+<span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Checkout failed!"</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/adapter/in_house_payment_processor.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">adapter</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">"fmt"</span>
+<span class="w">	</span><span class="s">"time"</span>
+<span class="p">)</span>
+
+<span class="c1">// InHousePaymentProcessor represents our in-house payment processing system</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">InHousePaymentProcessor</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">transactionID</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">isSuccessful</span><span class="w">  </span><span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="c1">// ProcessPayment implements the PaymentProcessor interface</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">InHousePaymentProcessor</span><span class="p">)</span><span class="w"> </span><span class="nx">ProcessPayment</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"InHousePaymentProcessor: Processing payment of %s %.2f\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="p">,</span><span class="w"> </span><span class="nx">amount</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">p</span><span class="p">.</span><span class="nx">transactionID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">"INH-%d"</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UnixNano</span><span class="p">())</span>
+<span class="w">	</span><span class="nx">p</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"InHousePaymentProcessor: Payment processed successfully. Txn ID: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">transactionID</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// IsPaymentSuccessful implements the PaymentProcessor interface</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">InHousePaymentProcessor</span><span class="p">)</span><span class="w"> </span><span class="nx">IsPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">isSuccessful</span>
+<span class="p">}</span>
+
+<span class="c1">// GetTransactionID implements the PaymentProcessor interface</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">InHousePaymentProcessor</span><span class="p">)</span><span class="w"> </span><span class="nx">GetTransactionID</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">transactionID</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/adapter/legacy_gateway.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">adapter</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">"fmt"</span>
+<span class="w">	</span><span class="s">"time"</span>
+<span class="p">)</span>
+
+<span class="c1">// LegacyGateway represents the legacy payment gateway</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">LegacyGateway</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">transactionReference</span><span class="w"> </span><span class="kt">int64</span>
+<span class="w">	</span><span class="nx">isPaymentSuccessful</span><span class="w">  </span><span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="c1">// ExecuteTransaction processes a payment using the legacy gateway</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">lg</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGateway</span><span class="p">)</span><span class="w"> </span><span class="nx">ExecuteTransaction</span><span class="p">(</span><span class="nx">totalAmount</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"LegacyGateway: Executing transaction for %s %.2f\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="p">,</span><span class="w"> </span><span class="nx">totalAmount</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">lg</span><span class="p">.</span><span class="nx">transactionReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">().</span><span class="nx">UnixNano</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">lg</span><span class="p">.</span><span class="nx">isPaymentSuccessful</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"LegacyGateway: Transaction executed successfully. Txn ID: %d\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">lg</span><span class="p">.</span><span class="nx">transactionReference</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// CheckStatus checks the status of a transaction</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">lg</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGateway</span><span class="p">)</span><span class="w"> </span><span class="nx">CheckStatus</span><span class="p">(</span><span class="nx">transactionReference</span><span class="w"> </span><span class="kt">int64</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"LegacyGateway: Checking status for ref: %d\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">transactionReference</span><span class="p">)</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">lg</span><span class="p">.</span><span class="nx">isPaymentSuccessful</span>
+<span class="p">}</span>
+
+<span class="c1">// GetReferenceNumber returns the transaction reference number</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">lg</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGateway</span><span class="p">)</span><span class="w"> </span><span class="nx">GetReferenceNumber</span><span class="p">()</span><span class="w"> </span><span class="kt">int64</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">lg</span><span class="p">.</span><span class="nx">transactionReference</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/adapter/legacy_gateway_adapter.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">adapter</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// LegacyGatewayAdapter adapts the LegacyGateway to the PaymentProcessor interface</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">LegacyGatewayAdapter</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">legacyGateway</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGateway</span>
+<span class="p">}</span>
+
+<span class="c1">// NewLegacyGatewayAdapter creates a new LegacyGatewayAdapter</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewLegacyGatewayAdapter</span><span class="p">(</span><span class="nx">legacyGateway</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGateway</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGatewayAdapter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">LegacyGatewayAdapter</span><span class="p">{</span>
+<span class="w">		</span><span class="nx">legacyGateway</span><span class="p">:</span><span class="w"> </span><span class="nx">legacyGateway</span><span class="p">,</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ProcessPayment implements the PaymentProcessor interface</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">adapter</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGatewayAdapter</span><span class="p">)</span><span class="w"> </span><span class="nx">ProcessPayment</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">legacyGateway</span><span class="p">.</span><span class="nx">ExecuteTransaction</span><span class="p">(</span><span class="nx">amount</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// IsPaymentSuccessful implements the PaymentProcessor interface</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">adapter</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGatewayAdapter</span><span class="p">)</span><span class="w"> </span><span class="nx">IsPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">adapter</span><span class="p">.</span><span class="nx">legacyGateway</span><span class="p">.</span><span class="nx">CheckStatus</span><span class="p">(</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">legacyGateway</span><span class="p">.</span><span class="nx">GetReferenceNumber</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="c1">// GetTransactionID implements the PaymentProcessor interface</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">adapter</span><span class="w"> </span><span class="o">*</span><span class="nx">LegacyGatewayAdapter</span><span class="p">)</span><span class="w"> </span><span class="nx">GetTransactionID</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">"LEG-%d"</span><span class="p">,</span><span class="w"> </span><span class="nx">adapter</span><span class="p">.</span><span class="nx">legacyGateway</span><span class="p">.</span><span class="nx">GetReferenceNumber</span><span class="p">())</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/adapter/payment_processor.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">adapter</span>
+
+<span class="c1">// PaymentProcessor defines the interface for processing payments</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">PaymentProcessor</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">ProcessPayment</span><span class="p">(</span><span class="nx">amount</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">currency</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">IsPaymentSuccessful</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span>
+<span class="w">	</span><span class="nx">GetTransactionID</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Structural Pattern/Adapter Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">USB_A_Connector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./usbA_connector"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./adapter"</span><span class="p">);</span>
+
+<span class="c1">// Creating instances for imported classes</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">usbAConnector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">USB_A_Connector</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">adapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Adapter</span><span class="p">(</span><span class="nx">usbAConnector</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">adapter</span><span class="p">.</span><span class="nx">plugIn</span><span class="p">());</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Adapter Design Pattern/adapter.js</summary><div class="highlight"><pre><span></span><span class="c1">// usbAdapter.js</span>
+
+<span class="c1">// No need to import USB_A_Connector here</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">USB_Adapter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">connector</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">connector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">connector</span><span class="p">;</span><span class="w"> </span><span class="c1">// Store the USB-A connector instance</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">plugIn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">connector</span><span class="p">.</span><span class="nx">connect</span><span class="p">();</span><span class="w"> </span><span class="c1">// Use the method of the passed instances</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">USB_Adapter</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Adapter Design Pattern/usbA_connector.js</summary><div class="highlight"><pre><span></span><span class="c1">// USB A plug class</span>
+
+<span class="c1">// Old system</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">USB_A_Connector</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">connect</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s2">"USB-A connector connected"</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">USB_A_Connector</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Structural Pattern/Adapter Design Pattern/usbC_device.js</summary><div class="highlight"><pre><span></span><span class="c1">// Device class to connect USB A cable</span>
+
+<span class="c1">// New system</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">USB_C_Device</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">plugIn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s2">"USB C device connected"</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">USB_C_Device</span><span class="p">;</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mediator · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Mediator</p>
+    
+    <span class="badge">Behavioral Pattern</span>
+    <h1>Mediator</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/mediator/Button.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Button</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Button</span><span class="p">(</span><span class="n">UIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">click</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Login Button clicked!"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">notifyMediator</span><span class="p">();</span><span class="w"> </span><span class="c1">// Will trigger login attempt</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Login Button is disabled."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setEnabled</span><span class="p">(</span><span class="kt">boolean</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Login Button is now "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">enabled</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"ENABLED"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">"DISABLED"</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/mediator/FormMediator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FormMediator</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">UIMediator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">TextField</span><span class="w"> </span><span class="n">usernameField</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">TextField</span><span class="w"> </span><span class="n">passwordField</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="n">loginButton</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Label</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setUsernameField</span><span class="p">(</span><span class="n">TextField</span><span class="w"> </span><span class="n">usernameField</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">usernameField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usernameField</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setPasswordField</span><span class="p">(</span><span class="n">TextField</span><span class="w"> </span><span class="n">passwordField</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">passwordField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordField</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setLoginButton</span><span class="p">(</span><span class="n">Button</span><span class="w"> </span><span class="n">loginButton</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">loginButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginButton</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setStatusLabel</span><span class="p">(</span><span class="n">Label</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">statusLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">componentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="w"> </span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">usernameField</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">passwordField</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">boolean</span><span class="w"> </span><span class="n">enableButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">usernameField</span><span class="p">.</span><span class="na">getText</span><span class="p">().</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">passwordField</span><span class="p">.</span><span class="na">getText</span><span class="p">().</span><span class="na">isEmpty</span><span class="p">();</span>
+<span class="w">            </span><span class="n">loginButton</span><span class="p">.</span><span class="na">setEnabled</span><span class="p">(</span><span class="n">enableButton</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">loginButton</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usernameField</span><span class="p">.</span><span class="na">getText</span><span class="p">();</span>
+<span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordField</span><span class="p">.</span><span class="na">getText</span><span class="p">();</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="s">"admin"</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">username</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">"1234"</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">password</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">statusLabel</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="s">"✅ Login successful!"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">statusLabel</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="s">"❌ Invalid credentials."</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/mediator/Label.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Label</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">Label</span><span class="p">(</span><span class="n">UIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setText</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Status: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">text</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/mediator/MediatorApp.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MediatorApp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">FormMediator</span><span class="w"> </span><span class="n">mediator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FormMediator</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">TextField</span><span class="w"> </span><span class="n">usernameField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextField</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">        </span><span class="n">TextField</span><span class="w"> </span><span class="n">passwordField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextField</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Button</span><span class="w"> </span><span class="n">loginButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Button</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Label</span><span class="w"> </span><span class="n">statusLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Label</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">mediator</span><span class="p">.</span><span class="na">setUsernameField</span><span class="p">(</span><span class="n">usernameField</span><span class="p">);</span>
+<span class="w">        </span><span class="n">mediator</span><span class="p">.</span><span class="na">setPasswordField</span><span class="p">(</span><span class="n">passwordField</span><span class="p">);</span>
+<span class="w">        </span><span class="n">mediator</span><span class="p">.</span><span class="na">setLoginButton</span><span class="p">(</span><span class="n">loginButton</span><span class="p">);</span>
+<span class="w">        </span><span class="n">mediator</span><span class="p">.</span><span class="na">setStatusLabel</span><span class="p">(</span><span class="n">statusLabel</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Simulate user interaction</span>
+<span class="w">        </span><span class="n">usernameField</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="s">"admin"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">passwordField</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="s">"1234"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">loginButton</span><span class="p">.</span><span class="na">click</span><span class="p">();</span><span class="w">  </span><span class="c1">// Should succeed</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- New Attempt with Wrong Password ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">passwordField</span><span class="p">.</span><span class="na">setText</span><span class="p">(</span><span class="s">"wrong"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">loginButton</span><span class="p">.</span><span class="na">click</span><span class="p">();</span><span class="w">  </span><span class="c1">// Should fail</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/mediator/TextField.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextField</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">TextField</span><span class="p">(</span><span class="n">UIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setText</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"TextField updated: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">newText</span><span class="p">);</span>
+<span class="w">        </span><span class="n">notifyMediator</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getText</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/mediator/UIComponent.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="n">UIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">UIComponent</span><span class="p">(</span><span class="n">UIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">mediator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mediator</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">notifyMediator</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mediator</span><span class="p">.</span><span class="na">componentChanged</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/mediator/UIMediator.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">UIMediator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">componentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="w"> </span><span class="n">component</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/mediator/__init__.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.ui_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIComponent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ui_mediator</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIMediator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_field</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextField</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.button</span><span class="w"> </span><span class="kn">import</span> <span class="n">Button</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.label</span><span class="w"> </span><span class="kn">import</span> <span class="n">Label</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.form_mediator</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormMediator</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'UIComponent'</span><span class="p">,</span>
+    <span class="s1">'UIMediator'</span><span class="p">,</span>
+    <span class="s1">'TextField'</span><span class="p">,</span>
+    <span class="s1">'Button'</span><span class="p">,</span>
+    <span class="s1">'Label'</span><span class="p">,</span>
+    <span class="s1">'FormMediator'</span>
+<span class="p">]</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/button.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.ui_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIComponent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Button</span><span class="p">(</span><span class="n">UIComponent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">:</span> <span class="s1">'UIMediator'</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span>
+
+    <span class="nd">@enabled</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">notify_mediator</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/form_mediator.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ui_mediator</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIMediator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ui_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIComponent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_field</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextField</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.button</span><span class="w"> </span><span class="kn">import</span> <span class="n">Button</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.label</span><span class="w"> </span><span class="kn">import</span> <span class="n">Label</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FormMediator</span><span class="p">(</span><span class="n">UIMediator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username_field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TextField</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TextField</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">login_button</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Button</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Label</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_username_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="n">TextField</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username_field</span> <span class="o">=</span> <span class="n">field</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_password_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="n">TextField</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span> <span class="o">=</span> <span class="n">field</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_login_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">:</span> <span class="n">Button</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">login_button</span> <span class="o">=</span> <span class="n">button</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_status_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="n">Label</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span> <span class="o">=</span> <span class="n">label</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">component_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">UIComponent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">username_field</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">login_button</span><span class="p">:</span>
+                <span class="n">enable_button</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username_field</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">login_button</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">enable_button</span>
+        <span class="k">elif</span> <span class="n">component</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">login_button</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username_field</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span> <span class="ow">and</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">login_button</span><span class="p">):</span>
+                <span class="n">username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">username_field</span><span class="o">.</span><span class="n">text</span>
+                <span class="n">password</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">password_field</span><span class="o">.</span><span class="n">text</span>
+
+                <span class="k">if</span> <span class="n">username</span> <span class="o">==</span> <span class="s2">"admin"</span> <span class="ow">and</span> <span class="n">password</span> <span class="o">==</span> <span class="s2">"1234"</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"✅ Login successful!"</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"❌ Invalid credentials."</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/label.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.ui_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIComponent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Label</span><span class="p">(</span><span class="n">UIComponent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">:</span> <span class="s1">'UIMediator'</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="s2">""</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span>
+
+    <span class="nd">@text</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">value</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/mediator_app.py</summary><div class="highlight"><pre><span></span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/text_field.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.ui_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIComponent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextField</span><span class="p">(</span><span class="n">UIComponent</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">:</span> <span class="s1">'UIMediator'</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="s2">""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span>
+
+    <span class="nd">@text</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notify_mediator</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span>
+
+    <span class="nd">@enabled</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enabled</span> <span class="o">=</span> <span class="n">value</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/ui_component.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ui_mediator</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIMediator</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UIComponent</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">:</span> <span class="n">UIMediator</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mediator</span> <span class="o">=</span> <span class="n">mediator</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">notify_mediator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mediator</span><span class="o">.</span><span class="n">component_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/mediator/ui_mediator.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ui_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">UIComponent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UIMediator</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">component_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">:</span> <span class="n">UIComponent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span> 
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/mediator/main.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"form_mediator.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_field.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"button.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"label.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Create the mediator</span>
+<span class="w">    </span><span class="n">FormMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Create UI components</span>
+<span class="w">    </span><span class="n">TextField</span><span class="w"> </span><span class="n">usernameField</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="n">TextField</span><span class="w"> </span><span class="n">passwordField</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Button</span><span class="w"> </span><span class="n">loginButton</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Label</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mediator</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Register components with the mediator</span>
+<span class="w">    </span><span class="n">mediator</span><span class="p">.</span><span class="n">setUsernameField</span><span class="p">(</span><span class="o">&amp;</span><span class="n">usernameField</span><span class="p">);</span>
+<span class="w">    </span><span class="n">mediator</span><span class="p">.</span><span class="n">setPasswordField</span><span class="p">(</span><span class="o">&amp;</span><span class="n">passwordField</span><span class="p">);</span>
+<span class="w">    </span><span class="n">mediator</span><span class="p">.</span><span class="n">setLoginButton</span><span class="p">(</span><span class="o">&amp;</span><span class="n">loginButton</span><span class="p">);</span>
+<span class="w">    </span><span class="n">mediator</span><span class="p">.</span><span class="n">setStatusLabel</span><span class="p">(</span><span class="o">&amp;</span><span class="n">statusLabel</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"=== Login Form Demo ===</span><span class="se">\n</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Test with empty fields</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Test 1: Empty fields"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">loginButton</span><span class="p">.</span><span class="n">click</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Test with username only</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Test 2: Username only"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">usernameField</span><span class="p">.</span><span class="n">setText</span><span class="p">(</span><span class="s">"admin"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">loginButton</span><span class="p">.</span><span class="n">click</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Test with both fields</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Test 3: Both fields filled"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">passwordField</span><span class="p">.</span><span class="n">setText</span><span class="p">(</span><span class="s">"1234"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">loginButton</span><span class="p">.</span><span class="n">click</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Test with wrong credentials</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Test 4: Wrong credentials"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">usernameField</span><span class="p">.</span><span class="n">setText</span><span class="p">(</span><span class="s">"user"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">passwordField</span><span class="p">.</span><span class="n">setText</span><span class="p">(</span><span class="s">"pass"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">loginButton</span><span class="p">.</span><span class="n">click</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/button.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"button.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">Button</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">UIComponent</span><span class="p">(</span><span class="n">mediator</span><span class="p">),</span><span class="w"> </span><span class="n">enabled</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">Button</span><span class="o">::</span><span class="n">click</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Login Button clicked!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="n">notifyMediator</span><span class="p">();</span><span class="w"> </span><span class="c1">// Will trigger login attempt</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Login Button is disabled."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">Button</span><span class="o">::</span><span class="n">setEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Login Button is now "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">enabled</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"ENABLED"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"DISABLED"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/button.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ui_component.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Button</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Button</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">click</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/form_mediator.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"form_mediator.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">FormMediator::setUsernameField</span><span class="p">(</span><span class="n">TextField</span><span class="o">*</span><span class="w"> </span><span class="n">field</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">usernameField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">field</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">FormMediator::setPasswordField</span><span class="p">(</span><span class="n">TextField</span><span class="o">*</span><span class="w"> </span><span class="n">field</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">passwordField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">field</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">FormMediator::setLoginButton</span><span class="p">(</span><span class="n">Button</span><span class="o">*</span><span class="w"> </span><span class="n">button</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loginButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">button</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">FormMediator::setStatusLabel</span><span class="p">(</span><span class="n">Label</span><span class="o">*</span><span class="w"> </span><span class="n">label</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">statusLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">label</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">FormMediator::componentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="o">*</span><span class="w"> </span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">usernameField</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">passwordField</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">enableButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">usernameField</span><span class="o">-&gt;</span><span class="n">getText</span><span class="p">().</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">passwordField</span><span class="o">-&gt;</span><span class="n">getText</span><span class="p">().</span><span class="n">empty</span><span class="p">();</span>
+<span class="w">        </span><span class="n">loginButton</span><span class="o">-&gt;</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">enableButton</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">loginButton</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usernameField</span><span class="o">-&gt;</span><span class="n">getText</span><span class="p">();</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordField</span><span class="o">-&gt;</span><span class="n">getText</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"admin"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"1234"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">statusLabel</span><span class="o">-&gt;</span><span class="n">setText</span><span class="p">(</span><span class="s">"✅ Login successful!"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">statusLabel</span><span class="o">-&gt;</span><span class="n">setText</span><span class="p">(</span><span class="s">"❌ Invalid credentials."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/form_mediator.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ui_mediator.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_field.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"button.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"label.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FormMediator</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIMediator</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">setUsernameField</span><span class="p">(</span><span class="n">TextField</span><span class="o">*</span><span class="w"> </span><span class="n">field</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setPasswordField</span><span class="p">(</span><span class="n">TextField</span><span class="o">*</span><span class="w"> </span><span class="n">field</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setLoginButton</span><span class="p">(</span><span class="n">Button</span><span class="o">*</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setStatusLabel</span><span class="p">(</span><span class="n">Label</span><span class="o">*</span><span class="w"> </span><span class="n">label</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">componentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="o">*</span><span class="w"> </span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">TextField</span><span class="o">*</span><span class="w"> </span><span class="n">usernameField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">TextField</span><span class="o">*</span><span class="w"> </span><span class="n">passwordField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Button</span><span class="o">*</span><span class="w"> </span><span class="n">loginButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Label</span><span class="o">*</span><span class="w"> </span><span class="n">statusLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/label.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"label.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">Label</span><span class="o">::</span><span class="n">Label</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">UIComponent</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">Label</span><span class="o">::</span><span class="n">setText</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Status: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/label.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ui_component.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Label</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Label</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setText</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/text_field.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_field.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">TextField</span><span class="o">::</span><span class="n">TextField</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">UIComponent</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">TextField</span><span class="o">::</span><span class="n">setText</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"TextField updated: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">newText</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">notifyMediator</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">TextField</span><span class="o">::</span><span class="n">getText</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/text_field.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ui_component.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextField</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">TextField</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setText</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">newText</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">getText</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/ui_component.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"ui_component.h"</span>
+
+<span class="n">UIComponent</span><span class="o">::</span><span class="n">UIComponent</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">mediator</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">UIComponent</span><span class="o">::</span><span class="n">notifyMediator</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mediator</span><span class="o">-&gt;</span><span class="n">componentChanged</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/ui_component.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"ui_mediator.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UIComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">UIComponent</span><span class="p">(</span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">UIComponent</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">notifyMediator</span><span class="p">();</span>
+<span class="w">    </span><span class="n">UIMediator</span><span class="o">*</span><span class="w"> </span><span class="n">mediator</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/mediator/ui_mediator.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="c1">// Forward declaration</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UIComponent</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UIMediator</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">UIMediator</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">componentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="o">*</span><span class="w"> </span><span class="n">component</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/mediator/Button.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Button</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UIComponent</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">Button</span><span class="p">(</span><span class="n">IUIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Click</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">enabled</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Login Button clicked!"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">NotifyMediator</span><span class="p">();</span><span class="w"> </span><span class="c1">// Will trigger login attempt</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Login Button is disabled."</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="k">value</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Login Button is now {(enabled ? "</span><span class="n">ENABLED</span><span class="s">" : "</span><span class="n">DISABLED</span><span class="s">")}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/mediator/FormMediator.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">FormMediator</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IUIMediator</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="n">TextField</span><span class="w"> </span><span class="n">usernameField</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="n">TextField</span><span class="w"> </span><span class="n">passwordField</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="n">Button</span><span class="w"> </span><span class="n">loginButton</span><span class="p">;</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="n">Label</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetUsernameField</span><span class="p">(</span><span class="n">TextField</span><span class="w"> </span><span class="n">usernameField</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">usernameField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usernameField</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetPasswordField</span><span class="p">(</span><span class="n">TextField</span><span class="w"> </span><span class="n">passwordField</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">passwordField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordField</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetLoginButton</span><span class="p">(</span><span class="n">Button</span><span class="w"> </span><span class="n">loginButton</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">loginButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginButton</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetStatusLabel</span><span class="p">(</span><span class="n">Label</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">statusLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">statusLabel</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ComponentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="w"> </span><span class="n">component</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">usernameField</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">passwordField</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">bool</span><span class="w"> </span><span class="n">enableButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">usernameField</span><span class="p">.</span><span class="n">GetText</span><span class="p">())</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>
+<span class="w">                                  </span><span class="o">!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">passwordField</span><span class="p">.</span><span class="n">GetText</span><span class="p">());</span>
+<span class="w">                </span><span class="n">loginButton</span><span class="p">.</span><span class="n">SetEnabled</span><span class="p">(</span><span class="n">enableButton</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">component</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">loginButton</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="kt">string</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">usernameField</span><span class="p">.</span><span class="n">GetText</span><span class="p">();</span>
+<span class="w">                </span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordField</span><span class="p">.</span><span class="n">GetText</span><span class="p">();</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"admin"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"1234"</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">statusLabel</span><span class="p">.</span><span class="n">SetText</span><span class="p">(</span><span class="s">"✅ Login successful!"</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">statusLabel</span><span class="p">.</span><span class="n">SetText</span><span class="p">(</span><span class="s">"❌ Invalid credentials."</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/mediator/IUIMediator.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IUIMediator</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">void</span><span class="w"> </span><span class="nf">ComponentChanged</span><span class="p">(</span><span class="n">UIComponent</span><span class="w"> </span><span class="n">component</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/mediator/Label.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Label</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UIComponent</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">Label</span><span class="p">(</span><span class="n">IUIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetText</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Status: {text}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/mediator/Program.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">mediator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FormMediator</span><span class="p">();</span>
+
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">usernameField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextField</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">passwordField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextField</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">loginButton</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Button</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">statusLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Label</span><span class="p">(</span><span class="n">mediator</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">mediator</span><span class="p">.</span><span class="n">SetUsernameField</span><span class="p">(</span><span class="n">usernameField</span><span class="p">);</span>
+<span class="w">            </span><span class="n">mediator</span><span class="p">.</span><span class="n">SetPasswordField</span><span class="p">(</span><span class="n">passwordField</span><span class="p">);</span>
+<span class="w">            </span><span class="n">mediator</span><span class="p">.</span><span class="n">SetLoginButton</span><span class="p">(</span><span class="n">loginButton</span><span class="p">);</span>
+<span class="w">            </span><span class="n">mediator</span><span class="p">.</span><span class="n">SetStatusLabel</span><span class="p">(</span><span class="n">statusLabel</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Simulate user interaction</span>
+<span class="w">            </span><span class="n">usernameField</span><span class="p">.</span><span class="n">SetText</span><span class="p">(</span><span class="s">"admin"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">passwordField</span><span class="p">.</span><span class="n">SetText</span><span class="p">(</span><span class="s">"1234"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">loginButton</span><span class="p">.</span><span class="n">Click</span><span class="p">();</span><span class="w">  </span><span class="c1">// Should succeed</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\n--- New Attempt with Wrong Password ---"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">passwordField</span><span class="p">.</span><span class="n">SetText</span><span class="p">(</span><span class="s">"wrong"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">loginButton</span><span class="p">.</span><span class="n">Click</span><span class="p">();</span><span class="w">  </span><span class="c1">// Should fail</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/mediator/TextField.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TextField</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">UIComponent</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">TextField</span><span class="p">(</span><span class="n">IUIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetText</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"TextField updated: {newText}"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">NotifyMediator</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetText</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/mediator/UIComponent.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Mediator</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">abstract</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UIComponent</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IUIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">UIComponent</span><span class="p">(</span><span class="n">IUIMediator</span><span class="w"> </span><span class="n">mediator</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">mediator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mediator</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">NotifyMediator</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">mediator</span><span class="p">.</span><span class="n">ComponentChanged</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/mediator/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">mediator</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">mediator</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewChatMediator</span><span class="p">()</span>
+
+<span class="w">	</span><span class="nx">alice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewUser</span><span class="p">(</span><span class="s">"Alice"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">bob</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewUser</span><span class="p">(</span><span class="s">"Bob"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">carol</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewUser</span><span class="p">(</span><span class="s">"Carol"</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">mediator</span><span class="p">.</span><span class="nx">AddUser</span><span class="p">(</span><span class="nx">alice</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">mediator</span><span class="p">.</span><span class="nx">AddUser</span><span class="p">(</span><span class="nx">bob</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">mediator</span><span class="p">.</span><span class="nx">AddUser</span><span class="p">(</span><span class="nx">carol</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">alice</span><span class="p">.</span><span class="nx">SendMessage</span><span class="p">(</span><span class="s">"Hello, everyone!"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">bob</span><span class="p">.</span><span class="nx">SendMessage</span><span class="p">(</span><span class="s">"Hi Alice!"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">carol</span><span class="p">.</span><span class="nx">SendMessage</span><span class="p">(</span><span class="s">"Hey folks!"</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/mediator/chat_mediator.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">mediator</span>
+
+<span class="c1">// ChatMediator is a concrete mediator that manages users</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">ChatMediator</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">users</span><span class="w"> </span><span class="p">[]</span><span class="nx">Colleague</span>
+<span class="p">}</span>
+
+<span class="c1">// NewChatMediator creates a new ChatMediator</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewChatMediator</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">ChatMediator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">ChatMediator</span><span class="p">{</span><span class="nx">users</span><span class="p">:</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="nx">Colleague</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="c1">// AddUser adds a user to the chat</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">ChatMediator</span><span class="p">)</span><span class="w"> </span><span class="nx">AddUser</span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="nx">Colleague</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">m</span><span class="p">.</span><span class="nx">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">users</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">user</span><span class="p">.</span><span class="nx">SetMediator</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// SendMessage sends a message from one user to all others</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">ChatMediator</span><span class="p">)</span><span class="w"> </span><span class="nx">SendMessage</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">sender</span><span class="w"> </span><span class="nx">Colleague</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">users</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">sender</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nx">user</span><span class="p">.</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">sender</span><span class="p">.</span><span class="nx">GetName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">": "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/mediator/colleague.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">mediator</span>
+
+<span class="c1">// Colleague defines the interface for participants in the communication</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Colleague</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">SetMediator</span><span class="p">(</span><span class="nx">mediator</span><span class="w"> </span><span class="nx">Mediator</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">GetName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/mediator/mediator.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">mediator</span>
+
+<span class="c1">// Mediator defines the interface for communication between colleagues</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Mediator</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">SendMessage</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">colleague</span><span class="w"> </span><span class="nx">Colleague</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/mediator/user.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">mediator</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// User represents a concrete colleague</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">name</span><span class="w">     </span><span class="kt">string</span>
+<span class="w">	</span><span class="nx">mediator</span><span class="w"> </span><span class="nx">Mediator</span>
+<span class="p">}</span>
+
+<span class="c1">// NewUser creates a new User</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewUser</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">User</span><span class="p">{</span><span class="nx">name</span><span class="p">:</span><span class="w"> </span><span class="nx">name</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="nx">SetMediator</span><span class="p">(</span><span class="nx">mediator</span><span class="w"> </span><span class="nx">Mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">u</span><span class="p">.</span><span class="nx">mediator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">mediator</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="nx">GetName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">u</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="nx">ReceiveMessage</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"%s received: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">u</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// SendMessage allows the user to send a message via the mediator</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="nx">SendMessage</span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">u</span><span class="p">.</span><span class="nx">mediator</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">u</span><span class="p">.</span><span class="nx">mediator</span><span class="p">.</span><span class="nx">SendMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="nx">u</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Behavioral Pattern/Mediator Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="c1">// Client code to handle users registration and messages communication</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./user"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">ChatRoom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./mediator"</span><span class="p">);</span>
+
+<span class="c1">// Object for chatRoom (mediator)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">chatRoom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">ChatRoom</span><span class="p">();</span>
+
+<span class="c1">// Objects for users</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">user1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="s2">"User1"</span><span class="p">,</span><span class="w"> </span><span class="nx">chatRoom</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">user2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="s2">"User2"</span><span class="p">,</span><span class="w"> </span><span class="nx">chatRoom</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">user3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="s2">"User3"</span><span class="p">,</span><span class="w"> </span><span class="nx">chatRoom</span><span class="p">);</span>
+
+
+<span class="c1">// Register users with chatRoom</span>
+<span class="nx">chatRoom</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">user1</span><span class="p">);</span>
+<span class="nx">chatRoom</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">user2</span><span class="p">);</span>
+<span class="nx">chatRoom</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">user3</span><span class="p">);</span>
+
+<span class="c1">// Send message</span>
+<span class="nx">user1</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"Hello everyone!"</span><span class="p">);</span>
+<span class="nx">user2</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"Hi User1!"</span><span class="p">);</span>
+<span class="nx">user3</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">"Hi User2!"</span><span class="p">);</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Mediator Design Pattern/mediator.js</summary><div class="highlight"><pre><span></span><span class="c1">// Abstract Mediator</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Mediator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">register</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"Method 'register()' must be implemented"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">send</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">"Method 'send()' must be implemented"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Concrete Mediator</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">ChatRoom</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">Mediator</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">super</span><span class="p">();</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">register</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">send</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="kr">from</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="kr">from</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// send senderMessage only to other users</span>
+<span class="w">        </span><span class="nx">user</span><span class="p">.</span><span class="nx">receive</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="kr">from</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ChatRoom</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Mediator Design Pattern/user.js</summary><div class="highlight"><pre><span></span><span class="kd">class</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">mediator</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">name</span><span class="p">;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">mediator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">mediator</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">send</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb"> sent: </span><span class="si">${</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">mediator</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">receive</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb"> receives message: </span><span class="si">${</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">User</span><span class="p">;</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

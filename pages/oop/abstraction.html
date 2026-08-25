@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abstraction · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Abstraction</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Abstraction</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Abstraction in Java</h1>
+<h2>Introduction</h2>
+<p><strong>Abstraction</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows you to hide <strong>implementation details</strong> while exposing only the necessary parts of an object. This helps in reducing complexity and increasing maintainability.</p>
+<p>Abstraction in Java is mainly achieved using:<br />
+1. <strong>Abstract Classes</strong><br />
+2. <strong>Interfaces</strong></p>
+<hr />
+<h2><strong>What is Abstraction?</strong></h2>
+<p><strong>Abstraction</strong> means showing only the <strong>essential details</strong> and hiding the <strong>implementation</strong>. It allows programmers to focus on <strong>what an object does</strong> rather than <strong>how it does it</strong>.</p>
+<h3><strong>Key Benefits of Abstraction</strong></h3>
+<ul>
+<li><strong>Reduces complexity</strong>: Hides unnecessary implementation details.</li>
+<li><strong>Increases code reusability</strong>: Encourages the reuse of abstracted logic.</li>
+<li><strong>Enhances security</strong>: Protects internal object details from unintended modifications.</li>
+<li><strong>Improves maintainability</strong>: Makes code easier to manage and update.</li>
+</ul>
+<hr />
+<h2><strong>1. Abstraction Using Abstract Classes</strong></h2>
+<p>An <strong>abstract class</strong> in Java is a class that cannot be instantiated. It is used to define common behavior that multiple subclasses should implement.</p>
+<h3><strong>Example: Abstract Class in Java</strong></h3>
+<pre><code class="language-java">// Abstract class
+abstract class Vehicle {
+    String brand;
+
+    // Constructor
+    Vehicle(String brand) {
+        this.brand = brand;
+    }
+
+    // Abstract method (must be implemented by subclasses)
+    abstract void start();
+
+    // Concrete method (can be inherited)
+    void displayBrand() {
+        System.out.println(&quot;Brand: &quot; + brand);
+    }
+}
+
+// Subclass implementing the abstract method
+class Car extends Vehicle {
+    Car(String brand) {
+        super(brand);
+    }
+
+    @Override
+    void start() {
+        System.out.println(&quot;Car is starting...&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Vehicle myCar = new Car(&quot;Toyota&quot;);
+        myCar.displayBrand();
+        myCar.start();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Brand: Toyota
+Car is starting...
+</code></pre>
+<p><strong>Why Use Abstract Classes?</strong><br />
+- Allows defining common behavior that subclasses must implement.<br />
+- Enables partial abstraction (can have both abstract and concrete methods).<br />
+- Prevents direct instantiation of base classes.</p>
+<hr />
+<h2><strong>2. Abstraction Using Interfaces</strong></h2>
+<p>An <strong>interface</strong> in Java is a blueprint that defines a contract for classes to follow. It contains <strong>only abstract methods</strong> (until Java 8 introduced default and static methods).</p>
+<h3><strong>Example: Interface in Java</strong></h3>
+<pre><code class="language-java">// Defining an interface
+interface Animal {
+    void makeSound(); // Abstract method
+}
+
+// Implementing the interface in Dog class
+class Dog implements Animal {
+    @Override
+    public void makeSound() {
+        System.out.println(&quot;Dog barks&quot;);
+    }
+}
+
+// Implementing the interface in Cat class
+class Cat implements Animal {
+    @Override
+    public void makeSound() {
+        System.out.println(&quot;Cat meows&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myDog = new Dog();
+        myDog.makeSound();
+
+        Animal myCat = new Cat();
+        myCat.makeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Interfaces?</strong><br />
+- Promotes <strong>full abstraction</strong> (hides all implementation details).<br />
+- Supports <strong>multiple inheritance</strong> in Java (a class can implement multiple interfaces).<br />
+- Provides a standard way for different classes to implement behaviors.</p>
+<hr />
+<h2><strong>Abstract Class vs Interface: Key Differences</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Abstract Class</th>
+<th>Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inheritance</strong></td>
+<td>A class <strong>extends</strong> only <strong>one</strong> abstract class</td>
+<td>A class <strong>implements multiple</strong> interfaces</td>
+</tr>
+<tr>
+<td><strong>Methods</strong></td>
+<td>Can have <strong>abstract + concrete</strong> methods</td>
+<td>Only abstract methods (before Java 8)</td>
+</tr>
+<tr>
+<td><strong>Default Methods</strong></td>
+<td>Concrete methods work without <code>default</code> keyword</td>
+<td>Supports <code>default</code> methods (Java 8+)</td>
+</tr>
+<tr>
+<td><strong>Static Methods</strong></td>
+<td>Can have static methods</td>
+<td>Supports static methods (Java 8+)</td>
+</tr>
+<tr>
+<td><strong>Fields</strong></td>
+<td>Can have <strong>instance variables</strong> (non-final)</td>
+<td>Only <strong>public static final</strong> (constants)</td>
+</tr>
+<tr>
+<td><strong>Constructor</strong></td>
+<td>Can have constructors</td>
+<td><strong>No constructors</strong> allowed</td>
+</tr>
+<tr>
+<td><strong>Multiple Inheritance</strong></td>
+<td>Not supported (only <strong>single</strong> inheritance)</td>
+<td>Supports <strong>multiple</strong> inheritance</td>
+</tr>
+<tr>
+<td><strong>Access Modifiers</strong></td>
+<td>Methods/fields can be <code>public</code>, <code>protected</code>, <code>private</code>, or default</td>
+<td>Methods are <code>public</code> by default</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td><strong>Partial implementation</strong> (code reuse)</td>
+<td><strong>Full abstraction</strong> (contract definition)</td>
+</tr>
+<tr>
+<td><strong>Object Creation</strong></td>
+<td>Cannot be instantiated directly</td>
+<td>Cannot be instantiated directly</td>
+</tr>
+<tr>
+<td><strong><code>super</code> Keyword</strong></td>
+<td>Can use <code>super()</code> to call parent constructor</td>
+<td>No <code>super()</code> (no constructors)</td>
+</tr>
+<tr>
+<td><strong>Private Methods</strong></td>
+<td>Supports <code>private</code> methods (Java 9+)</td>
+<td>Supports <code>private</code> methods (Java 9+)</td>
+</tr>
+<tr>
+<td><strong><code>final</code> Methods</strong></td>
+<td>Can have <code>final</code> methods</td>
+<td>Cannot have <code>final</code> methods</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>Abstraction is widely used in real-world applications, such as payment processing.</p>
+<h3><strong>Example: Payment System with Abstraction</strong></h3>
+<pre><code class="language-java">// Abstract class for Payment
+abstract class Payment {
+    double amount;
+
+    Payment(double amount) {
+        this.amount = amount;
+    }
+
+    abstract void pay(); // Abstract method
+}
+
+// Implementing payment methods
+class CreditCardPayment extends Payment {
+    CreditCardPayment(double amount) {
+        super(amount);
+    }
+
+    @Override
+    void pay() {
+        System.out.println(&quot;Paid &quot; + amount + &quot; using Credit Card&quot;);
+    }
+}
+
+class PayPalPayment extends Payment {
+    PayPalPayment(double amount) {
+        super(amount);
+    }
+
+    @Override
+    void pay() {
+        System.out.println(&quot;Paid &quot; + amount + &quot; using PayPal&quot;);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Payment payment;
+
+        payment = new CreditCardPayment(150.75);
+        payment.pay();
+
+        payment = new PayPalPayment(200.50);
+        payment.pay();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 150.75 using Credit Card
+Paid 200.50 using PayPal
+</code></pre>
+<p><strong>Why Use Abstraction in Payment Systems?</strong><br />
+- Allows multiple payment methods without modifying existing code.<br />
+- Improves maintainability and scalability.<br />
+- Provides a <strong>common contract</strong> for different payment types.</p></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Abstraction in C++</h1>
+<h2>Introduction</h2>
+<p><strong>Abstraction</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows you to hide <strong>implementation details</strong> while exposing only the necessary parts of an object. This helps in reducing complexity and increasing maintainability.</p>
+<p>Abstraction in C++ is mainly achieved using:<br />
+1. <strong>Abstract Classes</strong><br />
+2. <strong>Interfaces (Pure Virtual Functions)</strong></p>
+<hr />
+<h2><strong>What is Abstraction?</strong></h2>
+<p><strong>Abstraction</strong> means showing only the <strong>essential details</strong> and hiding the <strong>implementation</strong>. It allows programmers to focus on <strong>what an object does</strong> rather than <strong>how it does it</strong>.</p>
+<h3><strong>Key Benefits of Abstraction</strong></h3>
+<ul>
+<li><strong>Reduces complexity</strong>: Hides unnecessary implementation details.</li>
+<li><strong>Increases code reusability</strong>: Encourages the reuse of abstracted logic.</li>
+<li><strong>Enhances security</strong>: Protects internal object details from unintended modifications.</li>
+<li><strong>Improves maintainability</strong>: Makes code easier to manage and update.</li>
+</ul>
+<hr />
+<h2><strong>1. Abstraction Using Abstract Classes</strong></h2>
+<p>An <strong>abstract class</strong> in C++ is a class that <strong>cannot be instantiated</strong>. It is used to define common behavior that multiple subclasses should implement.</p>
+<h3><strong>Example: Abstract Class in C++</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+// Abstract class
+class Vehicle {
+protected:
+    string brand;
+public:
+    Vehicle(string b) : brand(b) {}
+    virtual void start() = 0; // Pure virtual function
+    virtual ~Vehicle() = default; // virtual destructor
+    void displayBrand() {
+        cout &lt;&lt; &quot;Brand: &quot; &lt;&lt; brand &lt;&lt; endl;
+    }
+};
+
+// Subclass implementing the abstract method
+class Car : public Vehicle {
+public:
+    Car(string b) : Vehicle(b) {}
+    void start() override {
+        cout &lt;&lt; &quot;Car is starting...&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    unique_ptr&lt;Vehicle&gt; myCar = make_unique&lt;Car&gt;(&quot;Toyota&quot;);
+    myCar-&gt;displayBrand();
+    myCar-&gt;start();
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Brand: Toyota
+Car is starting...
+</code></pre>
+<p><strong>Why Use Abstract Classes?</strong><br />
+- Allows defining common behavior that subclasses must implement.<br />
+- Enables partial abstraction (can have both abstract and concrete methods).<br />
+- Prevents direct instantiation of base classes.</p>
+<hr />
+<h2><strong>2. Abstraction Using Interfaces (Pure Virtual Functions)</strong></h2>
+<p>An <strong>interface</strong> in C++ is created using a class that contains <strong>only pure virtual functions</strong>.</p>
+<h3><strong>Example: Interface in C++</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+// Defining an interface
+class Animal {
+public:
+    virtual ~Animal() = default; // virtual destructor
+    virtual void makeSound() = 0; // Pure virtual function
+};
+
+// Implementing the interface in Dog class
+class Dog : public Animal {
+public:
+    void makeSound() override {
+        cout &lt;&lt; &quot;Dog barks&quot; &lt;&lt; endl;
+    }
+};
+
+// Implementing the interface in Cat class
+class Cat : public Animal {
+public:
+    void makeSound() override {
+        cout &lt;&lt; &quot;Cat meows&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    unique_ptr&lt;Animal&gt; myDog = make_unique&lt;Dog&gt;();
+    myDog-&gt;makeSound();
+
+    unique_ptr&lt;Animal&gt; myCat = make_unique&lt;Cat&gt;();
+    myCat-&gt;makeSound();
+
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Interfaces?</strong><br />
+- Promotes <strong>full abstraction</strong> (hides all implementation details).<br />
+- Supports <strong>multiple inheritance</strong> in C++.<br />
+- Provides a standard way for different classes to implement behaviors.</p>
+<hr />
+<h2><strong>Abstract Class vs Interface: Key Differences</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Abstract Class</th>
+<th>Interface (Pure Virtual Functions)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Methods</td>
+<td>Can have abstract and concrete methods</td>
+<td>Only pure virtual methods</td>
+</tr>
+<tr>
+<td>Fields</td>
+<td>Can have member variables</td>
+<td>Should not have data members</td>
+</tr>
+<tr>
+<td>Constructor</td>
+<td>Can have constructors</td>
+<td>Cannot have constructors</td>
+</tr>
+<tr>
+<td>Multiple Inheritance</td>
+<td>Not recommended</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td>Access Modifiers</td>
+<td>Can have private, protected, public members</td>
+<td>Methods are public by default</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>Abstraction is widely used in real-world applications, such as payment processing.</p>
+<h3><strong>Example: Payment System with Abstraction</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+using namespace std;
+
+// Abstract class for Payment
+class Payment {
+protected:
+    double amount;
+public:
+    Payment(double amt) : amount(amt) {}
+    virtual ~Payment() = default; // virtual destructor
+    virtual void pay() = 0; // Abstract method
+};
+
+// Implementing payment methods
+class CreditCardPayment : public Payment {
+public:
+    CreditCardPayment(double amt) : Payment(amt) {}
+    void pay() override {
+        cout &lt;&lt; &quot;Paid &quot; &lt;&lt; amount &lt;&lt; &quot; using Credit Card&quot; &lt;&lt; endl;
+    }
+};
+
+class PayPalPayment : public Payment {
+public:
+    PayPalPayment(double amt) : Payment(amt) {}
+    void pay() override {
+        cout &lt;&lt; &quot;Paid &quot; &lt;&lt; amount &lt;&lt; &quot; using PayPal&quot; &lt;&lt; endl;
+    }
+};
+
+int main() {
+    unique_ptr&lt;Payment&gt; payment;
+
+    payment = make_unique&lt;CreditCardPayment&gt;(150.75);
+    payment-&gt;pay();
+
+    payment = make_unique&lt;PayPalPayment&gt;(200.50);
+    payment-&gt;pay();
+
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 150.75 using Credit Card
+Paid 200.50 using PayPal
+</code></pre>
+<p><strong>Why Use Abstraction in Payment Systems?</strong><br />
+- Allows multiple payment methods without modifying existing code.<br />
+- Improves maintainability and scalability.<br />
+- Provides a <strong>common contract</strong> for different payment types.</p></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Abstraction in Python</h1>
+<h2>Introduction</h2>
+<p><strong>Abstraction</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows you to hide <strong>implementation details</strong> while exposing only the necessary parts of an object. This helps in reducing complexity and increasing maintainability.</p>
+<p>Abstraction in Python is mainly achieved using:<br />
+1. <strong>Abstract Classes</strong><br />
+2. <strong>Interfaces (via Abstract Base Classes - ABCs)</strong></p>
+<h2><strong>What is Abstraction?</strong></h2>
+<p><strong>Abstraction</strong> means showing only the <strong>essential details</strong> and hiding the <strong>implementation</strong>. It allows programmers to focus on <strong>what an object does</strong> rather than <strong>how it does it</strong>.</p>
+<h3><strong>Key Benefits of Abstraction</strong></h3>
+<ul>
+<li><strong>Reduces complexity</strong>: Hides unnecessary implementation details.</li>
+<li><strong>Increases code reusability</strong>: Encourages the reuse of abstracted logic.</li>
+<li><strong>Enhances security</strong>: Protects internal object details from unintended modifications.</li>
+<li><strong>Improves maintainability</strong>: Makes code easier to manage and update.</li>
+</ul>
+<hr />
+<h2><strong>1. Abstraction Using Abstract Classes</strong></h2>
+<p>An <strong>abstract class</strong> in Python is a class that <strong>cannot be instantiated</strong>. It is used to define common behavior that multiple subclasses should implement.</p>
+<p>Python provides the <code>ABC</code> module to define abstract classes.</p>
+<h3><strong>Example: Abstract Class in Python</strong></h3>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+# Abstract class
+class Vehicle(ABC):
+    def __init__(self, brand):
+        self.brand = brand
+
+    @abstractmethod
+    def start(self):
+        pass  # Abstract method (must be implemented by subclasses)
+
+    def display_brand(self):
+        print(f&quot;Brand: {self.brand}&quot;)
+
+# Subclass implementing the abstract method
+class Car(Vehicle):
+    def start(self):
+        print(&quot;Car is starting...&quot;)
+
+# Usage
+my_car = Car(&quot;Toyota&quot;)
+my_car.display_brand()
+my_car.start()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Brand: Toyota
+Car is starting...
+</code></pre>
+<p><strong>Why Use Abstract Classes?</strong><br />
+- Allows defining common behavior that subclasses must implement.<br />
+- Enables partial abstraction (can have both abstract and concrete methods).<br />
+- Prevents direct instantiation of base classes.</p>
+<hr />
+<h2><strong>2. Abstraction Using Interfaces (Abstract Base Classes - ABCs)</strong></h2>
+<p>An <strong>interface</strong> in Python can be implemented using <strong>Abstract Base Classes (ABCs)</strong>, which enforce method implementation.</p>
+<h3><strong>Example: Interface in Python</strong></h3>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+# Defining an interface
+class Animal(ABC):
+    @abstractmethod
+    def make_sound(self):
+        pass
+
+# Implementing the interface in Dog class
+class Dog(Animal):
+    def make_sound(self):
+        print(&quot;Dog barks&quot;)
+
+# Implementing the interface in Cat class
+class Cat(Animal):
+    def make_sound(self):
+        print(&quot;Cat meows&quot;)
+
+# Usage
+my_dog = Dog()
+my_dog.make_sound()
+
+my_cat = Cat()
+my_cat.make_sound()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Interfaces?</strong><br />
+- Promotes <strong>full abstraction</strong> (hides all implementation details).<br />
+- Provides a standard way for different classes to implement behaviors.</p>
+<hr />
+<h2><strong>Abstract Class vs Interface: Key Differences</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Abstract Class</th>
+<th>Interface (ABCs)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Methods</td>
+<td>Can have abstract and concrete methods</td>
+<td>Only abstract methods</td>
+</tr>
+<tr>
+<td>Fields</td>
+<td>Can have instance variables</td>
+<td>Should not have instance variables</td>
+</tr>
+<tr>
+<td>Constructor</td>
+<td>Can have constructors</td>
+<td>Cannot have constructors</td>
+</tr>
+<tr>
+<td>Multiple Inheritance</td>
+<td>Supported</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td>Access Modifiers</td>
+<td>Can have private, protected, public members</td>
+<td>Methods are public by default</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>Abstraction is widely used in real-world applications, such as payment processing.</p>
+<h3><strong>Example: Payment System with Abstraction</strong></h3>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+# Abstract class for Payment
+class Payment(ABC):
+    def __init__(self, amount):
+        self.amount = amount
+
+    @abstractmethod
+    def pay(self):
+        pass
+
+# Implementing payment methods
+class CreditCardPayment(Payment):
+    def pay(self):
+        print(f&quot;Paid {self.amount} using Credit Card&quot;)
+
+class PayPalPayment(Payment):
+    def pay(self):
+        print(f&quot;Paid {self.amount} using PayPal&quot;)
+
+# Usage
+payment = CreditCardPayment(150.75)
+payment.pay()
+
+payment = PayPalPayment(200.50)
+payment.pay()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 150.75 using Credit Card
+Paid 200.50 using PayPal
+</code></pre>
+<p><strong>Why Use Abstraction in Payment Systems?</strong><br />
+- Allows multiple payment methods without modifying existing code.<br />
+- Improves maintainability and scalability.<br />
+- Provides a <strong>common contract</strong> for different payment types.</p></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Abstraction in C</h1>
+<h2>Introduction</h2>
+<p><strong>Abstraction</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows you to hide <strong>implementation details</strong> while exposing only the necessary parts of an object. This helps in reducing complexity and increasing maintainability.</p>
+<p>Abstraction in C# is mainly achieved using:<br />
+1. <strong>Abstract Classes</strong><br />
+2. <strong>Interfaces</strong></p>
+<hr />
+<h2><strong>What is Abstraction?</strong></h2>
+<p><strong>Abstraction</strong> means showing only the <strong>essential details</strong> and hiding the <strong>implementation</strong>. It allows programmers to focus on <strong>what an object does</strong> rather than <strong>how it does it</strong>.</p>
+<h3><strong>Key Benefits of Abstraction</strong></h3>
+<ul>
+<li><strong>Reduces complexity</strong>: Hides unnecessary implementation details.</li>
+<li><strong>Increases code reusability</strong>: Encourages the reuse of abstracted logic.</li>
+<li><strong>Enhances security</strong>: Protects internal object details from unintended modifications.</li>
+<li><strong>Improves maintainability</strong>: Makes code easier to manage and update.</li>
+</ul>
+<hr />
+<h2><strong>1. Abstraction Using Abstract Classes</strong></h2>
+<p>An <strong>abstract class</strong> in C# is a class that <strong>cannot be instantiated</strong>. It is used to define common behavior that multiple subclasses should implement.</p>
+<h3><strong>Example: Abstract Class in C#</strong></h3>
+<pre><code class="language-csharp">using System;
+
+// Abstract class
+abstract class Vehicle {
+    protected string Brand;
+
+    public Vehicle(string brand) {
+        Brand = brand;
+    }
+
+    public abstract void Start(); // Abstract method
+
+    public void DisplayBrand() {
+        Console.WriteLine(&quot;Brand: &quot; + Brand);
+    }
+}
+
+// Subclass implementing the abstract method
+class Car : Vehicle {
+    public Car(string brand) : base(brand) {}
+
+    public override void Start() {
+        Console.WriteLine(&quot;Car is starting...&quot;);
+    }
+}
+
+class Program {
+    static void Main() {
+        Vehicle myCar = new Car(&quot;Toyota&quot;);
+        myCar.DisplayBrand();
+        myCar.Start();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Brand: Toyota
+Car is starting...
+</code></pre>
+<p><strong>Why Use Abstract Classes?</strong><br />
+- Allows defining common behavior that subclasses must implement.<br />
+- Enables partial abstraction (can have both abstract and concrete methods).<br />
+- Prevents direct instantiation of base classes.</p>
+<hr />
+<h2><strong>2. Abstraction Using Interfaces</strong></h2>
+<p>An <strong>interface</strong> in C# is a contract that defines methods a class must implement.</p>
+<h3><strong>Example: Interface in C#</strong></h3>
+<pre><code class="language-csharp">using System;
+
+// Defining an interface
+interface IAnimal {
+    void MakeSound(); // Abstract method
+}
+
+// Implementing the interface in Dog class
+class Dog : IAnimal {
+    public void MakeSound() {
+        Console.WriteLine(&quot;Dog barks&quot;);
+    }
+}
+
+// Implementing the interface in Cat class
+class Cat : IAnimal {
+    public void MakeSound() {
+        Console.WriteLine(&quot;Cat meows&quot;);
+    }
+}
+
+class Program {
+    static void Main() {
+        IAnimal myDog = new Dog();
+        myDog.MakeSound();
+
+        IAnimal myCat = new Cat();
+        myCat.MakeSound();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Interfaces?</strong><br />
+- Promotes <strong>full abstraction</strong> (hides all implementation details).<br />
+- Supports <strong>multiple inheritance</strong> in C#.<br />
+- Provides a standard way for different classes to implement behaviors.</p>
+<hr />
+<h2><strong>Abstract Class vs Interface: Key Differences</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Abstract Class</th>
+<th>Interface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Methods</td>
+<td>Can have abstract and concrete methods</td>
+<td>Only abstract methods (before C# 8)</td>
+</tr>
+<tr>
+<td>Fields</td>
+<td>Can have member variables</td>
+<td>Cannot have instance variables</td>
+</tr>
+<tr>
+<td>Constructor</td>
+<td>Can have constructors</td>
+<td>Cannot have constructors</td>
+</tr>
+<tr>
+<td>Multiple Inheritance</td>
+<td>Not supported</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td>Access Modifiers</td>
+<td>Can have different access modifiers</td>
+<td>Methods are <code>public</code> by default</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>Abstraction is widely used in real-world applications, such as payment processing.</p>
+<h3><strong>Example: Payment System with Abstraction</strong></h3>
+<pre><code class="language-csharp">using System;
+
+// Abstract class for Payment
+abstract class Payment {
+    protected double Amount;
+
+    public Payment(double amount) {
+        Amount = amount;
+    }
+
+    public abstract void Pay(); // Abstract method
+}
+
+// Implementing payment methods
+class CreditCardPayment : Payment {
+    public CreditCardPayment(double amount) : base(amount) {}
+
+    public override void Pay() {
+        Console.WriteLine(&quot;Paid &quot; + Amount + &quot; using Credit Card&quot;);
+    }
+}
+
+class PayPalPayment : Payment {
+    public PayPalPayment(double amount) : base(amount) {}
+
+    public override void Pay() {
+        Console.WriteLine(&quot;Paid &quot; + Amount + &quot; using PayPal&quot;);
+    }
+}
+
+class Program {
+    static void Main() {
+        Payment payment;
+
+        payment = new CreditCardPayment(150.75);
+        payment.Pay();
+
+        payment = new PayPalPayment(200.50);
+        payment.Pay();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 150.75 using Credit Card
+Paid 200.50 using PayPal
+</code></pre>
+<p><strong>Why Use Abstraction in Payment Systems?</strong><br />
+- Allows multiple payment methods without modifying existing code.<br />
+- Improves maintainability and scalability.<br />
+- Provides a <strong>common contract</strong> for different payment types.</p></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Abstraction in Go</h1>
+<h2>Introduction</h2>
+<p><strong>Abstraction</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows you to hide <strong>implementation details</strong> while exposing only the necessary parts of an object. This helps in reducing complexity and increasing maintainability.</p>
+<p>Unlike traditional OOP languages like Java or C++, <strong>Golang does not support classes</strong>. However, abstraction in Go is achieved using:<br />
+1. <strong>Interfaces</strong><br />
+2. <strong>Structs with Methods</strong></p>
+<h2><strong>What is Abstraction?</strong></h2>
+<p><strong>Abstraction</strong> means showing only the <strong>essential details</strong> and hiding the <strong>implementation</strong>. It allows programmers to focus on <strong>what an object does</strong> rather than <strong>how it does it</strong>.</p>
+<h3><strong>Key Benefits of Abstraction</strong></h3>
+<ul>
+<li><strong>Reduces complexity</strong>: Hides unnecessary implementation details.</li>
+<li><strong>Increases code reusability</strong>: Encourages the reuse of abstracted logic.</li>
+<li><strong>Improves maintainability</strong>: Makes code easier to manage and update.</li>
+<li><strong>Enhances flexibility</strong>: Enables polymorphic behavior in Go.</li>
+</ul>
+<hr />
+<h2><strong>1. Abstraction Using Interfaces</strong></h2>
+<p>An <strong>interface</strong> in Go defines a set of methods that a type must implement. This allows different types to be treated uniformly.</p>
+<h3><strong>Example: Interface in Golang</strong></h3>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Defining an interface
+type Vehicle interface {
+    Start()
+    DisplayBrand()
+}
+
+// Concrete implementation of Vehicle (Car)
+type Car struct {
+    brand string
+}
+
+func (c Car) Start() {
+    fmt.Println(&quot;Car is starting...&quot;)
+}
+
+func (c Car) DisplayBrand() {
+    fmt.Println(&quot;Brand:&quot;, c.brand)
+}
+
+func main() {
+    var myCar Vehicle = Car{&quot;Toyota&quot;}
+    myCar.DisplayBrand()
+    myCar.Start()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Brand: Toyota
+Car is starting...
+</code></pre>
+<p><strong>Why Use Interfaces?</strong><br />
+- Promotes <strong>abstraction</strong> by defining behaviors without implementation details.<br />
+- Allows multiple types to adhere to the same contract.<br />
+- Supports <strong>polymorphism</strong> by enabling different implementations to be used interchangeably.</p>
+<hr />
+<h2><strong>2. Abstraction Using Structs with Methods</strong></h2>
+<p>Go does not have traditional classes, but <strong>structs with methods</strong> provide an alternative way to achieve abstraction.</p>
+<h3><strong>Example: Abstracting Animal Behavior</strong></h3>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Abstract behavior using an interface
+type Animal interface {
+    MakeSound()
+}
+
+// Concrete struct (Dog)
+type Dog struct {}
+
+func (d Dog) MakeSound() {
+    fmt.Println(&quot;Dog barks&quot;)
+}
+
+// Concrete struct (Cat)
+type Cat struct {}
+
+func (c Cat) MakeSound() {
+    fmt.Println(&quot;Cat meows&quot;)
+}
+
+func main() {
+    var myAnimal Animal
+
+    myAnimal = Dog{}
+    myAnimal.MakeSound()
+
+    myAnimal = Cat{}
+    myAnimal.MakeSound()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Dog barks
+Cat meows
+</code></pre>
+<p><strong>Why Use Structs with Methods?</strong><br />
+- Provides a clean and flexible way to define behavior.<br />
+- Makes it easy to extend functionality.<br />
+- Improves code readability and organization.</p>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>Abstraction is widely used in real-world applications, such as payment processing.</p>
+<h3><strong>Example: Payment System with Abstraction</strong></h3>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Payment interface
+type Payment interface {
+    Pay(amount float64)
+}
+
+// CreditCardPayment struct
+
+type CreditCardPayment struct {}
+
+func (c CreditCardPayment) Pay(amount float64) {
+    fmt.Printf(&quot;Paid %.2f using Credit Card\n&quot;, amount)
+}
+
+// PayPalPayment struct
+type PayPalPayment struct {}
+
+func (p PayPalPayment) Pay(amount float64) {
+    fmt.Printf(&quot;Paid %.2f using PayPal\n&quot;, amount)
+}
+
+func main() {
+    var payment Payment
+
+    payment = CreditCardPayment{}
+    payment.Pay(150.75)
+
+    payment = PayPalPayment{}
+    payment.Pay(200.50)
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Paid 150.75 using Credit Card
+Paid 200.50 using PayPal
+</code></pre>
+<p><strong>Why Use Abstraction in Payment Systems?</strong><br />
+- Allows multiple payment methods without modifying existing code.<br />
+- Improves maintainability and scalability.<br />
+- Provides a <strong>common contract</strong> for different payment types.</p></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Abstraction in Rust</h1>
+<p><strong>Abstraction</strong> is the design pattern of hiding complex implementation details and exposing only the necessary functionality to the user.</p>
+<blockquote>
+<p><strong>Simple Definition:</strong> "Show what it does, hide how it does it."</p>
+</blockquote>
+<hr />
+<h2>🏗️ Prerequisites: The Building Blocks</h2>
+<p>Before understanding Abstraction in Rust, we must understand two fundamental concepts that replace "Classes" in other languages: <strong>Structs</strong> and <strong>Traits</strong>.</p>
+<h3>1. What is a Struct?</h3>
+<p>In Java/C++, a Class holds both data and methods. In Rust, data is separated.<br />
+A <strong>Struct</strong> is strictly for holding <strong>Data</strong>. It has no behavior on its own.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-rust">// Just data. No logic here.
+struct CoffeeMachine {
+    water_level: u32,
+    beans: u32,
+}
+</code></pre>
+<h3>2. What is a Trait?</h3>
+<p>A <strong>Trait</strong> is Rust's version of an <strong>Interface</strong>. It defines <strong>Behavior</strong>.<br />
+It tells us <em>what</em> functionality an object must provide, but not <em>how</em> it does it.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-rust">// This is the &quot;Contract&quot; or &quot;Interface&quot;
+trait Brewable {
+    fn make_coffee(&amp;self); // abstract method (no body)
+}
+</code></pre>
+<h3>3. What is <code>impl</code>?</h3>
+<p>The <code>impl</code> keyword is the glue. It implements the <strong>Trait</strong> (Behavior) for a specific <strong>Struct</strong> (Data).</p>
+<hr />
+<h2>☕ Abstraction: The Real-World Example</h2>
+<p>Let's apply these concepts to build a <strong>Coffee Machine</strong>.</p>
+<h3>The Problem (Without Abstraction)</h3>
+<p>If we don't use abstraction, the user has to manually handle the machine's internal parts. This is dangerous and complex.</p>
+<pre><code class="language-rust">let mut machine = CoffeeMachine { water: 0, beans: 0 };
+
+// BAD: User has to know how the machine works internally!
+machine.water = 100;       // User manually filling water?
+machine.beans = 50;        // User manually loading beans?
+machine.grind_beans();     // User manually starting the grinder?
+// This is too complex for a normal user.
+</code></pre>
+<h3>The Solution (With Abstraction)</h3>
+<p>We want to hide the grinding and heating logic. The user should only see one simple button: <code>brew()</code>.</p>
+<h4>Step 1: Define the Abstraction (The Interface)</h4>
+<p>We create a public Trait. This is the <strong>only</strong> thing the user needs to understand.</p>
+<pre><code class="language-rust">// PUBLIC: The user sees this.
+pub trait CoffeeMaker {
+    fn add_ingredients(&amp;mut self);
+    fn press_button(&amp;mut self);
+}
+</code></pre>
+<h4>Step 2: Implement the Hidden Logic</h4>
+<p>We hide the complex steps (<code>grind_beans</code>, <code>heat_water</code>) inside private helper methods. The user cannot call these directly.</p>
+<pre><code class="language-rust">pub struct PremiumMachine {
+    water: u32,
+    beans: u32,
+}
+
+impl PremiumMachine {
+    // PRIVATE: Internal logic (Hidden details)
+    fn grind_beans(&amp;self) {
+        println!(&quot;Grinding beans... 🚜&quot;);
+    }
+
+    fn heat_water(&amp;self) {
+        println!(&quot;Heating water... 🔥&quot;);
+    }
+}
+
+// CONNECTING THEM: Implementing the Public Trait
+impl CoffeeMaker for PremiumMachine {
+    fn add_ingredients(&amp;mut self) {
+        self.water = 100;
+        self.beans = 50;
+    }
+
+    fn press_button(&amp;mut self) {
+        // The abstraction happens here!
+        // One simple call triggers complex internal logic.
+        self.grind_beans();
+        self.heat_water();
+        println!(&quot;Coffee is ready! ☕&quot;);
+    }
+}
+</code></pre>
+<hr />
+<h2>🆚 Comparison: Rust vs. OOP Languages</h2>
+<p>Rust handles abstraction differently than Java or Python because it emphasizes <strong>memory safety</strong> and <strong>separation of concerns</strong>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Java / C++ / Python</th>
+<th style="text-align: left;">Rust</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Container</strong></td>
+<td style="text-align: left;"><code>Class</code> (Data + Methods together)</td>
+<td style="text-align: left;"><code>Struct</code> (Data) + <code>impl</code> (Methods) separated</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interface</strong></td>
+<td style="text-align: left;"><code>interface</code> or <code>abstract class</code></td>
+<td style="text-align: left;"><code>trait</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hiding Data</strong></td>
+<td style="text-align: left;"><code>private</code> / <code>protected</code> keywords</td>
+<td style="text-align: left;">Struct fields are <strong>private by default</strong> to other modules</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Override</strong></td>
+<td style="text-align: left;"><code>@Override</code> annotation</td>
+<td style="text-align: left;">Explicit implementation of Trait methods</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>🧠 Why is this useful?</h2>
+<ol>
+<li><strong>Safety:</strong> The user cannot accidentally change the <code>water_level</code> to a wrong value because the field is private.</li>
+<li><strong>Simplicity:</strong> The user doesn't need to know <em>how</em> to grind beans; they just press the button.</li>
+<li><strong>Flexibility:</strong> We can swap the <code>PremiumMachine</code> with a <code>CheapMachine</code>, and as long as they both implement the <code>CoffeeMaker</code> trait, the user code doesn't change.</li>
+</ol></div><details class="file"><summary>oop/rust/abstraction/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * ABSTRACTION EXAMPLE: A Coffee Machine</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: The user interacts with a simple interface (make_coffee),</span>
+<span class="cm"> * hiding the complex logic (grinding, heating, checking water) inside.</span>
+<span class="cm"> */</span>
+
+<span class="c1">// 1. THE ABSTRACTION (The Interface)</span>
+<span class="c1">// We define a Trait to specify WHAT a Coffee Machine should do.</span>
+<span class="c1">// The user strictly interacts with these methods.</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">CoffeeMaker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">brew</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">);</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">add_water</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 2. THE CONCRETE TYPE (The Data)</span>
+<span class="c1">// These fields represent the internal state.</span>
+<span class="c1">// Notice we do NOT make the fields 'pub'. They are hidden from the outside world.</span>
+<span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">PremiumCoffeeMachine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">water_level</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span>
+<span class="w">    </span><span class="n">beans_level</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. INTERNAL LOGIC (Helper methods)</span>
+<span class="c1">// These methods are NOT part of the Trait. They are private internal logic</span>
+<span class="c1">// used to support the public abstraction.</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">PremiumCoffeeMachine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">water</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">beans</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PremiumCoffeeMachine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">water_level</span><span class="p">:</span><span class="w"> </span><span class="nc">water</span><span class="p">,</span>
+<span class="w">            </span><span class="n">beans_level</span><span class="p">:</span><span class="w"> </span><span class="nc">beans</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// This is an internal detail (Encapsulated logic).</span>
+<span class="w">    </span><span class="c1">// The user doesn't need to call this manually.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">grind_beans</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">beans_level</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">beans_level</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">"* Grinding beans... *"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Error: Not enough beans!"</span><span class="p">);</span>
+<span class="w">        </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Another internal detail.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">heat_water</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">water_level</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">water_level</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">"* Heating water... *"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Error: Add more water!"</span><span class="p">);</span>
+<span class="w">        </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 4. IMPLEMENTING THE ABSTRACTION</span>
+<span class="c1">// We expose only the high-level 'brew' functionality to the user.</span>
+<span class="k">impl</span><span class="w"> </span><span class="n">CoffeeMaker</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">PremiumCoffeeMachine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">add_water</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">water_level</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">amount</span><span class="p">;</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Added {}ml of water. Current level: {}ml"</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">water_level</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// This is the implementation of the Abstraction.</span>
+<span class="w">    </span><span class="c1">// The complexity of grinding and heating is HIDDEN behind this single function call.</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">brew</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- Starting Brew Process ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// We chain internal steps here. The user doesn't know this complexity exists.</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">grind_beans</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">heat_water</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Success: Here is your hot coffee! ☕"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Failure: Could not brew coffee."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"-----------------------------</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// User creates the machine</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">machine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PremiumCoffeeMachine</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// USAGE</span>
+<span class="w">    </span><span class="c1">// The user doesn't verify water temp or grind size manually.</span>
+<span class="w">    </span><span class="c1">// They just use the abstract interface methods: add_water() and brew().</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">machine</span><span class="p">.</span><span class="n">add_water</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span><span class="w"> </span><span class="c1">// User interacts with the interface</span>
+<span class="w">    </span><span class="n">machine</span><span class="p">.</span><span class="n">brew</span><span class="p">();</span><span class="w">        </span><span class="c1">// User interacts with the interface</span>
+
+<span class="w">    </span><span class="c1">// Trying to brew again without water</span>
+<span class="w">    </span><span class="n">machine</span><span class="p">.</span><span class="n">brew</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aggregation · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Aggregation</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Aggregation</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Aggregation in Java</h1>
+<h2>Introduction</h2>
+<p>Aggregation is a key concept in object-oriented programming (OOP) that represents a "has-a" relationship between two classes, but with a crucial distinction: the lifecycle of the contained object is independent of the container object. This means that while one class contains another, the contained object can exist independently of the container.</p>
+<p>Aggregation allows for better modularity, code reuse, and maintainability. It is different from composition, where the contained object cannot exist without the container.</p>
+<hr />
+<h2>What is Aggregation?</h2>
+<p>Aggregation is a form of association in OOP where an object of one class contains a reference to an object of another class. However, the contained object can exist independently of the container. This means that even if the container object is destroyed, the contained object can still be used elsewhere in the application.</p>
+<h3>Key Characteristics of Aggregation:</h3>
+<ul>
+<li>Represents a <strong>has-a</strong> relationship.</li>
+<li>The contained object <strong>can exist independently</strong> of the container.</li>
+<li>Implemented using references (pointers) to objects.</li>
+<li>Promotes <strong>loose coupling</strong> between objects.</li>
+</ul>
+<h3>Example: A University and its Professors</h3>
+<p>Consider a scenario where a <code>University</code> contains multiple <code>Professor</code> objects. However, a <code>Professor</code> can exist independently of any university. This is an example of aggregation.</p>
+<pre><code class="language-java">class Professor {
+    private String name;
+    private String subject;
+
+    public Professor(String name, String subject) {
+        this.name = name;
+        this.subject = subject;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public void teach() {
+        System.out.println(name + &quot; is teaching &quot; + subject);
+    }
+}
+
+class University {
+    private String universityName;
+    private List&lt;Professor&gt; professors;
+
+    public University(String universityName) {
+        this.universityName = universityName;
+        this.professors = new ArrayList&lt;&gt;();
+    }
+
+    public void addProfessor(Professor professor) {
+        professors.add(professor);
+    }
+
+    public void showProfessors() {
+        System.out.println(&quot;Professors at &quot; + universityName + &quot;:&quot;);
+        for (Professor professor : professors) {
+            System.out.println(&quot; - &quot; + professor.getName());
+        }
+    }
+}
+
+import java.util.*;
+
+public class AggregationExample {
+    public static void main(String[] args) {
+        Professor prof1 = new Professor(&quot;Dr. Smith&quot;, &quot;Computer Science&quot;);
+        Professor prof2 = new Professor(&quot;Dr. Johnson&quot;, &quot;Mathematics&quot;);
+
+        University university = new University(&quot;Harvard University&quot;);
+        university.addProfessor(prof1);
+        university.addProfessor(prof2);
+
+        university.showProfessors();
+
+        // Professors can exist independently
+        prof1.teach();
+        prof2.teach();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at Harvard University:
+ - Dr. Smith
+ - Dr. Johnson
+Dr. Smith is teaching Computer Science
+Dr. Johnson is teaching Mathematics
+</code></pre>
+<hr />
+<h2>Aggregation vs Composition</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relationship</td>
+<td>"Has-a"</td>
+<td>"Has-a"</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Contained object <strong>can exist independently</strong></td>
+<td>Contained object <strong>cannot exist without</strong> the container</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Contained object <strong>outlives</strong> the container</td>
+<td>Contained object <strong>is destroyed</strong> with the container</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>University and Professors</td>
+<td>Car and Engine</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Why Use Aggregation?</h2>
+<h3>1. <strong>Promotes Code Reusability</strong></h3>
+<ul>
+<li>Aggregated objects can be used in multiple places without being tightly coupled to a single container class.</li>
+</ul>
+<h3>2. <strong>Encourages Loose Coupling</strong></h3>
+<ul>
+<li>Aggregation allows objects to interact without being dependent on the lifecycle of each other.</li>
+</ul>
+<h3>3. <strong>Better Maintainability</strong></h3>
+<ul>
+<li>Changes in one class do not heavily impact the other, making the codebase easier to modify and extend.</li>
+</ul>
+<h3>4. <strong>Real-World Applicability</strong></h3>
+<ul>
+<li>Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.</li>
+</ul>
+<hr />
+<h2>Aggregation with Interfaces</h2>
+<p>Using interfaces, we can further enhance the flexibility of aggregation.</p>
+<pre><code class="language-java">interface Teachable {
+    void teach();
+}
+
+class Professor implements Teachable {
+    private String name;
+    private String subject;
+
+    public Professor(String name, String subject) {
+        this.name = name;
+        this.subject = subject;
+    }
+
+    public void teach() {
+        System.out.println(name + &quot; is teaching &quot; + subject);
+    }
+}
+
+class University {
+    private String universityName;
+    private List&lt;Teachable&gt; professors;
+
+    public University(String universityName) {
+        this.universityName = universityName;
+        this.professors = new ArrayList&lt;&gt;();
+    }
+
+    public void addProfessor(Teachable professor) {
+        professors.add(professor);
+    }
+
+    public void showProfessors() {
+        System.out.println(&quot;Professors at &quot; + universityName + &quot;:&quot;);
+        for (Teachable professor : professors) {
+            professor.teach();
+        }
+    }
+}
+
+import java.util.*;
+
+public class InterfaceAggregationExample {
+    public static void main(String[] args) {
+        Professor prof1 = new Professor(&quot;Dr. Adams&quot;, &quot;Physics&quot;);
+        Professor prof2 = new Professor(&quot;Dr. Lee&quot;, &quot;Chemistry&quot;);
+
+        University university = new University(&quot;MIT&quot;);
+        university.addProfessor(prof1);
+        university.addProfessor(prof2);
+
+        university.showProfessors();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at MIT:
+Dr. Adams is teaching Physics
+Dr. Lee is teaching Chemistry
+</code></pre>
+<hr />
+<h2>When to Use Aggregation?</h2>
+<ul>
+<li>When an object <strong>can exist independently</strong> from the container.</li>
+<li>When designing <strong>loosely coupled</strong> systems.</li>
+<li>When different objects need to be <strong>shared</strong> across multiple containers.</li>
+<li>When following <strong>SOLID principles</strong>, particularly the <strong>Dependency Inversion Principle (DIP)</strong>.</li>
+</ul></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Aggregation in C++</h1>
+<h2>Introduction</h2>
+<p>Aggregation is a key concept in object-oriented programming (OOP) that represents a "has-a" relationship between two classes, but with a crucial distinction: the lifecycle of the contained object is independent of the container object. This means that while one class contains another, the contained object can exist independently of the container.</p>
+<p>Aggregation allows for better modularity, code reuse, and maintainability. It is different from composition, where the contained object cannot exist without the container.</p>
+<h2>What is Aggregation?</h2>
+<p>Aggregation is a form of association in OOP where an object of one class contains a reference to an object of another class. However, the contained object can exist independently of the container. This means that even if the container object is destroyed, the contained object can still be used elsewhere in the application.</p>
+<h3>Key Characteristics of Aggregation:</h3>
+<ul>
+<li>Represents a <strong>has-a</strong> relationship.</li>
+<li>The contained object <strong>can exist independently</strong> of the container.</li>
+<li>Implemented using references (pointers) to objects.</li>
+<li>Promotes <strong>loose coupling</strong> between objects.</li>
+</ul>
+<h3>Example: A University and its Professors</h3>
+<p>Consider a scenario where a <code>University</code> contains multiple <code>Professor</code> objects. However, a <code>Professor</code> can exist independently of any university. This is an example of aggregation.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class Professor {
+private:
+    string name;
+    string subject;
+public:
+    Professor(string name, string subject) : name(name), subject(subject) {}
+    void teach() {
+        cout &lt;&lt; name &lt;&lt; &quot; is teaching &quot; &lt;&lt; subject &lt;&lt; endl;
+    }
+    string getName() { return name; }
+};
+
+class University {
+private:
+    string universityName;
+    vector&lt;Professor*&gt; professors; // Aggregation: University has a list of professors
+public:
+    University(string name) : universityName(name) {}
+
+    void addProfessor(Professor* professor) {
+        professors.push_back(professor);
+    }
+
+    void showProfessors() {
+        cout &lt;&lt; &quot;Professors at &quot; &lt;&lt; universityName &lt;&lt; &quot;:&quot; &lt;&lt; endl;
+        for (auto professor : professors) {
+            cout &lt;&lt; &quot; - &quot; &lt;&lt; professor-&gt;getName() &lt;&lt; endl;
+        }
+    }
+};
+
+int main() {
+    Professor prof1(&quot;Dr. Smith&quot;, &quot;Computer Science&quot;);
+    Professor prof2(&quot;Dr. Johnson&quot;, &quot;Mathematics&quot;);
+
+    University university(&quot;Harvard University&quot;);
+    university.addProfessor(&amp;prof1);
+    university.addProfessor(&amp;prof2);
+
+    university.showProfessors();
+
+    // Professors can exist independently
+    prof1.teach();
+    prof2.teach();
+
+    return 0;
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at Harvard University:
+ - Dr. Smith
+ - Dr. Johnson
+Dr. Smith is teaching Computer Science
+Dr. Johnson is teaching Mathematics
+</code></pre>
+<hr />
+<h2>Aggregation vs Composition</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relationship</td>
+<td>"Has-a"</td>
+<td>"Has-a"</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Contained object <strong>can exist independently</strong></td>
+<td>Contained object <strong>cannot exist without</strong> the container</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Contained object <strong>outlives</strong> the container</td>
+<td>Contained object <strong>is destroyed</strong> with the container</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>University and Professors</td>
+<td>Car and Engine</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Why Use Aggregation?</h2>
+<h3>1. <strong>Promotes Code Reusability</strong></h3>
+<ul>
+<li>Aggregated objects can be used in multiple places without being tightly coupled to a single container class.</li>
+</ul>
+<h3>2. <strong>Encourages Loose Coupling</strong></h3>
+<ul>
+<li>Aggregation allows objects to interact without being dependent on the lifecycle of each other.</li>
+</ul>
+<h3>3. <strong>Better Maintainability</strong></h3>
+<ul>
+<li>Changes in one class do not heavily impact the other, making the codebase easier to modify and extend.</li>
+</ul>
+<h3>4. <strong>Real-World Applicability</strong></h3>
+<ul>
+<li>Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.</li>
+</ul>
+<hr />
+<h2>Aggregation with Interfaces (Abstract Classes)</h2>
+<p>Using abstract classes, we can further enhance the flexibility of aggregation.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class Teachable {
+public:
+    virtual void teach() = 0; // Pure virtual function
+    virtual string getName() = 0;
+};
+
+class Professor : public Teachable {
+private:
+    string name;
+    string subject;
+public:
+    Professor(string name, string subject) : name(name), subject(subject) {}
+    void teach() override {
+        cout &lt;&lt; name &lt;&lt; &quot; is teaching &quot; &lt;&lt; subject &lt;&lt; endl;
+    }
+    string getName() override { return name; }
+};
+
+class University {
+private:
+    string universityName;
+    vector&lt;Teachable*&gt; professors;
+public:
+    University(string name) : universityName(name) {}
+
+    void addProfessor(Teachable* professor) {
+        professors.push_back(professor);
+    }
+
+    void showProfessors() {
+        cout &lt;&lt; &quot;Professors at &quot; &lt;&lt; universityName &lt;&lt; &quot;:&quot; &lt;&lt; endl;
+        for (auto professor : professors) {
+            professor-&gt;teach();
+        }
+    }
+};
+
+int main() {
+    Professor prof1(&quot;Dr. Adams&quot;, &quot;Physics&quot;);
+    Professor prof2(&quot;Dr. Lee&quot;, &quot;Chemistry&quot;);
+
+    University university(&quot;MIT&quot;);
+    university.addProfessor(&amp;prof1);
+    university.addProfessor(&amp;prof2);
+
+    university.showProfessors();
+
+    return 0;
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at MIT:
+Dr. Adams is teaching Physics
+Dr. Lee is teaching Chemistry
+</code></pre>
+<hr />
+<h2>When to Use Aggregation?</h2>
+<ul>
+<li>When an object <strong>can exist independently</strong> from the container.</li>
+<li>When designing <strong>loosely coupled</strong> systems.</li>
+<li>When different objects need to be <strong>shared</strong> across multiple containers.</li>
+<li>When following <strong>SOLID principles</strong>, particularly the <strong>Dependency Inversion Principle (DIP)</strong>.</li>
+</ul></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Aggregation in Python</h1>
+<h2>Introduction</h2>
+<p>Aggregation is a key concept in object-oriented programming (OOP) that represents a "has-a" relationship between two classes, but with a crucial distinction: the lifecycle of the contained object is independent of the container object. This means that while one class contains another, the contained object can exist independently of the container.</p>
+<p>Aggregation allows for better modularity, code reuse, and maintainability. It is different from composition, where the contained object cannot exist without the container.</p>
+<h2>What is Aggregation?</h2>
+<p>Aggregation is a form of association in OOP where an object of one class contains a reference to an object of another class. However, the contained object can exist independently of the container. This means that even if the container object is destroyed, the contained object can still be used elsewhere in the application.</p>
+<h3>Key Characteristics of Aggregation:</h3>
+<ul>
+<li>Represents a <strong>has-a</strong> relationship.</li>
+<li>The contained object <strong>can exist independently</strong> of the container.</li>
+<li>Implemented using references to objects.</li>
+<li>Promotes <strong>loose coupling</strong> between objects.</li>
+</ul>
+<h3>Example: A University and its Professors</h3>
+<p>Consider a scenario where a <code>University</code> contains multiple <code>Professor</code> objects. However, a <code>Professor</code> can exist independently of any university. This is an example of aggregation.</p>
+<pre><code class="language-python">class Professor:
+    def __init__(self, name, subject):
+        self.name = name
+        self.subject = subject
+
+    def teach(self):
+        print(f&quot;{self.name} is teaching {self.subject}&quot;)
+
+
+class University:
+    def __init__(self, university_name):
+        self.university_name = university_name
+        self.professors = []
+
+    def add_professor(self, professor):
+        self.professors.append(professor)
+
+    def show_professors(self):
+        print(f&quot;Professors at {self.university_name}:&quot;)
+        for professor in self.professors:
+            print(f&quot; - {professor.name}&quot;)
+
+
+# Example Usage
+if __name__ == &quot;__main__&quot;:
+    prof1 = Professor(&quot;Dr. Smith&quot;, &quot;Computer Science&quot;)
+    prof2 = Professor(&quot;Dr. Johnson&quot;, &quot;Mathematics&quot;)
+
+    university = University(&quot;Harvard University&quot;)
+    university.add_professor(prof1)
+    university.add_professor(prof2)
+
+    university.show_professors()
+
+    # Professors can exist independently
+    prof1.teach()
+    prof2.teach()
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at Harvard University:
+ - Dr. Smith
+ - Dr. Johnson
+Dr. Smith is teaching Computer Science
+Dr. Johnson is teaching Mathematics
+</code></pre>
+<hr />
+<h2>Aggregation vs Composition</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relationship</td>
+<td>"Has-a"</td>
+<td>"Has-a"</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Contained object <strong>can exist independently</strong></td>
+<td>Contained object <strong>cannot exist without</strong> the container</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Contained object <strong>outlives</strong> the container</td>
+<td>Contained object <strong>is destroyed</strong> with the container</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>University and Professors</td>
+<td>Car and Engine</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Why Use Aggregation?</h2>
+<h3>1. <strong>Promotes Code Reusability</strong></h3>
+<ul>
+<li>Aggregated objects can be used in multiple places without being tightly coupled to a single container class.</li>
+</ul>
+<h3>2. <strong>Encourages Loose Coupling</strong></h3>
+<ul>
+<li>Aggregation allows objects to interact without being dependent on the lifecycle of each other.</li>
+</ul>
+<h3>3. <strong>Better Maintainability</strong></h3>
+<ul>
+<li>Changes in one class do not heavily impact the other, making the codebase easier to modify and extend.</li>
+</ul>
+<h3>4. <strong>Real-World Applicability</strong></h3>
+<ul>
+<li>Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.</li>
+</ul>
+<hr />
+<h2>Aggregation with Interfaces (Abstract Base Classes)</h2>
+<p>Using abstract base classes, we can further enhance the flexibility of aggregation.</p>
+<pre><code class="language-python">from abc import ABC, abstractmethod
+
+class Teachable(ABC):
+    @abstractmethod
+    def teach(self):
+        pass
+
+
+class Professor(Teachable):
+    def __init__(self, name, subject):
+        self.name = name
+        self.subject = subject
+
+    def teach(self):
+        print(f&quot;{self.name} is teaching {self.subject}&quot;)
+
+
+class University:
+    def __init__(self, university_name):
+        self.university_name = university_name
+        self.professors = []
+
+    def add_professor(self, professor):
+        self.professors.append(professor)
+
+    def show_professors(self):
+        print(f&quot;Professors at {self.university_name}:&quot;)
+        for professor in self.professors:
+            professor.teach()
+
+
+# Example Usage
+if __name__ == &quot;__main__&quot;:
+    prof1 = Professor(&quot;Dr. Adams&quot;, &quot;Physics&quot;)
+    prof2 = Professor(&quot;Dr. Lee&quot;, &quot;Chemistry&quot;)
+
+    university = University(&quot;MIT&quot;)
+    university.add_professor(prof1)
+    university.add_professor(prof2)
+
+    university.show_professors()
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at MIT:
+Dr. Adams is teaching Physics
+Dr. Lee is teaching Chemistry
+</code></pre>
+<hr />
+<h2>When to Use Aggregation?</h2>
+<ul>
+<li>When an object <strong>can exist independently</strong> from the container.</li>
+<li>When designing <strong>loosely coupled</strong> systems.</li>
+<li>When different objects need to be <strong>shared</strong> across multiple containers.</li>
+<li>When following <strong>SOLID principles</strong>, particularly the <strong>Dependency Inversion Principle (DIP)</strong>.</li>
+</ul></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Aggregation in C</h1>
+<h2>Introduction</h2>
+<p>Aggregation is a key concept in object-oriented programming (OOP) that represents a "has-a" relationship between two classes, but with a crucial distinction: the lifecycle of the contained object is independent of the container object. This means that while one class contains another, the contained object can exist independently of the container.</p>
+<p>Aggregation allows for better modularity, code reuse, and maintainability. It is different from composition, where the contained object cannot exist without the container.</p>
+<h2>What is Aggregation?</h2>
+<p>Aggregation is a form of association in OOP where an object of one class contains a reference to an object of another class. However, the contained object can exist independently of the container. This means that even if the container object is destroyed, the contained object can still be used elsewhere in the application.</p>
+<h3>Key Characteristics of Aggregation:</h3>
+<ul>
+<li>Represents a <strong>has-a</strong> relationship.</li>
+<li>The contained object <strong>can exist independently</strong> of the container.</li>
+<li>Implemented using references to objects.</li>
+<li>Promotes <strong>loose coupling</strong> between objects.</li>
+</ul>
+<h3>Example: A University and its Professors</h3>
+<p>Consider a scenario where a <code>University</code> contains multiple <code>Professor</code> objects. However, a <code>Professor</code> can exist independently of any university. This is an example of aggregation.</p>
+<pre><code class="language-csharp">using System;
+using System.Collections.Generic;
+
+class Professor {
+    public string Name { get; private set; }
+    public string Subject { get; private set; }
+
+    public Professor(string name, string subject) {
+        Name = name;
+        Subject = subject;
+    }
+
+    public void Teach() {
+        Console.WriteLine($&quot;{Name} is teaching {Subject}&quot;);
+    }
+}
+
+class University {
+    private string universityName;
+    private List&lt;Professor&gt; professors;
+
+    public University(string universityName) {
+        this.universityName = universityName;
+        professors = new List&lt;Professor&gt;();
+    }
+
+    public void AddProfessor(Professor professor) {
+        professors.Add(professor);
+    }
+
+    public void ShowProfessors() {
+        Console.WriteLine($&quot;Professors at {universityName}:&quot;);
+        foreach (var professor in professors) {
+            Console.WriteLine($&quot; - {professor.Name}&quot;);
+        }
+    }
+}
+
+class AggregationExample {
+    static void Main() {
+        Professor prof1 = new Professor(&quot;Dr. Smith&quot;, &quot;Computer Science&quot;);
+        Professor prof2 = new Professor(&quot;Dr. Johnson&quot;, &quot;Mathematics&quot;);
+
+        University university = new University(&quot;Harvard University&quot;);
+        university.AddProfessor(prof1);
+        university.AddProfessor(prof2);
+
+        university.ShowProfessors();
+
+        // Professors can exist independently
+        prof1.Teach();
+        prof2.Teach();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at Harvard University:
+ - Dr. Smith
+ - Dr. Johnson
+Dr. Smith is teaching Computer Science
+Dr. Johnson is teaching Mathematics
+</code></pre>
+<hr />
+<h2>Aggregation vs Composition</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relationship</td>
+<td>"Has-a"</td>
+<td>"Has-a"</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Contained object <strong>can exist independently</strong></td>
+<td>Contained object <strong>cannot exist without</strong> the container</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Contained object <strong>outlives</strong> the container</td>
+<td>Contained object <strong>is destroyed</strong> with the container</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>University and Professors</td>
+<td>Car and Engine</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Why Use Aggregation?</h2>
+<h3>1. <strong>Promotes Code Reusability</strong></h3>
+<ul>
+<li>Aggregated objects can be used in multiple places without being tightly coupled to a single container class.</li>
+</ul>
+<h3>2. <strong>Encourages Loose Coupling</strong></h3>
+<ul>
+<li>Aggregation allows objects to interact without being dependent on the lifecycle of each other.</li>
+</ul>
+<h3>3. <strong>Better Maintainability</strong></h3>
+<ul>
+<li>Changes in one class do not heavily impact the other, making the codebase easier to modify and extend.</li>
+</ul>
+<h3>4. <strong>Real-World Applicability</strong></h3>
+<ul>
+<li>Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.</li>
+</ul>
+<hr />
+<h2>Aggregation with Interfaces</h2>
+<p>Using interfaces, we can further enhance the flexibility of aggregation.</p>
+<pre><code class="language-csharp">using System;
+using System.Collections.Generic;
+
+interface ITeachable {
+    void Teach();
+}
+
+class Professor : ITeachable {
+    public string Name { get; private set; }
+    public string Subject { get; private set; }
+
+    public Professor(string name, string subject) {
+        Name = name;
+        Subject = subject;
+    }
+
+    public void Teach() {
+        Console.WriteLine($&quot;{Name} is teaching {Subject}&quot;);
+    }
+}
+
+class University {
+    private string universityName;
+    private List&lt;ITeachable&gt; professors;
+
+    public University(string universityName) {
+        this.universityName = universityName;
+        professors = new List&lt;ITeachable&gt;();
+    }
+
+    public void AddProfessor(ITeachable professor) {
+        professors.Add(professor);
+    }
+
+    public void ShowProfessors() {
+        Console.WriteLine($&quot;Professors at {universityName}:&quot;);
+        foreach (var professor in professors) {
+            professor.Teach();
+        }
+    }
+}
+
+class InterfaceAggregationExample {
+    static void Main() {
+        Professor prof1 = new Professor(&quot;Dr. Adams&quot;, &quot;Physics&quot;);
+        Professor prof2 = new Professor(&quot;Dr. Lee&quot;, &quot;Chemistry&quot;);
+
+        University university = new University(&quot;MIT&quot;);
+        university.AddProfessor(prof1);
+        university.AddProfessor(prof2);
+
+        university.ShowProfessors();
+    }
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at MIT:
+Dr. Adams is teaching Physics
+Dr. Lee is teaching Chemistry
+</code></pre>
+<hr />
+<h2>When to Use Aggregation?</h2>
+<ul>
+<li>When an object <strong>can exist independently</strong> from the container.</li>
+<li>When designing <strong>loosely coupled</strong> systems.</li>
+<li>When different objects need to be <strong>shared</strong> across multiple containers.</li>
+<li>When following <strong>SOLID principles</strong>, particularly the <strong>Dependency Inversion Principle (DIP)</strong>.</li>
+</ul></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Aggregation in Golang</h1>
+<h2>Introduction</h2>
+<p>Aggregation is a key concept in object-oriented programming (OOP) that represents a "has-a" relationship between two classes (or structs in Golang), but with a crucial distinction: the lifecycle of the contained object is independent of the container object. This means that while one struct contains another, the contained struct can exist independently of the container.</p>
+<p>Aggregation allows for better modularity, code reuse, and maintainability. It is different from composition, where the contained struct cannot exist without the container.</p>
+<h2>What is Aggregation?</h2>
+<p>Aggregation is a form of association in OOP where an object of one struct contains a reference (pointer) to an object of another struct. However, the contained object can exist independently of the container. This means that even if the container object is destroyed, the contained object can still be used elsewhere in the application.</p>
+<h3>Key Characteristics of Aggregation:</h3>
+<ul>
+<li>Represents a <strong>has-a</strong> relationship.</li>
+<li>The contained object <strong>can exist independently</strong> of the container.</li>
+<li>Implemented using references (pointers) to objects.</li>
+<li>Promotes <strong>loose coupling</strong> between objects.</li>
+</ul>
+<h3>Example: A University and its Professors</h3>
+<p>Consider a scenario where a <code>University</code> contains multiple <code>Professor</code> objects. However, a <code>Professor</code> can exist independently of any university. This is an example of aggregation.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Professor struct (independent entity)
+type Professor struct {
+    Name    string
+    Subject string
+}
+
+func (p Professor) Teach() {
+    fmt.Printf(&quot;%s is teaching %s\n&quot;, p.Name, p.Subject)
+}
+
+// University struct contains a list of professors (aggregation)
+type University struct {
+    Name       string
+    Professors []*Professor // Aggregation: University has a list of professors
+}
+
+func (u *University) AddProfessor(professor *Professor) {
+    u.Professors = append(u.Professors, professor)
+}
+
+func (u University) ShowProfessors() {
+    fmt.Printf(&quot;Professors at %s:\n&quot;, u.Name)
+    for _, professor := range u.Professors {
+        fmt.Printf(&quot; - %s\n&quot;, professor.Name)
+    }
+}
+
+func main() {
+    prof1 := &amp;Professor{Name: &quot;Dr. Smith&quot;, Subject: &quot;Computer Science&quot;}
+    prof2 := &amp;Professor{Name: &quot;Dr. Johnson&quot;, Subject: &quot;Mathematics&quot;}
+
+    university := &amp;University{Name: &quot;Harvard University&quot;}
+    university.AddProfessor(prof1)
+    university.AddProfessor(prof2)
+
+    university.ShowProfessors()
+
+    // Professors can exist independently
+    prof1.Teach()
+    prof2.Teach()
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at Harvard University:
+ - Dr. Smith
+ - Dr. Johnson
+Dr. Smith is teaching Computer Science
+Dr. Johnson is teaching Mathematics
+</code></pre>
+<hr />
+<h2>Aggregation vs Composition</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aggregation</th>
+<th>Composition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relationship</td>
+<td>"Has-a"</td>
+<td>"Has-a"</td>
+</tr>
+<tr>
+<td>Ownership</td>
+<td>Contained object <strong>can exist independently</strong></td>
+<td>Contained object <strong>cannot exist without</strong> the container</td>
+</tr>
+<tr>
+<td>Lifetime</td>
+<td>Contained object <strong>outlives</strong> the container</td>
+<td>Contained object <strong>is destroyed</strong> with the container</td>
+</tr>
+<tr>
+<td>Example</td>
+<td>University and Professors</td>
+<td>Car and Engine</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Why Use Aggregation?</h2>
+<h3>1. <strong>Promotes Code Reusability</strong></h3>
+<ul>
+<li>Aggregated objects can be used in multiple places without being tightly coupled to a single container struct.</li>
+</ul>
+<h3>2. <strong>Encourages Loose Coupling</strong></h3>
+<ul>
+<li>Aggregation allows objects to interact without being dependent on the lifecycle of each other.</li>
+</ul>
+<h3>3. <strong>Better Maintainability</strong></h3>
+<ul>
+<li>Changes in one struct do not heavily impact the other, making the codebase easier to modify and extend.</li>
+</ul>
+<h3>4. <strong>Real-World Applicability</strong></h3>
+<ul>
+<li>Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.</li>
+</ul>
+<hr />
+<h2>Aggregation with Interfaces</h2>
+<p>Using interfaces, we can further enhance the flexibility of aggregation.</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// Teachable interface
+type Teachable interface {
+    Teach()
+}
+
+// Professor struct implementing Teachable interface
+type Professor struct {
+    Name    string
+    Subject string
+}
+
+func (p Professor) Teach() {
+    fmt.Printf(&quot;%s is teaching %s\n&quot;, p.Name, p.Subject)
+}
+
+// University struct containing a list of professors
+type University struct {
+    Name       string
+    Professors []Teachable
+}
+
+func (u *University) AddProfessor(professor Teachable) {
+    u.Professors = append(u.Professors, professor)
+}
+
+func (u University) ShowProfessors() {
+    fmt.Printf(&quot;Professors at %s:\n&quot;, u.Name)
+    for _, professor := range u.Professors {
+        professor.Teach()
+    }
+}
+
+func main() {
+    prof1 := Professor{Name: &quot;Dr. Adams&quot;, Subject: &quot;Physics&quot;}
+    prof2 := Professor{Name: &quot;Dr. Lee&quot;, Subject: &quot;Chemistry&quot;}
+
+    university := &amp;University{Name: &quot;MIT&quot;}
+    university.AddProfessor(prof1)
+    university.AddProfessor(prof2)
+
+    university.ShowProfessors()
+}
+</code></pre>
+<h3>Output:</h3>
+<pre><code>Professors at MIT:
+Dr. Adams is teaching Physics
+Dr. Lee is teaching Chemistry
+</code></pre>
+<hr />
+<h2>When to Use Aggregation?</h2>
+<ul>
+<li>When an object <strong>can exist independently</strong> from the container.</li>
+<li>When designing <strong>loosely coupled</strong> systems.</li>
+<li>When different objects need to be <strong>shared</strong> across multiple containers.</li>
+<li>When following <strong>SOLID principles</strong>, particularly the <strong>Dependency Inversion Principle (DIP)</strong>.</li>
+</ul></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Aggregation in Rust (References &amp; Lifetimes)</h1>
+<h2>Introduction</h2>
+<p><strong>Aggregation</strong> is a specific type of association in Object-Oriented Programming (OOP) representing a <strong>"Has-A"</strong> relationship.<br />
+* <strong>Crucial Distinction:</strong> The lifecycle of the contained object (Child) is <strong>independent</strong> of the container object (Parent).<br />
+* <strong>In plain English:</strong> If the University closes down (is destroyed), the Professors do not die; they go home.</p>
+<p><strong>Does Rust support Aggregation?</strong><br />
+Yes, but it is stricter than Java. In Rust, Aggregation is implemented using <strong>References (<code>&amp;T</code>)</strong> and <strong>Lifetimes (<code>'a</code>)</strong>.</p>
+<hr />
+<h2><strong>1. The Core Concept: Borrowing vs. Owning</strong></h2>
+<p>To understand Aggregation, you must understand Rust's memory model:</p>
+<ol>
+<li><strong>Composition (Strong):</strong> The Parent <strong>OWNS</strong> the Child.<ul>
+<li><em>Rust:</em> <code>struct Parent { child: Child }</code></li>
+<li><em>Result:</em> If Parent dies, Child dies immediately.</li>
+</ul>
+</li>
+<li><strong>Aggregation (Weak):</strong> The Parent <strong>BORROWS</strong> the Child.<ul>
+<li><em>Rust:</em> <code>struct Parent&lt;'a&gt; { child: &amp;'a Child }</code></li>
+<li><em>Result:</em> Parent holds a pointer. If Parent dies, the Child is unaffected because the Parent never owned it.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2><strong>2. The "Lifetime" Problem (<code>'a</code>)</strong></h2>
+<p>This is the most unique part of Rust. If a struct holds a reference, the borrow checker will reject invalid lifetimes at compile time:</p>
+<blockquote>
+<p><em>"What if the University holds a pointer to a Professor, but the Professor has already been deleted? The University would be pointing to garbage memory!"</em></p>
+</blockquote>
+<p>To prevent this, we use <strong>Lifetime Annotations (<code>'a</code>)</strong>.</p>
+<pre><code class="language-rust">// &lt;'a&gt; reads as: &quot;This struct lives for a duration called 'a&quot;
+struct University&lt;'a&gt; {
+    // This reference must live AT LEAST as long as 'a
+    professor: &amp;'a Professor,
+}
+
+</code></pre>
+<p><strong>What this tells the compiler:</strong><br />
+<em>"I promise that the <code>Professor</code> will stay alive longer than (or at least as long as) the <code>University</code>."</em></p>
+<hr />
+<h2><strong>3. Code Implementation</strong></h2>
+<h3><strong>Step 1: The Independent Object</strong></h3>
+<p>The <code>Professor</code> owns its own data. It doesn't know about the University.</p>
+<pre><code class="language-rust">struct Professor {
+    name: String,
+}
+
+</code></pre>
+<h3><strong>Step 2: The Container (With Lifetimes)</strong></h3>
+<p>The <code>University</code> holds a <strong>Reference</strong> (<code>&amp;</code>) to the Professor.</p>
+<pre><code class="language-rust">struct University&lt;'a&gt; {
+    name: String,
+    // Aggregation: We borrow the professor
+    staff: Vec&lt;&amp;'a Professor&gt;,
+}
+
+</code></pre>
+<h3><strong>Step 3: Usage</strong></h3>
+<pre><code class="language-rust">fn main() {
+    // 1. Create the Child (Owner)
+    let prof = Professor { name: &quot;Dr. Smith&quot;.into() };
+
+    {
+        // 2. Create the Parent (Borrower)
+        let mut uni = University { 
+            name: &quot;MIT&quot;.into(), 
+            staff: vec![&amp;prof] // Borrowing here
+        }; 
+
+        // uni is destroyed here...
+    } 
+
+    // 3. PROOF OF AGGREGATION:
+    // The Professor is still alive!
+    println!(&quot;{} is currently unemployed but alive.&quot;, prof.name);
+}
+
+</code></pre>
+<hr />
+<h2><strong>4. Advanced: Shared Ownership (<code>Rc&lt;T&gt;</code>)</strong></h2>
+<p>Sometimes, you don't know who will die first. Maybe the Professor belongs to 3 Universities at once.<br />
+For this, Rust uses <strong>Reference Counting (<code>Rc</code>)</strong>.</p>
+<ul>
+<li><strong><code>Rc&lt;T&gt;</code></strong>: A smart pointer that keeps track of how many owners exist.</li>
+<li>The object is only deleted when the <strong>count reaches 0</strong>.</li>
+</ul>
+<pre><code class="language-rust">use std::rc::Rc;
+
+struct Company {
+    // Shared Ownership Aggregation
+    employee: Rc&lt;Employee&gt;,
+}
+
+</code></pre>
+<hr />
+<h2><strong>Comparison: Aggregation vs Composition</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Aggregation (Weak)</th>
+<th>Composition (Strong)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Relationship</strong></td>
+<td><strong>"Uses a"</strong> / <strong>"Has access to"</strong></td>
+<td><strong>"Consists of"</strong></td>
+</tr>
+<tr>
+<td><strong>Rust Syntax</strong></td>
+<td><code>&amp;'a T</code> (Reference)</td>
+<td><code>T</code> (Direct Value)</td>
+</tr>
+<tr>
+<td><strong>Ownership</strong></td>
+<td><strong>Borrowed</strong> (Parent does not own)</td>
+<td><strong>Owned</strong> (Parent owns Child)</td>
+</tr>
+<tr>
+<td><strong>Lifecycle</strong></td>
+<td><strong>Independent</strong> (Child survives Parent)</td>
+<td><strong>Dependent</strong> (Child dies with Parent)</td>
+</tr>
+<tr>
+<td><strong>Drop Rule</strong></td>
+<td>Dropping Parent <strong>does nothing</strong> to Child.</td>
+<td>Dropping Parent <strong>drops</strong> Child.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>📚 New Terminology</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Detailed Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lifetime (<code>'a</code>)</strong></td>
+<td>A generic parameter that restricts how long a Reference is valid. It ensures a struct never points to dead memory.</td>
+</tr>
+<tr>
+<td><strong>Borrow Checker</strong></td>
+<td>The part of the Rust compiler that enforces Aggregation rules. It ensures the "Child" lives longer than the "Parent".</td>
+</tr>
+<tr>
+<td><strong>Dangling Pointer</strong></td>
+<td>A pointer that points to invalid memory. Rust's Aggregation rules exist specifically to prevent this.</td>
+</tr>
+<tr>
+<td><strong><code>Vec&lt;&amp;T&gt;</code></strong></td>
+<td>A Vector that stores <em>addresses</em> of objects, not the objects themselves.</td>
+</tr>
+</tbody>
+</table></div><details class="file"><summary>oop/rust/aggregation/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * AGGREGATION IN RUST</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: Demonstrate Independent Lifecycles using References and Lifetimes.</span>
+<span class="cm"> * Scenario: A Library (Container) holds references to Books (Independent Objects).</span>
+<span class="cm"> */</span>
+
+<span class="cp">#[derive(Debug)]</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">title</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="n">author</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="w"> </span><span class="n">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">title</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">author</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">title</span><span class="p">:</span><span class="w"> </span><span class="nc">title</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">author</span><span class="p">:</span><span class="w"> </span><span class="nc">author</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"  Reading '{}' by {}..."</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">author</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// THE CONTAINER (AGGREGATION)</span>
+<span class="c1">// &lt;'a&gt; ensures Library cannot outlive the Books it holds.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Library</span><span class="o">&lt;'</span><span class="na">a</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Aggregation: Library 'has' books, but does not 'own' them.</span>
+<span class="w">    </span><span class="n">collection</span><span class="p">:</span><span class="w"> </span><span class="nb">Vec</span><span class="o">&lt;&amp;'</span><span class="na">a</span><span class="w"> </span><span class="n">Book</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">impl</span><span class="o">&lt;'</span><span class="na">a</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Library</span><span class="o">&lt;'</span><span class="na">a</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Library</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nc">name</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">collection</span><span class="p">:</span><span class="w"> </span><span class="nb">Vec</span><span class="p">::</span><span class="n">new</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// We take a reference with lifetime 'a</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">add_book</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">book</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="o">'</span><span class="na">a</span><span class="w"> </span><span class="nc">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">collection</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">book</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">list_books</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Library '{}' contains:"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">book</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="bp">self</span><span class="p">.</span><span class="n">collection</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">book</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ADVANCED: SHARED AGGREGATION (Rc)</span>
+<span class="k">use</span><span class="w"> </span><span class="n">std</span><span class="p">::</span><span class="n">rc</span><span class="p">::</span><span class="n">Rc</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Reader</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// Multiple readers can hold the SAME book</span>
+<span class="w">    </span><span class="n">favorite_book</span><span class="p">:</span><span class="w"> </span><span class="nc">Rc</span><span class="o">&lt;</span><span class="n">Book</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span>
+<span class="p">}</span>
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 1. Standard Aggregation (References &amp; Lifetimes) ---"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// STEP A: Create the Independent Objects (Books)</span>
+<span class="w">    </span><span class="c1">// These live in the 'main' scope.</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">book1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Book</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"The Rust Book"</span><span class="p">,</span><span class="w"> </span><span class="s">"Steve Klabnik"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">book2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Book</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"Clean Code"</span><span class="p">,</span><span class="w"> </span><span class="s">"Robert C. Martin"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// STEP B: Create the Container (Library) inside a smaller scope</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">my_library</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Library</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"City Central Lib"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// STEP C: Aggregate (Borrow the books)</span>
+<span class="w">        </span><span class="n">my_library</span><span class="p">.</span><span class="n">add_book</span><span class="p">(</span><span class="o">&amp;</span><span class="n">book1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">my_library</span><span class="p">.</span><span class="n">add_book</span><span class="p">(</span><span class="o">&amp;</span><span class="n">book2</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">my_library</span><span class="p">.</span><span class="n">list_books</span><span class="p">();</span>
+
+<span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- Library is closing (Variable 'my_library' dropped) ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="c1">// 'my_library' dies here.</span>
+
+<span class="w">    </span><span class="c1">// STEP D: Verify Independence</span>
+<span class="w">    </span><span class="c1">// The library is gone, but the books are still here!</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Verification: '{}' is still on my shelf at home."</span><span class="p">,</span><span class="w"> </span><span class="n">book1</span><span class="p">.</span><span class="n">title</span><span class="p">);</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 2. Shared Aggregation (Rc Smart Pointer) ---"</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// We wrap a book in Rc (Reference Counted)</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="n">Book</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"Design Patterns"</span><span class="p">,</span><span class="w"> </span><span class="s">"Gang of Four"</span><span class="p">));</span>
+
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">reader1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Reader</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Alice"</span><span class="p">.</span><span class="n">into</span><span class="p">(),</span><span class="w"> </span><span class="n">favorite_book</span><span class="p">:</span><span class="w"> </span><span class="nc">Rc</span><span class="p">::</span><span class="n">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_book</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">reader2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Reader</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Bob"</span><span class="p">.</span><span class="n">into</span><span class="p">(),</span><span class="w"> </span><span class="n">favorite_book</span><span class="p">:</span><span class="w"> </span><span class="nc">Rc</span><span class="p">::</span><span class="n">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_book</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"{} loves {}."</span><span class="p">,</span><span class="w"> </span><span class="n">reader1</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">reader1</span><span class="p">.</span><span class="n">favorite_book</span><span class="p">.</span><span class="n">title</span><span class="p">);</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"{} also loves {}."</span><span class="p">,</span><span class="w"> </span><span class="n">reader2</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">reader2</span><span class="p">.</span><span class="n">favorite_book</span><span class="p">.</span><span class="n">title</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// The book stays alive as long as EITHER Alice OR Bob (or the original var) holds it.</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

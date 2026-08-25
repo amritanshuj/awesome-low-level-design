@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Encapsulation · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#oop">OOP</a> / Encapsulation</p>
+    
+    <span class="badge">OOP</span>
+    <h1>Encapsulation</h1>
+    <p class="lede">Explanations and language samples from the repository <code>oop/</code> folder.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="rust">Rust</button></div><section class="panel" id="java" data-panel="java"><div class="prose"><h1>Encapsulation in Java</h1>
+<h2>Introduction</h2>
+<p><strong>Encapsulation</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It is the practice of <strong>bundling data (variables) and methods</strong> that operate on that data into a single unit (class) while restricting direct access to the internal details.</p>
+<p>Encapsulation in Java is achieved using:<br />
+1. <strong>Access Modifiers</strong> (<code>private</code>, <code>protected</code>, <code>public</code>)<br />
+2. <strong>Getters and Setters</strong><br />
+3. <strong>Data Hiding</strong></p>
+<p>Encapsulation helps in <strong>data protection, modularity, and maintainability</strong> of the code.</p>
+<hr />
+<h2><strong>What is Encapsulation?</strong></h2>
+<p>Encapsulation means <strong>wrapping</strong> the data (variables) and code (methods) together into a single unit (class). It restricts direct access to some of an object's components, which helps protect data integrity and prevents unintended modifications.</p>
+<h3><strong>Key Benefits of Encapsulation</strong></h3>
+<ul>
+<li><strong>Data Hiding</strong>: Prevents direct access to sensitive data.</li>
+<li><strong>Increased Security</strong>: Controls how data is accessed and modified.</li>
+<li><strong>Improved Code Maintainability</strong>: Allows changes without affecting other parts of the code.</li>
+<li><strong>Better Modularity</strong>: Organizes the code into logical components.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Access Modifiers</strong></h2>
+<p>Java provides <strong>access modifiers</strong> to enforce encapsulation:<br />
+- <strong><code>private</code></strong>: Accessible only within the same class.<br />
+- <strong><code>protected</code></strong>: Accessible within the same package and subclasses.<br />
+- <strong><code>public</code></strong>: Accessible from anywhere.</p>
+<h3><strong>Example: Encapsulation with Private Variables</strong></h3>
+<pre><code class="language-java">// Class with encapsulated data
+class BankAccount {
+    private String accountHolder;
+    private double balance;
+
+    // Constructor
+    public BankAccount(String accountHolder, double balance) {
+        this.accountHolder = accountHolder;
+        this.balance = balance;
+    }
+
+    // Getter method to access balance
+    public double getBalance() {
+        return balance;
+    }
+
+    // Setter method to modify balance
+    public void deposit(double amount) {
+        if (amount &gt; 0) {
+            balance += amount;
+            System.out.println(&quot;Deposited: &quot; + amount);
+        } else {
+            System.out.println(&quot;Invalid deposit amount&quot;);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount(&quot;Alice&quot;, 1000);
+        System.out.println(&quot;Current Balance: &quot; + account.getBalance());
+        account.deposit(500);
+        System.out.println(&quot;Updated Balance: &quot; + account.getBalance());
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Current Balance: 1000.0
+Deposited: 500.0
+Updated Balance: 1500.0
+</code></pre>
+<p><strong>Why Use Encapsulation?</strong><br />
+- Prevents unauthorized access to the data.<br />
+- Allows controlled modifications through methods.</p>
+<hr />
+<h2><strong>Encapsulation Using Getters and Setters</strong></h2>
+<p>Encapsulation ensures that <strong>data cannot be directly accessed</strong> but must be retrieved or modified through methods.</p>
+<h3><strong>Example: Getters and Setters in Java</strong></h3>
+<pre><code class="language-java">class Employee {
+    private String name;
+    private int age;
+
+    // Getter method
+    public String getName() {
+        return name;
+    }
+
+    // Setter method
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        if (age &gt; 18) {
+            this.age = age;
+        } else {
+            System.out.println(&quot;Age must be greater than 18&quot;);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Employee emp = new Employee();
+        emp.setName(&quot;John Doe&quot;);
+        emp.setAge(25);
+        System.out.println(&quot;Employee Name: &quot; + emp.getName());
+        System.out.println(&quot;Employee Age: &quot; + emp.getAge());
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Employee Name: John Doe
+Employee Age: 25
+</code></pre>
+<hr />
+<h2><strong>Encapsulation and Data Hiding</strong></h2>
+<p>Encapsulation helps <strong>hide implementation details</strong> while exposing only necessary methods.</p>
+<h3><strong>Example: Hiding Implementation Details</strong></h3>
+<pre><code class="language-java">class Account {
+    private double balance;
+
+    public Account(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    private boolean validateWithdrawal(double amount) {
+        return amount &gt; 0 &amp;&amp; amount &lt;= balance;
+    }
+
+    public void withdraw(double amount) {
+        if (validateWithdrawal(amount)) {
+            balance -= amount;
+            System.out.println(&quot;Withdrawal Successful: &quot; + amount);
+        } else {
+            System.out.println(&quot;Insufficient balance or invalid amount&quot;);
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Account myAccount = new Account(1000);
+        myAccount.withdraw(300);
+        System.out.println(&quot;Remaining Balance: &quot; + myAccount.getBalance());
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Withdrawal Successful: 300.0
+Remaining Balance: 700.0
+</code></pre>
+<p><strong>Why Hide Data?</strong><br />
+- Prevents direct modification of important fields.<br />
+- Ensures data integrity by validating inputs.</p>
+<hr />
+<h2><strong>Encapsulation in Real-World Applications</strong></h2>
+<p>Encapsulation is used in many real-world applications such as:<br />
+1. <strong>Banking Systems</strong> - Ensuring account details are private.<br />
+2. <strong>Healthcare Applications</strong> - Protecting patient records.<br />
+3. <strong>E-Commerce Platforms</strong> - Hiding payment processing details.</p>
+<h3><strong>Example: Encapsulation in Payment Processing</strong></h3>
+<pre><code class="language-java">class PaymentProcessor {
+    private String cardNumber;
+    private double amount;
+
+    public PaymentProcessor(String cardNumber, double amount) {
+        this.cardNumber = maskCardNumber(cardNumber);
+        this.amount = amount;
+    }
+
+    private String maskCardNumber(String cardNumber) {
+        return &quot;****-****-****-&quot; + cardNumber.substring(cardNumber.length() - 4);
+    }
+
+    public void processPayment() {
+        System.out.println(&quot;Processing payment of &quot; + amount + &quot; for card &quot; + cardNumber);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        PaymentProcessor payment = new PaymentProcessor(&quot;1234567812345678&quot;, 250.00);
+        payment.processPayment();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Processing payment of 250.0 for card ****-****-****-5678
+</code></pre>
+<p><strong>Why Use Encapsulation in Payment Processing?</strong><br />
+- Protects sensitive data (e.g., credit card numbers).<br />
+- Hides unnecessary details from users.<br />
+- Ensures secure transactions.</p></div></section><section class="panel" id="cpp" data-panel="cpp"><div class="prose"><h1>Encapsulation in C++</h1>
+<h2>Introduction</h2>
+<p><strong>Encapsulation</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It is the practice of <strong>bundling data (variables) and methods</strong> that operate on that data into a single unit (class) while restricting direct access to the internal details.</p>
+<p>Encapsulation in C++ is achieved using:<br />
+1. <strong>Access Specifiers</strong> (<code>private</code>, <code>protected</code>, <code>public</code>)<br />
+2. <strong>Getters and Setters</strong><br />
+3. <strong>Data Hiding</strong></p>
+<p>Encapsulation helps in <strong>data protection, modularity, and maintainability</strong> of the code.</p>
+<h2><strong>What is Encapsulation?</strong></h2>
+<p>Encapsulation means <strong>wrapping</strong> the data (variables) and code (methods) together into a single unit (class). It restricts direct access to some of an object's components, which helps protect data integrity and prevents unintended modifications.</p>
+<h3><strong>Key Benefits of Encapsulation</strong></h3>
+<ul>
+<li><strong>Data Hiding</strong>: Prevents direct access to sensitive data.</li>
+<li><strong>Increased Security</strong>: Controls how data is accessed and modified.</li>
+<li><strong>Improved Code Maintainability</strong>: Allows changes without affecting other parts of the code.</li>
+<li><strong>Better Modularity</strong>: Organizes the code into logical components.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Access Specifiers</strong></h2>
+<p>C++ provides <strong>access specifiers</strong> to enforce encapsulation:<br />
+- <strong><code>private</code></strong>: Accessible only within the same class.<br />
+- <strong><code>protected</code></strong>: Accessible within the same class and derived classes.<br />
+- <strong><code>public</code></strong>: Accessible from anywhere.</p>
+<h3><strong>Example: Encapsulation with Private Variables</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// Class with encapsulated data
+class BankAccount {
+private:
+    string accountHolder;
+    double balance;
+
+public:
+    // Constructor
+    BankAccount(string name, double bal) {
+        accountHolder = name;
+        balance = bal;
+    }
+
+    // Getter method to access balance
+    double getBalance() {
+        return balance;
+    }
+
+    // Setter method to modify balance
+    void deposit(double amount) {
+        if (amount &gt; 0) {
+            balance += amount;
+            cout &lt;&lt; &quot;Deposited: &quot; &lt;&lt; amount &lt;&lt; endl;
+        } else {
+            cout &lt;&lt; &quot;Invalid deposit amount&quot; &lt;&lt; endl;
+        }
+    }
+};
+
+int main() {
+    BankAccount account(&quot;Alice&quot;, 1000);
+    cout &lt;&lt; &quot;Current Balance: &quot; &lt;&lt; account.getBalance() &lt;&lt; endl;
+    account.deposit(500);
+    cout &lt;&lt; &quot;Updated Balance: &quot; &lt;&lt; account.getBalance() &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Current Balance: 1000
+Deposited: 500
+Updated Balance: 1500
+</code></pre>
+<p><strong>Why Use Encapsulation?</strong><br />
+- Prevents unauthorized access to the data.<br />
+- Allows controlled modifications through methods.</p>
+<hr />
+<h2><strong>Encapsulation Using Getters and Setters</strong></h2>
+<p>Encapsulation ensures that <strong>data cannot be directly accessed</strong> but must be retrieved or modified through methods.</p>
+<h3><strong>Example: Getters and Setters in C++</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Employee {
+private:
+    string name;
+    int age;
+
+public:
+    // Getter method
+    string getName() {
+        return name;
+    }
+
+    // Setter method
+    void setName(string newName) {
+        name = newName;
+    }
+
+    int getAge() {
+        return age;
+    }
+
+    void setAge(int newAge) {
+        if (newAge &gt; 18) {
+            age = newAge;
+        } else {
+            cout &lt;&lt; &quot;Age must be greater than 18&quot; &lt;&lt; endl;
+        }
+    }
+};
+
+int main() {
+    Employee emp;
+    emp.setName(&quot;John Doe&quot;);
+    emp.setAge(25);
+    cout &lt;&lt; &quot;Employee Name: &quot; &lt;&lt; emp.getName() &lt;&lt; endl;
+    cout &lt;&lt; &quot;Employee Age: &quot; &lt;&lt; emp.getAge() &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Employee Name: John Doe
+Employee Age: 25
+</code></pre>
+<hr />
+<h2><strong>Encapsulation and Data Hiding</strong></h2>
+<p>Encapsulation helps <strong>hide implementation details</strong> while exposing only necessary methods.</p>
+<h3><strong>Example: Hiding Implementation Details</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class Account {
+private:
+    double balance;
+
+    bool validateWithdrawal(double amount) {
+        return amount &gt; 0 &amp;&amp; amount &lt;= balance;
+    }
+
+public:
+    Account(double initialBalance) {
+        balance = initialBalance;
+    }
+
+    void withdraw(double amount) {
+        if (validateWithdrawal(amount)) {
+            balance -= amount;
+            cout &lt;&lt; &quot;Withdrawal Successful: &quot; &lt;&lt; amount &lt;&lt; endl;
+        } else {
+            cout &lt;&lt; &quot;Insufficient balance or invalid amount&quot; &lt;&lt; endl;
+        }
+    }
+
+    double getBalance() {
+        return balance;
+    }
+};
+
+int main() {
+    Account myAccount(1000);
+    myAccount.withdraw(300);
+    cout &lt;&lt; &quot;Remaining Balance: &quot; &lt;&lt; myAccount.getBalance() &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Withdrawal Successful: 300
+Remaining Balance: 700
+</code></pre>
+<p><strong>Why Hide Data?</strong><br />
+- Prevents direct modification of important fields.<br />
+- Ensures data integrity by validating inputs.</p>
+<hr />
+<h2><strong>Encapsulation in Real-World Applications</strong></h2>
+<p>Encapsulation is used in many real-world applications such as:<br />
+1. <strong>Banking Systems</strong> - Ensuring account details are private.<br />
+2. <strong>Healthcare Applications</strong> - Protecting patient records.<br />
+3. <strong>E-Commerce Platforms</strong> - Hiding payment processing details.</p>
+<h3><strong>Example: Encapsulation in Payment Processing</strong></h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+class PaymentProcessor {
+private:
+    string cardNumber;
+    double amount;
+
+    string maskCardNumber(string cardNumber) {
+        return &quot;****-****-****-&quot; + cardNumber.substr(cardNumber.length() - 4);
+    }
+
+public:
+    PaymentProcessor(string card, double amt) : cardNumber(card), amount(amt) {}
+
+    void processPayment() {
+        cout &lt;&lt; &quot;Processing payment of &quot; &lt;&lt; amount &lt;&lt; &quot; for card &quot; &lt;&lt; maskCardNumber(cardNumber) &lt;&lt; endl;
+    }
+};
+
+int main() {
+    PaymentProcessor payment(&quot;1234567812345678&quot;, 250.00);
+    payment.processPayment();
+    return 0;
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Processing payment of 250 for card ****-****-****-5678
+</code></pre>
+<p><strong>Why Use Encapsulation in Payment Processing?</strong><br />
+- Protects sensitive data (e.g., credit card numbers).<br />
+- Hides unnecessary details from users.<br />
+- Ensures secure transactions.</p></div></section><section class="panel" id="python" data-panel="python"><div class="prose"><h1>Encapsulation in Python</h1>
+<h2>Introduction</h2>
+<p><strong>Encapsulation</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It is the practice of <strong>bundling data (variables) and methods</strong> that operate on that data into a single unit (class) while restricting direct access to the internal details.</p>
+<p>Encapsulation in Python is achieved using:<br />
+1. <strong>Access Modifiers</strong> (<code>public</code>, <code>_protected</code>, <code>__private</code>)<br />
+2. <strong>Getters and Setters</strong><br />
+3. <strong>Data Hiding</strong></p>
+<p>Encapsulation helps in <strong>data protection, modularity, and maintainability</strong> of the code.</p>
+<h2><strong>What is Encapsulation?</strong></h2>
+<p>Encapsulation means <strong>wrapping</strong> the data (variables) and code (methods) together into a single unit (class). It restricts direct access to some of an object's components, which helps protect data integrity and prevents unintended modifications.</p>
+<h3><strong>Key Benefits of Encapsulation</strong></h3>
+<ul>
+<li><strong>Data Hiding</strong>: Prevents direct access to sensitive data.</li>
+<li><strong>Increased Security</strong>: Controls how data is accessed and modified.</li>
+<li><strong>Improved Code Maintainability</strong>: Allows changes without affecting other parts of the code.</li>
+<li><strong>Better Modularity</strong>: Organizes the code into logical components.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Access Modifiers</strong></h2>
+<p>Python provides <strong>access modifiers</strong> to enforce encapsulation:<br />
+- <strong><code>public</code></strong>: Accessible from anywhere.<br />
+- <strong><code>_protected</code></strong>: Accessible within the class and subclasses.<br />
+- <strong><code>__private</code></strong>: Accessible only within the class.</p>
+<h3><strong>Example: Encapsulation with Private Variables</strong></h3>
+<pre><code class="language-python">class BankAccount:
+    def __init__(self, account_holder, balance):
+        self.__account_holder = account_holder  # Private attribute
+        self.__balance = balance  # Private attribute
+
+    # Getter method to access balance
+    def get_balance(self):
+        return self.__balance
+
+    # Setter method to modify balance
+    def deposit(self, amount):
+        if amount &gt; 0:
+            self.__balance += amount
+            print(f&quot;Deposited: {amount}&quot;)
+        else:
+            print(&quot;Invalid deposit amount&quot;)
+
+# Usage
+account = BankAccount(&quot;Alice&quot;, 1000)
+print(&quot;Current Balance:&quot;, account.get_balance())
+account.deposit(500)
+print(&quot;Updated Balance:&quot;, account.get_balance())
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Current Balance: 1000
+Deposited: 500
+Updated Balance: 1500
+</code></pre>
+<p><strong>Why Use Encapsulation?</strong><br />
+- Prevents unauthorized access to the data.<br />
+- Allows controlled modifications through methods.</p>
+<hr />
+<h2><strong>Encapsulation Using Getters and Setters</strong></h2>
+<p>Encapsulation ensures that <strong>data cannot be directly accessed</strong> but must be retrieved or modified through methods.</p>
+<h3><strong>Example: Getters and Setters in Python</strong></h3>
+<pre><code class="language-python">class Employee:
+    def __init__(self):
+        self.__name = &quot;&quot;
+        self.__age = 0
+
+    # Getter method
+    def get_name(self):
+        return self.__name
+
+    # Setter method
+    def set_name(self, name):
+        self.__name = name
+
+    def get_age(self):
+        return self.__age
+
+    def set_age(self, age):
+        if age &gt; 18:
+            self.__age = age
+        else:
+            print(&quot;Age must be greater than 18&quot;)
+
+# Usage
+emp = Employee()
+emp.set_name(&quot;John Doe&quot;)
+emp.set_age(25)
+print(&quot;Employee Name:&quot;, emp.get_name())
+print(&quot;Employee Age:&quot;, emp.get_age())
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Employee Name: John Doe
+Employee Age: 25
+</code></pre>
+<hr />
+<h2><strong>Encapsulation and Data Hiding</strong></h2>
+<p>Encapsulation helps <strong>hide implementation details</strong> while exposing only necessary methods.</p>
+<h3><strong>Example: Hiding Implementation Details</strong></h3>
+<pre><code class="language-python">class Account:
+    def __init__(self, initial_balance):
+        self.__balance = initial_balance
+
+    def __validate_withdrawal(self, amount):
+        return amount &gt; 0 and amount &lt;= self.__balance
+
+    def withdraw(self, amount):
+        if self.__validate_withdrawal(amount):
+            self.__balance -= amount
+            print(f&quot;Withdrawal Successful: {amount}&quot;)
+        else:
+            print(&quot;Insufficient balance or invalid amount&quot;)
+
+    def get_balance(self):
+        return self.__balance
+
+# Usage
+my_account = Account(1000)
+my_account.withdraw(300)
+print(&quot;Remaining Balance:&quot;, my_account.get_balance())
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Withdrawal Successful: 300
+Remaining Balance: 700
+</code></pre>
+<p><strong>Why Hide Data?</strong><br />
+- Prevents direct modification of important fields.<br />
+- Ensures data integrity by validating inputs.</p>
+<hr />
+<h2><strong>Encapsulation in Real-World Applications</strong></h2>
+<p>Encapsulation is used in many real-world applications such as:<br />
+1. <strong>Banking Systems</strong> - Ensuring account details are private.<br />
+2. <strong>Healthcare Applications</strong> - Protecting patient records.<br />
+3. <strong>E-Commerce Platforms</strong> - Hiding payment processing details.</p>
+<h3><strong>Example: Encapsulation in Payment Processing</strong></h3>
+<pre><code class="language-python">class PaymentProcessor:
+    def __init__(self, card_number, amount):
+        self.__card_number = self.__mask_card_number(card_number)
+        self.__amount = amount
+
+    def __mask_card_number(self, card_number):
+        return &quot;****-****-****-&quot; + card_number[-4:]
+
+    def process_payment(self):
+        print(f&quot;Processing payment of {self.__amount} for card {self.__card_number}&quot;)
+
+# Usage
+payment = PaymentProcessor(&quot;1234567812345678&quot;, 250.00)
+payment.process_payment()
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Processing payment of 250.0 for card ****-****-****-5678
+</code></pre>
+<p><strong>Why Use Encapsulation in Payment Processing?</strong><br />
+- Protects sensitive data (e.g., credit card numbers).<br />
+- Hides unnecessary details from users.<br />
+- Ensures secure transactions.</p></div></section><section class="panel" id="csharp" data-panel="csharp"><div class="prose"><h1>Encapsulation in C</h1>
+<h2>Introduction</h2>
+<p><strong>Encapsulation</strong> is one of the four fundamental principles of <strong>Object-Oriented Programming (OOP)</strong>. It is the practice of <strong>bundling data (fields) and methods</strong> that operate on that data into a single unit (<strong>class</strong>) while <strong>restricting direct access</strong> to the internal details.</p>
+<p>Encapsulation in C# is achieved using:<br />
+1. <strong>Access Modifiers</strong> (<code>private</code>, <code>protected</code>, <code>public</code>)<br />
+2. <strong>Properties (Getters and Setters)</strong><br />
+3. <strong>Data Hiding</strong></p>
+<p>Encapsulation helps in <strong>data protection, modularity, and maintainability</strong> of the code.</p>
+<h2><strong>What is Encapsulation?</strong></h2>
+<p>Encapsulation means <strong>wrapping</strong> the data (fields) and code (methods) together into a single unit (class). It restricts direct access to some of an object's components, ensuring <strong>data integrity and security</strong>.</p>
+<h3><strong>Key Benefits of Encapsulation</strong></h3>
+<ul>
+<li><strong>Data Hiding</strong>: Prevents direct access to sensitive data.</li>
+<li><strong>Increased Security</strong>: Controls how data is accessed and modified.</li>
+<li><strong>Improved Code Maintainability</strong>: Allows changes without affecting other parts of the code.</li>
+<li><strong>Better Modularity</strong>: Organizes the code into logical components.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Access Modifiers in C#</strong></h2>
+<p>C# provides <strong>access modifiers</strong> to enforce encapsulation:<br />
+- <strong><code>private</code></strong>: Accessible only within the same class.<br />
+- <strong><code>protected</code></strong>: Accessible within the same class and derived (child) classes.<br />
+- <strong><code>public</code></strong>: Accessible from anywhere.<br />
+- <strong><code>internal</code></strong>: Accessible only within the same assembly.</p>
+<h3><strong>Example: Encapsulation with Private Fields</strong></h3>
+<pre><code class="language-csharp">using System;
+
+class BankAccount
+{
+    private string accountHolder;
+    private double balance;
+
+    // Constructor
+    public BankAccount(string accountHolder, double balance)
+    {
+        this.accountHolder = accountHolder;
+        this.balance = balance;
+    }
+
+    // Getter method to access balance
+    public double GetBalance()
+    {
+        return balance;
+    }
+
+    // Setter method to modify balance
+    public void Deposit(double amount)
+    {
+        if (amount &gt; 0)
+        {
+            balance += amount;
+            Console.WriteLine($&quot;Deposited: {amount}&quot;);
+        }
+        else
+        {
+            Console.WriteLine(&quot;Invalid deposit amount&quot;);
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        BankAccount account = new BankAccount(&quot;Alice&quot;, 1000);
+        Console.WriteLine($&quot;Current Balance: {account.GetBalance()}&quot;);
+        account.Deposit(500);
+        Console.WriteLine($&quot;Updated Balance: {account.GetBalance()}&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Current Balance: 1000
+Deposited: 500
+Updated Balance: 1500
+</code></pre>
+<hr />
+<h2><strong>Encapsulation Using Properties (Getters and Setters)</strong></h2>
+<p>Encapsulation ensures that <strong>data cannot be directly accessed</strong> but must be retrieved or modified through <strong>properties</strong>.</p>
+<h3><strong>Example: Properties in C#</strong></h3>
+<pre><code class="language-csharp">using System;
+
+class Employee
+{
+    private string name;
+    private int age;
+
+    // Property for Name
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+
+    // Property for Age with validation
+    public int Age
+    {
+        get { return age; }
+        set
+        {
+            if (value &gt; 18)
+                age = value;
+            else
+                Console.WriteLine(&quot;Age must be greater than 18&quot;);
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Employee emp = new Employee();
+        emp.Name = &quot;John Doe&quot;;
+        emp.Age = 25;
+        Console.WriteLine($&quot;Employee Name: {emp.Name}&quot;);
+        Console.WriteLine($&quot;Employee Age: {emp.Age}&quot;);
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Employee Name: John Doe
+Employee Age: 25
+</code></pre>
+<hr />
+<h2><strong>Encapsulation in Real-World Applications</strong></h2>
+<p>Encapsulation is used in many real-world applications such as:<br />
+1. <strong>Banking Systems</strong> - Ensuring account details are private.<br />
+2. <strong>Healthcare Applications</strong> - Protecting patient records.<br />
+3. <strong>E-Commerce Platforms</strong> - Hiding payment processing details.</p>
+<h3><strong>Example: Encapsulation in Payment Processing</strong></h3>
+<pre><code class="language-csharp">using System;
+
+class PaymentProcessor
+{
+    private string cardNumber;
+    private double amount;
+
+    public PaymentProcessor(string cardNumber, double amount)
+    {
+        this.cardNumber = MaskCardNumber(cardNumber);
+        this.amount = amount;
+    }
+
+    private string MaskCardNumber(string cardNumber)
+    {
+        return &quot;****-****-****-&quot; + cardNumber.Substring(cardNumber.Length - 4);
+    }
+
+    public void ProcessPayment()
+    {
+        Console.WriteLine($&quot;Processing payment of {amount} for card {cardNumber}&quot;);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        PaymentProcessor payment = new PaymentProcessor(&quot;1234567812345678&quot;, 250.00);
+        payment.ProcessPayment();
+    }
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Processing payment of 250 for card ****-****-****-5678
+</code></pre></div></section><section class="panel" id="go" data-panel="go"><div class="prose"><h1>Encapsulation in Golang</h1>
+<h2>Introduction</h2>
+<p><strong>Encapsulation</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It is the practice of <strong>bundling data (variables) and methods</strong> that operate on that data into a single unit (struct) while restricting direct access to the internal details.</p>
+<p>Encapsulation in Golang is achieved using:<br />
+1. <strong>Exported and Unexported Fields (Visibility Control)</strong><br />
+2. <strong>Getters and Setters (Methods for Data Access)</strong><br />
+3. <strong>Data Hiding</strong></p>
+<p>Encapsulation helps in <strong>data protection, modularity, and maintainability</strong> of the code.</p>
+<h2><strong>What is Encapsulation?</strong></h2>
+<p>Encapsulation means <strong>wrapping</strong> the data (fields) and code (methods) together into a single unit (struct). It restricts direct access to some of an object's components, which helps protect data integrity and prevents unintended modifications.</p>
+<h3><strong>Key Benefits of Encapsulation</strong></h3>
+<ul>
+<li><strong>Data Hiding</strong>: Prevents direct access to sensitive data.</li>
+<li><strong>Increased Security</strong>: Controls how data is accessed and modified.</li>
+<li><strong>Improved Code Maintainability</strong>: Allows changes without affecting other parts of the code.</li>
+<li><strong>Better Modularity</strong>: Organizes the code into logical components.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Exported and Unexported Fields</strong></h2>
+<p>Golang does not have traditional access modifiers like <code>private</code>, <code>protected</code>, or <code>public</code>. Instead, it uses <strong>capitalization</strong> to determine visibility:<br />
+- <strong>Exported fields (Public)</strong>: Fields that start with an <strong>uppercase letter</strong> can be accessed outside the package.<br />
+- <strong>Unexported fields (Private)</strong>: Fields that start with a <strong>lowercase letter</strong> are only accessible within the same package.</p>
+<h3><strong>Example: Encapsulation with Unexported Fields</strong></h3>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+)
+
+// BankAccount struct with encapsulated data
+type BankAccount struct {
+    accountHolder string  // Unexported field (private)
+    balance       float64 // Unexported field (private)
+}
+
+// Constructor function to initialize BankAccount
+func NewBankAccount(holder string, balance float64) *BankAccount {
+    return &amp;BankAccount{accountHolder: holder, balance: balance}
+}
+
+// Getter method to access balance
+func (b *BankAccount) GetBalance() float64 {
+    return b.balance
+}
+
+// Setter method to modify balance
+func (b *BankAccount) Deposit(amount float64) {
+    if amount &gt; 0 {
+        b.balance += amount
+        fmt.Println(&quot;Deposited:&quot;, amount)
+    } else {
+        fmt.Println(&quot;Invalid deposit amount&quot;)
+    }
+}
+
+func main() {
+    account := NewBankAccount(&quot;Alice&quot;, 1000)
+    fmt.Println(&quot;Current Balance:&quot;, account.GetBalance())
+    account.Deposit(500)
+    fmt.Println(&quot;Updated Balance:&quot;, account.GetBalance())
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Current Balance: 1000
+Deposited: 500
+Updated Balance: 1500
+</code></pre>
+<p><strong>Why Use Encapsulation?</strong><br />
+- Prevents unauthorized access to the data.<br />
+- Allows controlled modifications through methods.</p>
+<hr />
+<h2><strong>Encapsulation Using Getters and Setters</strong></h2>
+<p>Encapsulation ensures that <strong>data cannot be directly accessed</strong> but must be retrieved or modified through methods.</p>
+<h3><strong>Example: Getters and Setters in Golang</strong></h3>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+)
+
+// Employee struct with private fields
+type Employee struct {
+    name string
+    age  int
+}
+
+// Getter for name
+func (e *Employee) GetName() string {
+    return e.name
+}
+
+// Setter for name
+func (e *Employee) SetName(name string) {
+    e.name = name
+}
+
+// Getter for age
+func (e *Employee) GetAge() int {
+    return e.age
+}
+
+// Setter for age with validation
+func (e *Employee) SetAge(age int) {
+    if age &gt; 18 {
+        e.age = age
+    } else {
+        fmt.Println(&quot;Age must be greater than 18&quot;)
+    }
+}
+
+func main() {
+    emp := Employee{}
+    emp.SetName(&quot;John Doe&quot;)
+    emp.SetAge(25)
+    fmt.Println(&quot;Employee Name:&quot;, emp.GetName())
+    fmt.Println(&quot;Employee Age:&quot;, emp.GetAge())
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Employee Name: John Doe
+Employee Age: 25
+</code></pre>
+<hr />
+<h2><strong>Encapsulation and Data Hiding</strong></h2>
+<p>Encapsulation helps <strong>hide implementation details</strong> while exposing only necessary methods.</p>
+<h3><strong>Example: Hiding Implementation Details</strong></h3>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+)
+
+// Account struct with private balance
+type Account struct {
+    balance float64
+}
+
+// Constructor function
+func NewAccount(initialBalance float64) *Account {
+    return &amp;Account{balance: initialBalance}
+}
+
+// Private method for withdrawal validation
+func (a *Account) validateWithdrawal(amount float64) bool {
+    return amount &gt; 0 &amp;&amp; amount &lt;= a.balance
+}
+
+// Public method to withdraw
+func (a *Account) Withdraw(amount float64) {
+    if a.validateWithdrawal(amount) {
+        a.balance -= amount
+        fmt.Println(&quot;Withdrawal Successful:&quot;, amount)
+    } else {
+        fmt.Println(&quot;Insufficient balance or invalid amount&quot;)
+    }
+}
+
+// Getter for balance
+func (a *Account) GetBalance() float64 {
+    return a.balance
+}
+
+func main() {
+    myAccount := NewAccount(1000)
+    myAccount.Withdraw(300)
+    fmt.Println(&quot;Remaining Balance:&quot;, myAccount.GetBalance())
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Withdrawal Successful: 300
+Remaining Balance: 700
+</code></pre>
+<p><strong>Why Hide Data?</strong><br />
+- Prevents direct modification of important fields.<br />
+- Ensures data integrity by validating inputs.</p>
+<hr />
+<h2><strong>Encapsulation in Real-World Applications</strong></h2>
+<p>Encapsulation is used in many real-world applications such as:<br />
+1. <strong>Banking Systems</strong> - Ensuring account details are private.<br />
+2. <strong>Healthcare Applications</strong> - Protecting patient records.<br />
+3. <strong>E-Commerce Platforms</strong> - Hiding payment processing details.</p>
+<h3><strong>Example: Encapsulation in Payment Processing</strong></h3>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    &quot;strings&quot;
+)
+
+// PaymentProcessor struct
+type PaymentProcessor struct {
+    cardNumber string
+    amount     float64
+}
+
+// Constructor function
+func NewPaymentProcessor(cardNumber string, amount float64) *PaymentProcessor {
+    return &amp;PaymentProcessor{cardNumber: maskCardNumber(cardNumber), amount: amount}
+}
+
+// Private function to mask card number
+func maskCardNumber(cardNumber string) string {
+    return &quot;****-****-****-&quot; + cardNumber[len(cardNumber)-4:]
+}
+
+// Public method to process payment
+func (p *PaymentProcessor) ProcessPayment() {
+    fmt.Println(&quot;Processing payment of&quot;, p.amount, &quot;for card&quot;, p.cardNumber)
+}
+
+func main() {
+    payment := NewPaymentProcessor(&quot;1234567812345678&quot;, 250.00)
+    payment.ProcessPayment()
+}
+</code></pre>
+<h3><strong>Output:</strong></h3>
+<pre><code>Processing payment of 250 for card ****-****-****-5678
+</code></pre>
+<p><strong>Why Use Encapsulation in Payment Processing?</strong><br />
+- Protects sensitive data (e.g., credit card numbers).<br />
+- Hides unnecessary details from users.<br />
+- Ensures secure transactions.</p></div></section><section class="panel" id="rust" data-panel="rust"><div class="prose"><h1>Encapsulation in Rust (Modules &amp; Visibility)</h1>
+<h2>Introduction</h2>
+<p><strong>Encapsulation</strong> is one of the four fundamental principles of Object-Oriented Programming (OOP). It is the practice of <strong>bundling data (variables) and methods</strong> into a single unit while restricting direct access to the internal details.</p>
+<p><strong>Does Rust support Encapsulation?</strong><br />
+Yes, but it works differently than Java.<br />
+1.  <strong>Java:</strong> Uses classes and access modifiers (<code>private</code>, <code>protected</code>, <code>public</code>) to hide data.<br />
+2.  <strong>Rust:</strong> Uses <strong>Modules</strong> (<code>mod</code>) and the <code>pub</code> keyword. Encapsulation boundaries are set at the <em>Module</em> level, not the <em>Struct</em> level.</p>
+<h2><strong>What is Encapsulation?</strong></h2>
+<p>Encapsulation means <strong>wrapping</strong> data and code together and restricting access.</p>
+<h3><strong>Key Benefits of Encapsulation</strong></h3>
+<ul>
+<li><strong>Data Protection</strong>: Prevents external code from corrupting internal state (e.g., negative bank balance).</li>
+<li><strong>Modularity</strong>: Changes to internal logic (like how interest is calculated) don't break the code that uses it.</li>
+<li><strong>Interface Clarity</strong>: Users only interact with <code>pub</code> methods, ignoring the complex details inside.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Visibility Modifiers (<code>pub</code>)</strong></h2>
+<p>In Java, you have <code>private</code>, <code>protected</code>, <code>public</code>, and package-private.<br />
+In Rust, everything is <strong>private by default</strong>.</p>
+<ul>
+<li><strong>Private (Default):</strong> Accessible only within the current module (and its sub-modules).</li>
+<li><strong><code>pub</code>:</strong> Accessible from outside the module.</li>
+<li><strong><code>pub(crate)</code>:</strong> Accessible anywhere inside the same project (crate), but not by external users.</li>
+</ul>
+<h3><strong>Example: Encapsulation with Modules</strong></h3>
+<pre><code class="language-rust">// We define a module to create a privacy boundary
+mod bank {
+    pub struct BankAccount {
+        pub owner: String, // Public: Anyone can read/write
+        balance: f64,      // Private: Only this 'bank' module can see it
+    }
+
+    impl BankAccount {
+        pub fn new(owner: &amp;str, balance: f64) -&gt; Self {
+            BankAccount {
+                owner: owner.to_string(),
+                balance,
+            }
+        }
+
+        pub fn get_balance(&amp;self) -&gt; f64 {
+            self.balance
+        }
+    }
+}
+
+fn main() {
+    let account = bank::BankAccount::new(&quot;Alice&quot;, 1000.0);
+
+    // Allowed: 'owner' is pub
+    println!(&quot;{}&quot;, account.owner);
+
+    // ERROR: 'balance' is private!
+    // println!(&quot;{}&quot;, account.balance); 
+}
+
+</code></pre>
+<p><strong>Why Use Encapsulation?</strong></p>
+<ul>
+<li>It ensures you cannot accidentally set <code>balance = -500.0</code>. You <em>must</em> go through a method that validates the input.</li>
+</ul>
+<hr />
+<h2><strong>Encapsulation Using Getters and Setters</strong></h2>
+<p>Since Rust fields are often private, we access them using methods.</p>
+<p><strong>Rust Idiom:</strong></p>
+<ul>
+<li><strong>Getter:</strong> naming convention is <code>field_name()</code>, not <code>get_field_name()</code>.</li>
+<li><strong>Setter:</strong> naming convention is <code>set_field_name()</code>.</li>
+</ul>
+<h3><strong>Example: Getters and Setters in Rust</strong></h3>
+<pre><code class="language-rust">pub struct Employee {
+    name: String,
+    age: u8,
+}
+
+impl Employee {
+    // Setter
+    pub fn set_age(&amp;mut self, age: u8) {
+        if age &gt; 18 {
+            self.age = age;
+        } else {
+            println!(&quot;Age must be greater than 18&quot;);
+        }
+    }
+
+    // Getter (Note: no 'get_' prefix)
+    pub fn age(&amp;self) -&gt; u8 {
+        self.age
+    }
+}
+
+</code></pre>
+<hr />
+<h2><strong>Encapsulation and Data Hiding</strong></h2>
+<p>We hide implementation details so the user doesn't need to worry about complex validation logic.</p>
+<h3><strong>Example: Hiding Implementation Details</strong></h3>
+<pre><code class="language-rust">mod finance {
+    pub struct Account {
+        balance: f64,
+    }
+
+    impl Account {
+        pub fn new(balance: f64) -&gt; Self {
+            Account { balance }
+        }
+
+        // Private helper method (Not 'pub', so invisible outside)
+        fn validate(&amp;self, amount: f64) -&gt; bool {
+            amount &gt; 0.0 &amp;&amp; amount &lt;= self.balance
+        }
+
+        // Public API
+        pub fn withdraw(&amp;mut self, amount: f64) {
+            if self.validate(amount) {
+                self.balance -= amount;
+                println!(&quot;Withdrawal Successful: {}&quot;, amount);
+            } else {
+                println!(&quot;Invalid transaction&quot;);
+            }
+        }
+    }
+}
+
+</code></pre>
+<p><strong>Why Hide Data?</strong></p>
+<ul>
+<li><strong>Safety:</strong> The <code>validate</code> logic cannot be bypassed by external code.</li>
+<li><strong>Simplicity:</strong> The user just calls <code>withdraw</code>; they don't need to know <em>how</em> validation works.</li>
+</ul>
+<hr />
+<h2><strong>Real-World Example: Payment System</strong></h2>
+<p>A common real-world use case is processing payments where sensitive data (like card numbers) should never be exposed directly.</p>
+<pre><code class="language-rust">mod payment_system {
+    pub struct CreditCard {
+        number: String, // Private!
+        amount: f64,
+    }
+
+    impl CreditCard {
+        pub fn new(number: &amp;str, amount: f64) -&gt; Self {
+            CreditCard {
+                number: CreditCard::mask(number), // Internal logic
+                amount,
+            }
+        }
+
+        // Private utility function
+        fn mask(real_number: &amp;str) -&gt; String {
+            let last_4 = &amp;real_number[real_number.len()-4..];
+            format!(&quot;****-****-****-{}&quot;, last_4)
+        }
+
+        pub fn process(&amp;self) {
+            println!(&quot;Charging {} to card {}&quot;, self.amount, self.number);
+        }
+    }
+}
+
+</code></pre>
+<hr />
+<h2>📚 New Terminology (Java vs. Rust)</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Java Equivalent</th>
+<th>Detailed Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Module (<code>mod</code>)</strong></td>
+<td>Package / Class</td>
+<td>In Rust, the boundary for privacy is the <strong>Module</strong>, not the Class. Private items in a struct are visible to everything in the same <code>mod</code>.</td>
+</tr>
+<tr>
+<td><strong><code>pub</code></strong></td>
+<td><code>public</code></td>
+<td>Makes an item visible to other modules.</td>
+</tr>
+<tr>
+<td><strong>(No modifier)</strong></td>
+<td><code>private</code> / package-private</td>
+<td>By default, everything in Rust is private. It is only visible within the current module and its children.</td>
+</tr>
+<tr>
+<td><strong><code>pub(crate)</code></strong></td>
+<td>N/A</td>
+<td>Visible to the entire project (crate), but hidden from anyone who uses your project as a library.</td>
+</tr>
+<tr>
+<td><strong><code>&amp;mut self</code></strong></td>
+<td><code>this</code> (implicitly mutable)</td>
+<td>In Java, you can always modify <code>this</code>. In Rust, you must explicitly say <code>&amp;mut self</code> if a method changes data (like a Setter).</td>
+</tr>
+<tr>
+<td><strong>Getter convention</strong></td>
+<td><code>getName()</code></td>
+<td>In Rust, we simply use the field name: <code>name()</code>.</td>
+</tr>
+</tbody>
+</table></div><details class="file"><summary>oop/rust/encapsulation/main.rs</summary><div class="highlight"><pre><span></span><span class="cm">/*</span>
+<span class="cm"> * ENCAPSULATION IN RUST</span>
+<span class="cm"> *</span>
+<span class="cm"> * Goal: Demonstrate Access Control, Data Hiding, and Modularity using Modules.</span>
+<span class="cm"> */</span>
+
+<span class="c1">// 1. ENCAPSULATION WITH MODULES (Access Modifiers)</span>
+<span class="c1">// We define a module to simulate a separate file/package</span>
+<span class="k">mod</span><span class="w"> </span><span class="nn">bank</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">BankAccount</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="n">owner</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="c1">// Public: Accessible everywhere</span>
+<span class="w">        </span><span class="n">balance</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">,</span><span class="w">      </span><span class="c1">// Private: Accessible only inside 'mod bank'</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">impl</span><span class="w"> </span><span class="n">BankAccount</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">owner</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">balance</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">BankAccount</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">owner</span><span class="p">:</span><span class="w"> </span><span class="nc">owner</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">balance</span><span class="p">,</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Getter</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">balance</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">f64</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">balance</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Setter (Mutating method)</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">deposit</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="bp">self</span><span class="p">.</span><span class="n">balance</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">amount</span><span class="p">;</span>
+<span class="w">                </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Deposited: {:.2}"</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Invalid deposit amount"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 2. GETTERS AND SETTERS (Idiomatic Rust)</span>
+<span class="k">mod</span><span class="w"> </span><span class="nn">hr</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Employee</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span>
+<span class="w">        </span><span class="n">age</span><span class="p">:</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">impl</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">:</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Employee</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="nc">name</span><span class="p">.</span><span class="n">to_string</span><span class="p">(),</span>
+<span class="w">                </span><span class="n">age</span><span class="p">,</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Getter (Rust style: no 'get_' prefix)</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="o">&amp;</span><span class="bp">self</span><span class="p">.</span><span class="n">name</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Setter</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">set_age</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">:</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">18</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="bp">self</span><span class="p">.</span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">age</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Error: Age must be greater than 18"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">age</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="bp">self</span><span class="p">.</span><span class="n">age</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. REAL WORLD: PAYMENT PROCESSING (Data Hiding)</span>
+<span class="k">mod</span><span class="w"> </span><span class="nn">payment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Processor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">card_number</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="p">,</span><span class="w"> </span><span class="c1">// Private to keep secure</span>
+<span class="w">        </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">impl</span><span class="w"> </span><span class="n">Processor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">card_number</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">:</span><span class="w"> </span><span class="kt">f64</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nc">Self</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Processor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// We mask the data immediately upon creation</span>
+<span class="w">                </span><span class="n">card_number</span><span class="p">:</span><span class="w"> </span><span class="nc">Processor</span><span class="p">::</span><span class="n">mask_card</span><span class="p">(</span><span class="n">card_number</span><span class="p">),</span>
+<span class="w">                </span><span class="n">amount</span><span class="p">,</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Private helper method (Data Hiding)</span>
+<span class="w">        </span><span class="k">fn</span><span class="w"> </span><span class="nf">mask_card</span><span class="p">(</span><span class="n">real_no</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">String</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">real_no</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="n">last_4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">real_no</span><span class="p">[</span><span class="n">real_no</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">4</span><span class="o">..</span><span class="p">];</span>
+<span class="w">                </span><span class="fm">format!</span><span class="p">(</span><span class="s">"****-****-****-{}"</span><span class="p">,</span><span class="w"> </span><span class="n">last_4</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s">"****"</span><span class="p">.</span><span class="n">to_string</span><span class="p">()</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Processing payment of ${:.2} for card {}"</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">card_number</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"--- 1. Access Modifiers ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// We use the full path 'bank::BankAccount'</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bank</span><span class="p">::</span><span class="n">BankAccount</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"Alice"</span><span class="p">,</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Valid: 'owner' is pub</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Account Holder: {}"</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">owner</span><span class="p">);</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Valid: Accessing private data via public method</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Current Balance: {:.2}"</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">balance</span><span class="p">());</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Invalid: Direct access would cause compile error</span>
+<span class="w">    </span><span class="c1">// println!("{}", account.balance); // ERROR: field `balance` is private</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">account</span><span class="p">.</span><span class="n">deposit</span><span class="p">(</span><span class="mf">500.0</span><span class="p">);</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Updated Balance: {:.2}"</span><span class="p">,</span><span class="w"> </span><span class="n">account</span><span class="p">.</span><span class="n">balance</span><span class="p">());</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 2. Getters &amp; Setters ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">emp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hr</span><span class="p">::</span><span class="n">Employee</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"John Doe"</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">);</span>
+<span class="w">    </span><span class="n">emp</span><span class="p">.</span><span class="n">set_age</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// emp.name = "Jane".to_string(); // ERROR: 'name' is private</span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"Employee: {}, Age: {}"</span><span class="p">,</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="n">name</span><span class="p">(),</span><span class="w"> </span><span class="n">emp</span><span class="p">.</span><span class="n">age</span><span class="p">());</span>
+
+
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">--- 3. Real World: Data Hiding ---"</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">payment</span><span class="p">::</span><span class="n">Processor</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="s">"1234567812345678"</span><span class="p">,</span><span class="w"> </span><span class="mf">250.00</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// The internal logic hid the real card number automatically</span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">process</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#oop">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memento · Low Level Design Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/pygments.css" />
+  <script src="../../assets/page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../../index.html"><span aria-hidden="true">💻</span> Low Level Design Guide</a>
+      <nav class="nav-mini">
+        <a href="../../index.html#oop">OOP</a>
+        <a href="../../index.html#patterns">Patterns</a>
+        <a href="../../index.html#problems">Problems</a>
+        <a href="../../index.html#languages">Code</a>
+        <a href="../../pages/interview.html">Interview</a>
+      </nav>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">
+        <span class="icon-moon">☾</span><span class="icon-sun">☀</span>
+      </button>
+    </div>
+  </header>
+  <main class="page"><div class="wrap">
+    <p class="crumbs"><a href="../../index.html">Home</a> / <a href="../../index.html#patterns">Patterns</a> / Memento</p>
+    
+    <span class="badge">Behavioral Pattern</span>
+    <h1>Memento</h1>
+    <p class="lede">Implementations from <code>design-patterns/</code> in this repository.</p>
+    <div class="tabs"><button type="button" data-tab="java">Java</button><button type="button" data-tab="python">Python</button><button type="button" data-tab="cpp">C++</button><button type="button" data-tab="csharp">C#</button><button type="button" data-tab="go">Go</button><button type="button" data-tab="js">JavaScript</button></div><section class="panel" id="java" data-panel="java"><details class="file" open><summary>design-patterns/java/memento/TextEditor.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextEditor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">content</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Typed: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">newText</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getContent</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="w"> </span><span class="nf">save</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Saving state: \""</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"\""</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="n">TextEditorMemento</span><span class="w"> </span><span class="n">memento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memento</span><span class="p">.</span><span class="na">getState</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Restored state to: \""</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"\""</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/memento/TextEditorMemento.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextEditorMemento</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">TextEditorMemento</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/memento/TextEditorNaive.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextEditorNaive</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">content</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">previousContent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">previousContent</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getContent</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w">    </span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/memento/TextEditorUndoManager.java</summary><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Stack</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextEditorUndoManager</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="n">TextEditorMemento</span><span class="o">&gt;</span><span class="w"> </span><span class="n">history</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">TextEditor</span><span class="w"> </span><span class="n">editor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">history</span><span class="p">.</span><span class="na">push</span><span class="p">(</span><span class="n">editor</span><span class="p">.</span><span class="na">save</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="n">TextEditor</span><span class="w"> </span><span class="n">editor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">history</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">editor</span><span class="p">.</span><span class="na">restore</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="na">pop</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Nothing to undo."</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/memento/TextEditorUndoV1.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextEditorUndoV1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">TextEditorNaive</span><span class="w"> </span><span class="n">editor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextEditorNaive</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="na">type</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">snapshot1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="na">getContent</span><span class="p">();</span><span class="w"> </span><span class="c1">// manual snapshot</span>
+
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="na">type</span><span class="p">(</span><span class="s">" World"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">snapshot2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="na">getContent</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Current Content: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="na">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Hello World</span>
+
+<span class="w">        </span><span class="c1">// Undo 1 step</span>
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="na">undo</span><span class="p">(</span><span class="n">snapshot1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"After Undo: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="na">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Hello</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/java/memento/TextEditorUndoV2.java</summary><div class="highlight"><pre><span></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">TextEditorUndoV2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">TextEditor</span><span class="w"> </span><span class="n">editor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextEditor</span><span class="p">();</span>
+<span class="w">        </span><span class="n">TextEditorUndoManager</span><span class="w"> </span><span class="n">undoManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextEditorUndoManager</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="na">type</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">undoManager</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span><span class="w">  </span><span class="c1">// save state: Hello</span>
+
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="na">type</span><span class="p">(</span><span class="s">" World"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">undoManager</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span><span class="w">  </span><span class="c1">// save state: Hello World</span>
+
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="na">type</span><span class="p">(</span><span class="s">"!"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Current Content: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="na">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Hello World!</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Undo 1 ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">undoManager</span><span class="p">.</span><span class="na">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span><span class="w"> </span><span class="c1">// Back to: Hello World</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Undo 2 ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">undoManager</span><span class="p">.</span><span class="na">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span><span class="w"> </span><span class="c1">// Back to: Hello</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"\n--- Undo 3 ---"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">undoManager</span><span class="p">.</span><span class="na">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span><span class="w"> </span><span class="c1">// Nothing left to undo</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="python" data-panel="python"><details class="file" open><summary>design-patterns/python/memento/__init__.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor_memento</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditorMemento</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor_undo_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditorUndoManager</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'TextEditorMemento'</span><span class="p">,</span>
+    <span class="s1">'TextEditor'</span><span class="p">,</span>
+    <span class="s1">'TextEditorUndoManager'</span>
+<span class="p">]</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/memento/text_editor.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor_memento</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditorMemento</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextEditor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">+=</span> <span class="n">new_text</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Typed: </span><span class="si">{</span><span class="n">new_text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextEditorMemento</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Saving state: "</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">TextEditorMemento</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memento</span><span class="p">:</span> <span class="n">TextEditorMemento</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">memento</span><span class="o">.</span><span class="n">state</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Restored state to: "</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/memento/text_editor_memento.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TextEditorMemento</span><span class="p">:</span>
+    <span class="n">state</span><span class="p">:</span> <span class="nb">str</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/memento/text_editor_naive.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditor</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create editor</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">TextEditor</span><span class="p">()</span>
+
+    <span class="c1"># Type some text</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">)</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">" World"</span><span class="p">)</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">"!"</span><span class="p">)</span>
+
+    <span class="c1"># Show content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Content: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># No undo functionality available</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">No undo functionality available in this version"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/memento/text_editor_undo_manager.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor_memento</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditorMemento</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextEditorUndoManager</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TextEditorMemento</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor</span><span class="p">:</span> <span class="n">TextEditor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">editor</span><span class="o">.</span><span class="n">save</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor</span><span class="p">:</span> <span class="n">TextEditor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
+            <span class="n">editor</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Nothing to undo."</span><span class="p">)</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/memento/text_editor_undo_v1.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor_undo_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditorUndoManager</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create editor and undo manager</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">TextEditor</span><span class="p">()</span>
+    <span class="n">undo_manager</span> <span class="o">=</span> <span class="n">TextEditorUndoManager</span><span class="p">()</span>
+
+    <span class="c1"># Type some text</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">" World"</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">"!"</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+    <span class="c1"># Show current content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Current content: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># Undo operations</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Undoing..."</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Content after undo: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Content after second undo: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Content after third undo: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># Try to undo when nothing is left</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+</details><details class="file"><summary>design-patterns/python/memento/text_editor_undo_v2.py</summary><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.text_editor_undo_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextEditorUndoManager</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Create editor and undo manager</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">TextEditor</span><span class="p">()</span>
+    <span class="n">undo_manager</span> <span class="o">=</span> <span class="n">TextEditorUndoManager</span><span class="p">()</span>
+
+    <span class="c1"># Type a sentence</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">"The quick brown fox"</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+    <span class="c1"># Type more text</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">" jumps over the lazy dog"</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+    <span class="c1"># Show current content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Current content: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># Undo to remove " jumps over the lazy dog"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Undoing..."</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Content after undo: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># Type different text</span>
+    <span class="n">editor</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s2">" is quick"</span><span class="p">)</span>
+    <span class="n">undo_manager</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+
+    <span class="c1"># Show final content</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Final content: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># Try to undo multiple times</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Undoing multiple times..."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">undo_manager</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Content: </span><span class="si">{</span><span class="n">editor</span><span class="o">.</span><span class="n">get_content</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span> 
+</pre></div>
+</details></section><section class="panel" id="cpp" data-panel="cpp"><details class="file" open><summary>design-patterns/cpp/memento/main.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor_undo_manager.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TextEditor</span><span class="w"> </span><span class="n">editor</span><span class="p">;</span>
+<span class="w">    </span><span class="n">TextEditorUndoManager</span><span class="w"> </span><span class="n">undoManager</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"=== Text Editor with Undo Demo ===</span><span class="se">\n</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Type some text and save state</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Typing and saving initial text:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">editor</span><span class="p">.</span><span class="n">type</span><span class="p">(</span><span class="s">"Hello, "</span><span class="p">);</span>
+<span class="w">    </span><span class="n">undoManager</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Type more text and save state</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Typing and saving more text:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">editor</span><span class="p">.</span><span class="n">type</span><span class="p">(</span><span class="s">"World!"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">undoManager</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Type additional text</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Typing additional text:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">editor</span><span class="p">.</span><span class="n">type</span><span class="p">(</span><span class="s">" How are you?"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Show current content</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Current content: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">getContent</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Undo last change</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Undoing last change:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">undoManager</span><span class="p">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Show content after undo</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Content after undo: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">getContent</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Undo again</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Undoing again:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">undoManager</span><span class="p">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Show content after second undo</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Content after second undo: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">editor</span><span class="p">.</span><span class="n">getContent</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Try to undo when nothing is left</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">Trying to undo when nothing is left:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">undoManager</span><span class="p">.</span><span class="n">undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/memento/text_editor.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TextEditor::type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Typed: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">newText</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">TextEditor::getContent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">TextEditorMemento</span><span class="w"> </span><span class="nf">TextEditor::save</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Saving state: </span><span class="se">\"</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\"</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TextEditor::restore</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="o">&amp;</span><span class="w"> </span><span class="n">memento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memento</span><span class="p">.</span><span class="n">getState</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Restored state to: </span><span class="se">\"</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\"</span><span class="s">"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/memento/text_editor.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor_memento.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextEditor</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">type</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">newText</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getContent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">    </span><span class="n">TextEditorMemento</span><span class="w"> </span><span class="nf">save</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="o">&amp;</span><span class="w"> </span><span class="n">memento</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/memento/text_editor_memento.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor_memento.h"</span>
+
+<span class="n">TextEditorMemento</span><span class="o">::</span><span class="n">TextEditorMemento</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="o">::</span><span class="n">getState</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/memento/text_editor_memento.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextEditorMemento</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">state</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getState</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/memento/text_editor_undo_manager.cpp</summary><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor_undo_manager.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TextEditorUndoManager::save</span><span class="p">(</span><span class="n">TextEditor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">editor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">history</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">editor</span><span class="p">.</span><span class="n">save</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TextEditorUndoManager::undo</span><span class="p">(</span><span class="n">TextEditor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">editor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">history</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">editor</span><span class="p">.</span><span class="n">restore</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+<span class="w">        </span><span class="n">history</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Nothing to undo."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/cpp/memento/text_editor_undo_manager.h</summary><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"text_editor.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stack&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TextEditorUndoManager</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">save</span><span class="p">(</span><span class="n">TextEditor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">editor</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="n">TextEditor</span><span class="o">&amp;</span><span class="w"> </span><span class="n">editor</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">TextEditorMemento</span><span class="o">&gt;</span><span class="w"> </span><span class="n">history</span><span class="p">;</span>
+<span class="p">};</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="csharp" data-panel="csharp"><details class="file" open><summary>design-patterns/csharp/memento/Program.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Memento</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">editor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextEditor</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">undoManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TextEditorUndoManager</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Type some text and save state</span>
+<span class="w">            </span><span class="n">editor</span><span class="p">.</span><span class="n">Type</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">undoManager</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">editor</span><span class="p">.</span><span class="n">Type</span><span class="p">(</span><span class="s">" World"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">undoManager</span><span class="p">.</span><span class="n">Save</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">editor</span><span class="p">.</span><span class="n">Type</span><span class="p">(</span><span class="s">"!"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Current content: {editor.GetContent()}"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Undo twice</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\nUndoing last change:"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">undoManager</span><span class="p">.</span><span class="n">Undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Content after undo: {editor.GetContent()}"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\nUndoing another change:"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">undoManager</span><span class="p">.</span><span class="n">Undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Content after second undo: {editor.GetContent()}"</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Try to undo when nothing is left</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"\nTrying to undo when nothing is left:"</span><span class="p">);</span>
+<span class="w">            </span><span class="n">undoManager</span><span class="p">.</span><span class="n">Undo</span><span class="p">(</span><span class="n">editor</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/memento/TextEditor.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Memento</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TextEditor</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Type</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">newText</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">content</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">newText</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Typed: {newText}"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetContent</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="n">TextEditorMemento</span><span class="w"> </span><span class="nf">Save</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Saving state: \"{content}\""</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">TextEditorMemento</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Restore</span><span class="p">(</span><span class="n">TextEditorMemento</span><span class="w"> </span><span class="n">memento</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memento</span><span class="p">.</span><span class="n">GetState</span><span class="p">();</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Restored state to: \"{content}\""</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/memento/TextEditorMemento.cs</summary><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">Memento</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TextEditorMemento</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="nf">TextEditorMemento</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">state</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetState</span><span class="p">()</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">state</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/csharp/memento/TextEditorUndoManager.cs</summary><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Memento</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TextEditorUndoManager</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="n">TextEditorMemento</span><span class="o">&gt;</span><span class="w"> </span><span class="n">history</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="n">TextEditorMemento</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Save</span><span class="p">(</span><span class="n">TextEditor</span><span class="w"> </span><span class="n">editor</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">history</span><span class="p">.</span><span class="n">Push</span><span class="p">(</span><span class="n">editor</span><span class="p">.</span><span class="n">Save</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Undo</span><span class="p">(</span><span class="n">TextEditor</span><span class="w"> </span><span class="n">editor</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">Count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">editor</span><span class="p">.</span><span class="n">Restore</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">Pop</span><span class="p">());</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Nothing to undo."</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span><span class="w"> </span>
+</pre></div>
+</details></section><section class="panel" id="go" data-panel="go"><details class="file" open><summary>design-patterns/golang/memento/main.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">memento</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">editor</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewTextEditor</span><span class="p">()</span>
+<span class="w">	</span><span class="nx">undoManager</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewTextEditorUndoManager</span><span class="p">()</span>
+
+<span class="w">	</span><span class="nx">editor</span><span class="p">.</span><span class="nx">Type</span><span class="p">(</span><span class="s">"Hello, "</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">undoManager</span><span class="p">.</span><span class="nx">Save</span><span class="p">(</span><span class="nx">editor</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">editor</span><span class="p">.</span><span class="nx">Type</span><span class="p">(</span><span class="s">"world!"</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">undoManager</span><span class="p">.</span><span class="nx">Save</span><span class="p">(</span><span class="nx">editor</span><span class="p">)</span>
+
+<span class="w">	</span><span class="nx">editor</span><span class="p">.</span><span class="nx">Type</span><span class="p">(</span><span class="s">" This is a test."</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Current content:"</span><span class="p">,</span><span class="w"> </span><span class="nx">editor</span><span class="p">.</span><span class="nx">GetContent</span><span class="p">())</span>
+
+<span class="w">	</span><span class="nx">undoManager</span><span class="p">.</span><span class="nx">Undo</span><span class="p">(</span><span class="nx">editor</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"After undo:"</span><span class="p">,</span><span class="w"> </span><span class="nx">editor</span><span class="p">.</span><span class="nx">GetContent</span><span class="p">())</span>
+
+<span class="w">	</span><span class="nx">undoManager</span><span class="p">.</span><span class="nx">Undo</span><span class="p">(</span><span class="nx">editor</span><span class="p">)</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"After second undo:"</span><span class="p">,</span><span class="w"> </span><span class="nx">editor</span><span class="p">.</span><span class="nx">GetContent</span><span class="p">())</span>
+
+<span class="w">	</span><span class="nx">undoManager</span><span class="p">.</span><span class="nx">Undo</span><span class="p">(</span><span class="nx">editor</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/memento/text_editor.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">memento</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// TextEditor is the originator that can save and restore its state</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">TextEditor</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">content</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// NewTextEditor creates a new TextEditor</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewTextEditor</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">TextEditor</span><span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="c1">// Type appends text to the editor</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="p">)</span><span class="w"> </span><span class="nx">Type</span><span class="p">(</span><span class="nx">words</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">words</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Typed: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">words</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// GetContent returns the current content</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="p">)</span><span class="w"> </span><span class="nx">GetContent</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span>
+<span class="p">}</span>
+
+<span class="c1">// Save creates a memento of the current state</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="p">)</span><span class="w"> </span><span class="nx">Save</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditorMemento</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Saved state: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">NewTextEditorMemento</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Restore restores the state from a memento</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="p">)</span><span class="w"> </span><span class="nx">Restore</span><span class="p">(</span><span class="nx">memento</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditorMemento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">memento</span><span class="p">.</span><span class="nx">State</span>
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">"Restored state: %s\n"</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/memento/text_editor_memento.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">memento</span>
+
+<span class="c1">// TextEditorMemento stores the state of the TextEditor</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">TextEditorMemento</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">State</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// NewTextEditorMemento creates a new memento with the given state</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewTextEditorMemento</span><span class="p">(</span><span class="nx">state</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditorMemento</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">TextEditorMemento</span><span class="p">{</span><span class="nx">State</span><span class="p">:</span><span class="w"> </span><span class="nx">state</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/golang/memento/text_editor_undo_manager.go</summary><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">memento</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="s">"fmt"</span>
+
+<span class="c1">// TextEditorUndoManager manages the undo stack for the TextEditor</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">TextEditorUndoManager</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">history</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">TextEditorMemento</span>
+<span class="p">}</span>
+
+<span class="c1">// NewTextEditorUndoManager creates a new undo manager</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewTextEditorUndoManager</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditorUndoManager</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">TextEditorUndoManager</span><span class="p">{</span><span class="nx">history</span><span class="p">:</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="o">*</span><span class="nx">TextEditorMemento</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)}</span>
+<span class="p">}</span>
+
+<span class="c1">// Save saves the current state of the editor</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditorUndoManager</span><span class="p">)</span><span class="w"> </span><span class="nx">Save</span><span class="p">(</span><span class="nx">editor</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">m</span><span class="p">.</span><span class="nx">history</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">history</span><span class="p">,</span><span class="w"> </span><span class="nx">editor</span><span class="p">.</span><span class="nx">Save</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="c1">// Undo restores the last saved state</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditorUndoManager</span><span class="p">)</span><span class="w"> </span><span class="nx">Undo</span><span class="p">(</span><span class="nx">editor</span><span class="w"> </span><span class="o">*</span><span class="nx">TextEditor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">history</span><span class="p">)</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">"Nothing to undo."</span><span class="p">)</span>
+<span class="w">		</span><span class="k">return</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">	</span><span class="nx">last</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">history</span><span class="p">[</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="w">	</span><span class="nx">m</span><span class="p">.</span><span class="nx">history</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">history</span><span class="p">[:</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="w">	</span><span class="nx">editor</span><span class="p">.</span><span class="nx">Restore</span><span class="p">(</span><span class="nx">last</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</details></section><section class="panel" id="js" data-panel="js"><details class="file" open><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/Example2/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">DrawingCanvas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'./canvas'</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">CanvasMemento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'./memento'</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">History</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'./careTaker'</span><span class="p">);</span>
+
+<span class="c1">// Create a new drawing canvas (Originator)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">canvas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">DrawingCanvas</span><span class="p">();</span>
+
+<span class="c1">// Create a new History (Caretaker)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">history</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">History</span><span class="p">();</span>
+
+<span class="c1">// Draw some shapes on the canvas</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addShape</span><span class="p">(</span><span class="s2">"Circle"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addShape</span><span class="p">(</span><span class="s2">"Square"</span><span class="p">);</span>
+
+<span class="c1">// Show current state of canvas</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Initial Drawing:"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: Circle, Square</span>
+
+<span class="c1">// Save the current state of the canvas</span>
+<span class="nx">history</span><span class="p">.</span><span class="nx">saveMemento</span><span class="p">(</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">save</span><span class="p">());</span><span class="w"> </span><span class="c1">// Save: Circle, Square</span>
+
+<span class="c1">// Draw more shapes</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addShape</span><span class="p">(</span><span class="s2">"Triangle"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addShape</span><span class="p">(</span><span class="s2">"Hexagon"</span><span class="p">);</span>
+
+<span class="c1">// Show current state of canvas</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"\nAfter Drawing More Shapes:"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: Circle, Square, Triangle, Hexagon</span>
+
+<span class="c1">// Save the current state again</span>
+<span class="nx">history</span><span class="p">.</span><span class="nx">saveMemento</span><span class="p">(</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">save</span><span class="p">());</span><span class="w"> </span><span class="c1">// Save: Circle, Square, Triangle, Hexagon</span>
+
+<span class="c1">// Draw another shape</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addShape</span><span class="p">(</span><span class="s2">"Pentagon"</span><span class="p">);</span>
+
+<span class="c1">// Show current state of canvas</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"\nAfter Adding Pentagon:"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: Circle, Square, Triangle, Hexagon, Pentagon</span>
+
+<span class="c1">// Undo the last action by restoring the previous memento</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">restore</span><span class="p">(</span><span class="nx">history</span><span class="p">.</span><span class="nx">getLatestMemento</span><span class="p">());</span>
+<span class="nx">history</span><span class="p">.</span><span class="nx">removeLastMemento</span><span class="p">();</span><span class="w"> </span><span class="c1">// Remove the latest snapshot</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"\nAfter Undo (Restoring Previous State):"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: Circle, Square, Triangle, Hexagon</span>
+
+<span class="c1">// Undo another action</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">restore</span><span class="p">(</span><span class="nx">history</span><span class="p">.</span><span class="nx">getLatestMemento</span><span class="p">());</span>
+<span class="nx">history</span><span class="p">.</span><span class="nx">removeLastMemento</span><span class="p">();</span><span class="w"> </span><span class="c1">// Remove the latest snapshot</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"\nAfter Another Undo:"</span><span class="p">);</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span><span class="w"> </span><span class="c1">// Output: Circle, Square</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/main.js</summary><div class="highlight"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">TextEditor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./orginator"</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">Caretaker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./careTaker"</span><span class="p">);</span>
+
+<span class="c1">// Create a TextEditor instance</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">textEditor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">TextEditor</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">caretaker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Caretaker</span><span class="p">();</span>
+
+<span class="c1">// Write some content</span>
+<span class="nx">textEditor</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">"Hello, "</span><span class="p">);</span>
+<span class="nx">caretaker</span><span class="p">.</span><span class="nx">saveMemento</span><span class="p">(</span><span class="nx">textEditor</span><span class="p">.</span><span class="nx">save</span><span class="p">());</span><span class="w"> </span><span class="c1">// Save the current state</span>
+
+<span class="nx">textEditor</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">"world!"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">textEditor</span><span class="p">.</span><span class="nx">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Output: "Hello, world!"</span>
+
+<span class="nx">caretaker</span><span class="p">.</span><span class="nx">saveMemento</span><span class="p">(</span><span class="nx">textEditor</span><span class="p">.</span><span class="nx">save</span><span class="p">());</span><span class="w"> </span><span class="c1">// Save the current state again</span>
+
+<span class="nx">textEditor</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">" How are you?"</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">textEditor</span><span class="p">.</span><span class="nx">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Output: "Hello, world! How are you?"</span>
+
+<span class="c1">// Restore to the previous state</span>
+<span class="nx">textEditor</span><span class="p">.</span><span class="nx">restore</span><span class="p">(</span><span class="nx">caretaker</span><span class="p">.</span><span class="nx">getMemento</span><span class="p">(</span><span class="mf">1</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">textEditor</span><span class="p">.</span><span class="nx">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Output: "Hello, world!"</span>
+
+<span class="c1">// Restore to the initial state</span>
+<span class="nx">textEditor</span><span class="p">.</span><span class="nx">restore</span><span class="p">(</span><span class="nx">caretaker</span><span class="p">.</span><span class="nx">getMemento</span><span class="p">(</span><span class="mf">0</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">textEditor</span><span class="p">.</span><span class="nx">getContent</span><span class="p">());</span><span class="w"> </span><span class="c1">// Output: "Hello, "</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/careTaker.js</summary><div class="highlight"><pre><span></span><span class="c1">// careTaker.js</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">CareTaker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">saveMemento</span><span class="p">(</span><span class="nx">memento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">memento</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">getMemento</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CareTaker</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/Example2/canvas.js</summary><div class="highlight"><pre><span></span><span class="c1">// Import CanvasMemento from memento.js</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">CanvasMemento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./memento"</span><span class="p">);</span><span class="w"> </span><span class="c1">// &lt;-- Add this line</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">DrawingCanvas</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"> </span><span class="c1">// The current shapes drawn on the canvas</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Method to draw a new shape</span>
+<span class="w">  </span><span class="nx">addShape</span><span class="p">(</span><span class="nx">shape</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">shapes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">shape</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Method to remove the last added shape (simulating undo)</span>
+<span class="w">  </span><span class="nx">removeLastShape</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">shapes</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Create a memento (save the current state)</span>
+<span class="w">  </span><span class="nx">save</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">CanvasMemento</span><span class="p">([...</span><span class="k">this</span><span class="p">.</span><span class="nx">shapes</span><span class="p">]);</span><span class="w"> </span><span class="c1">// Copy the current shapes to a new Memento</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Restore the canvas state from a memento</span>
+<span class="w">  </span><span class="nx">restore</span><span class="p">(</span><span class="nx">memento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">shapes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">memento</span><span class="p">.</span><span class="nx">getState</span><span class="p">();</span><span class="w"> </span><span class="c1">// Replace current shapes with the saved shapes</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Print all shapes (to simulate displaying them on the canvas)</span>
+<span class="w">  </span><span class="nx">show</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Current shapes on canvas:"</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">shapes</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DrawingCanvas</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/Example2/careTaker.js</summary><div class="highlight"><pre><span></span><span class="c1">// CareTaker -&gt; Manages mementos</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">History</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"> </span><span class="c1">// List of saved mementos</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Save a memento</span>
+<span class="w">  </span><span class="nx">saveMemento</span><span class="p">(</span><span class="nx">memento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">memento</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Get a memento</span>
+<span class="w">  </span><span class="nx">getMemento</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Remove the last memento</span>
+<span class="w">  </span><span class="nx">removeMemento</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">getLatestMemento</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span>
+<span class="w">      </span><span class="o">?</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">]</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">removeLastMemento</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">mementos</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">History</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/Example2/memento.js</summary><div class="highlight"><pre><span></span><span class="c1">// Memento -&gt; Stores the snapshot of canvas state</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">CanvasMemento</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">state</span><span class="p">;</span><span class="w"> </span><span class="c1">// The saved shapes at this point</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Returns the saved state</span>
+<span class="w">  </span><span class="nx">getState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">CanvasMemento</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/memento.js</summary><div class="highlight"><pre><span></span><span class="c1">// Memento</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Memento</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">state</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">getState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Memento</span><span class="p">;</span>
+</pre></div>
+</details><details class="file"><summary>design-patterns/Javascript/Behavioral Pattern/Memento Design Pattern/orginator.js</summary><div class="highlight"><pre><span></span><span class="c1">// Orginator file</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">Memento</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s2">"./memento"</span><span class="p">);</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">TextEditor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">write</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">content</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">getContent</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">save</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Memento</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">restore</span><span class="p">(</span><span class="nx">memento</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">memento</span><span class="p">.</span><span class="nx">getState</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">TextEditor</span><span class="p">;</span>
+</pre></div>
+</details></section>
+    <p style="margin-top:28px"><a class="btn-primary" href="../../index.html#patterns">Back to index</a></p>
+
+  </div></main>
+</body>
+</html>
