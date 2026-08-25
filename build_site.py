@@ -253,6 +253,9 @@ def page_shell(title: str, rel_root: str, crumbs: str, body: str) -> str:
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{html.escape(title)} · Low Level Design Guide</title>
+  <link rel="icon" href="{rel_root}/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="{rel_root}/assets/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="{rel_root}/assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{rel_root}/assets/site.css" />
