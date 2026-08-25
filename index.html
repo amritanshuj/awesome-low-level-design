@@ -14,112 +14,221 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            ink: "#090d16",
-            panel: "#161b26",
-            line: "#243044"
-          },
           fontFamily: {
             sans: ["Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"]
-          },
-          boxShadow: {
-            glow: "0 0 0 1px rgba(59,130,246,.28), 0 24px 48px -24px rgba(99,102,241,.45)"
           }
         }
       }
     };
+    (function () {
+      const theme = localStorage.getItem("lld-theme") === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+    })();
   </script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    body { background: #090d16; }
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --header: rgba(248, 250, 252, 0.88);
+      --panel: #ffffff;
+      --panel-2: #f1f5f9;
+      --text: #0f172a;
+      --text-soft: #334155;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --accent: #2563eb;
+      --accent-2: #7c3aed;
+      --link: #2563eb;
+      --chip: #f8fafc;
+      --thumb: #f1f5f9;
+      --overlay: rgba(15, 23, 42, 0.45);
+      --dialog: #ffffff;
+      --mesh-a: rgba(37, 99, 235, 0.10);
+      --mesh-b: rgba(124, 58, 237, 0.08);
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+      --glow: 0 14px 32px -18px rgba(37, 99, 235, 0.45);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #090d16;
+      --header: rgba(9, 13, 22, 0.82);
+      --panel: #161b26;
+      --panel-2: #1c2330;
+      --text: #f1f5f9;
+      --text-soft: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border: #243044;
+      --border-strong: #334155;
+      --accent: #3b82f6;
+      --accent-2: #8b5cf6;
+      --link: #93c5fd;
+      --chip: #0c111c;
+      --thumb: #0c111c;
+      --overlay: rgba(2, 6, 23, 0.62);
+      --dialog: #161b26;
+      --mesh-a: rgba(59, 130, 246, 0.20);
+      --mesh-b: rgba(139, 92, 246, 0.16);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+      --glow: 0 24px 48px -24px rgba(99, 102, 241, 0.45);
+    }
+    body { background: var(--bg); color: var(--text); }
     .bg-mesh {
       background:
-        radial-gradient(900px 420px at 12% -10%, rgba(59,130,246,.22), transparent 55%),
-        radial-gradient(800px 380px at 92% 0%, rgba(139,92,246,.18), transparent 50%),
-        radial-gradient(700px 360px at 50% 100%, rgba(59,130,246,.08), transparent 55%),
-        #090d16;
+        radial-gradient(900px 420px at 12% -10%, var(--mesh-a), transparent 55%),
+        radial-gradient(800px 380px at 92% 0%, var(--mesh-b), transparent 50%),
+        var(--bg);
     }
+    .site-header { background: var(--header); border-color: var(--border); }
+    .fg { color: var(--text); }
+    .fg-soft { color: var(--text-soft); }
+    .fg-muted { color: var(--text-muted); }
+    .surface { background: var(--panel); }
+    .surface-2 { background: var(--panel-2); }
+    .line { border-color: var(--border); }
     .card {
-      border: 1px solid #243044;
-      background: linear-gradient(180deg, rgba(22,27,38,.96), rgba(16,21,32,.96));
+      border: 1px solid var(--border);
+      background: var(--panel);
+      box-shadow: var(--shadow);
       transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
     }
     .card:hover {
-      border-color: rgba(59,130,246,.5);
-      box-shadow: 0 0 0 1px rgba(59,130,246,.18), 0 22px 44px -28px rgba(59,130,246,.55);
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.16), var(--glow);
       transform: translateY(-2px);
     }
     .grad-text {
-      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
     .btn-primary {
       background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff;
+      box-shadow: var(--glow);
     }
-    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-primary:hover { filter: brightness(1.06); }
+    .btn-secondary {
+      border: 1px solid var(--border-strong);
+      background: var(--panel);
+      color: var(--text);
+    }
+    .btn-secondary:hover { border-color: rgba(59, 130, 246, 0.55); color: var(--accent); }
+    .icon-btn {
+      display: grid; place-items: center; width: 40px; height: 40px; flex: none;
+      border-radius: 999px; border: 1px solid var(--border); background: var(--panel);
+      color: var(--text-soft); cursor: pointer;
+      transition: background .16s ease, color .16s ease, border-color .16s ease;
+    }
+    .icon-btn:hover { background: var(--accent); color: #fff; border-color: transparent; }
+    html[data-theme="dark"] .icon-moon { display: none; }
+    html:not([data-theme="dark"]) .icon-sun { display: none; }
+    .search-input {
+      width: 100%; border: 1px solid var(--border-strong); background: var(--panel);
+      color: var(--text); border-radius: 12px;
+    }
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-input:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .nav-link { color: var(--text-soft); border: 1px solid transparent; }
+    .nav-link:hover { background: var(--panel-2); color: var(--text); }
     .nav-link.active, .nav-link[aria-current="true"] {
-      background: rgba(59,130,246,.12);
-      color: #93c5fd;
-      border-color: rgba(59,130,246,.35);
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      color: var(--accent);
+      border-color: color-mix(in srgb, var(--accent) 30%, transparent);
     }
+    .chip {
+      border: 1px solid var(--border); background: var(--panel); color: var(--text-soft);
+    }
+    .chip:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+    .chip.is-on {
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff;
+      border-color: transparent;
+    }
+    .lang-chip {
+      border: 1px solid var(--border); background: var(--chip); color: var(--text-soft);
+    }
+    .lang-chip:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); color: var(--text); }
+    .stat-card { border: 1px solid var(--border); background: var(--panel); box-shadow: var(--shadow); }
+    .sidebar-box { border: 1px solid var(--border); background: var(--panel); }
+    .site-footer { border-color: var(--border); }
+    .site-link { color: var(--link); }
+    .drawer-panel { background: var(--panel); border-color: var(--border); color: var(--text); }
     #drawer { transform: translateX(-100%); }
     #drawer.open { transform: translateX(0); }
-    .hidden-card { display: none !important; }
-    dialog::backdrop { background: rgba(2,6,23,.78); backdrop-filter: blur(8px); }
-    .thumb {
-      background: #0c111c;
-      border: 1px solid #243044;
-    }
+    dialog { background: var(--dialog); color: var(--text); border-color: var(--border); }
+    dialog::backdrop { background: var(--overlay); backdrop-filter: blur(8px); }
+    .thumb { background: var(--thumb); border: 1px solid var(--border); }
     .thumb img {
-      width: 100%;
-      height: 148px;
-      object-fit: cover;
-      object-position: top;
+      width: 100%; height: 148px; object-fit: cover; object-position: top;
     }
     @media (min-width: 1024px) {
       .thumb img { height: 160px; }
     }
+    .hero-photo {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    html[data-theme="dark"] .topic-card [class*="text-emerald-"] { color: #6ee7b7 !important; }
+    html[data-theme="dark"] .topic-card [class*="text-amber-"] { color: #fcd34d !important; }
+    html[data-theme="dark"] .topic-card [class*="text-rose-"] { color: #fda4af !important; }
+    html[data-theme="dark"] .topic-card [class*="text-blue-"] { color: #93c5fd !important; }
+    html[data-theme="dark"] .topic-card [class*="text-violet-"] { color: #c4b5fd !important; }
+    html[data-theme="dark"] .topic-card [class*="text-fuchsia-"] { color: #f0abfc !important; }
+    html[data-theme="dark"] .topic-card [class*="text-cyan-"] { color: #67e8f9 !important; }
+    html[data-theme="dark"] .topic-card [class*="text-indigo-"] { color: #a5b4fc !important; }
+    html[data-theme="dark"] .topic-card [class*="text-slate-"] { color: #cbd5e1 !important; }
   </style>
 </head>
-<body class="bg-mesh text-slate-200 font-sans antialiased">
+<body class="bg-mesh font-sans antialiased">
   <a href="#index" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[80] focus:bg-blue-600 focus:text-white focus:px-3 focus:py-2 focus:rounded-lg">Skip to index</a>
 
-  <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-[#090d16]/80 backdrop-blur-xl">
+  <header class="site-header sticky top-0 z-50 border-b backdrop-blur-xl">
     <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 lg:px-6">
-      <button id="menuBtn" class="lg:hidden grid h-10 w-10 place-items-center rounded-xl border border-slate-800 bg-panel text-slate-300" aria-label="Open navigation">
+      <button id="menuBtn" class="icon-btn lg:hidden" aria-label="Open navigation">
         <i data-lucide="menu" class="h-5 w-5"></i>
       </button>
       <a href="#top" class="flex min-w-0 items-center gap-3">
         <img src="images/lld-repo-logo.png" alt="awesome-low-level-design logo" class="h-9 w-auto rounded-md" />
-        <span class="truncate text-sm font-semibold tracking-tight text-white">Low Level Design Guide</span>
+        <span class="fg truncate text-sm font-semibold tracking-tight">Low Level Design Guide</span>
       </a>
       <div class="relative ml-auto hidden min-w-0 flex-1 md:block md:max-w-md lg:max-w-lg">
-        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"></i>
+        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 fg-muted"></i>
         <input id="searchDesktop" type="search" placeholder="Search topics, patterns, problems, languages…"
-          class="w-full rounded-xl border border-slate-800 bg-panel py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-500/60 focus:ring-2 focus:ring-blue-500/20" />
+          class="search-input py-2.5 pl-10 pr-3 text-sm" />
       </div>
+      <button id="themeBtn" class="icon-btn" type="button" aria-label="Toggle dark mode">
+        <i data-lucide="moon" class="icon-moon h-4 w-4"></i>
+        <i data-lucide="sun" class="icon-sun h-4 w-4"></i>
+      </button>
       <a href="https://github.com/amritanshuj/awesome-low-level-design" target="_blank" rel="noopener"
-         class="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-panel px-3 py-2 text-sm font-medium text-slate-200 hover:border-blue-500/50">
+         class="btn-secondary inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium">
         <i data-lucide="github" class="h-4 w-4"></i>
         <span class="hidden sm:inline">Star</span>
       </a>
     </div>
-    <div class="border-t border-slate-800 px-4 py-2 md:hidden">
+    <div class="border-t line px-4 py-2 md:hidden">
       <div class="relative">
-        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"></i>
+        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 fg-muted"></i>
         <input id="searchMobile" type="search" placeholder="Search topics and problems…"
-          class="w-full rounded-xl border border-slate-800 bg-panel py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 outline-none focus:border-blue-500/60" />
+          class="search-input py-2.5 pl-10 pr-3 text-sm" />
       </div>
     </div>
   </header>
 
-  <div id="overlay" class="fixed inset-0 z-40 hidden bg-black/60 lg:hidden"></div>
-  <aside id="drawer" class="fixed inset-y-0 left-0 z-50 w-[86%] max-w-sm overflow-y-auto border-r border-slate-800 bg-[#0c111b] p-5 transition-transform duration-200 lg:hidden">
+  <div id="overlay" class="fixed inset-0 z-40 hidden" style="background: var(--overlay)"></div>
+  <aside id="drawer" class="drawer-panel fixed inset-y-0 left-0 z-50 w-[86%] max-w-sm overflow-y-auto border-r p-5 transition-transform duration-200 lg:hidden">
     <div class="mb-4 flex items-center justify-between">
-      <p class="text-sm font-semibold text-white">Quick index</p>
-      <button id="closeDrawer" class="grid h-9 w-9 place-items-center rounded-lg border border-slate-800" aria-label="Close navigation">
+      <p class="text-sm font-semibold">Quick index</p>
+      <button id="closeDrawer" class="icon-btn" aria-label="Close navigation">
         <i data-lucide="x" class="h-4 w-4"></i>
       </button>
     </div>
@@ -130,65 +239,54 @@
     <section class="relative overflow-hidden">
       <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-12 lg:grid-cols-12 lg:px-6 lg:pt-16">
         <div class="lg:col-span-7">
-          <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
+          <div class="mb-5 inline-flex items-center gap-2 rounded-full border line surface px-3 py-1 text-xs font-medium" style="color: var(--accent); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); background: color-mix(in srgb, var(--accent) 8%, var(--panel));">
             <i data-lucide="sparkles" class="h-3.5 w-3.5"></i>
             Free open-source LLD interview curriculum
           </div>
-          <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 class="fg text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             Low Level <span class="grad-text">Design Guide</span>
           </h1>
-          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-400">
+          <p class="fg-soft mt-5 max-w-2xl text-lg leading-relaxed">
             Master Object-Oriented Design, Design Patterns, SOLID Principles, and System Interview Problems.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a href="#index" class="btn-primary inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white shadow-glow">
+            <a href="#index" class="btn-primary inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold">
               Explore LLD Topics
               <i data-lucide="arrow-down" class="h-4 w-4"></i>
             </a>
-            <a href="https://github.com/amritanshuj/awesome-low-level-design" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-panel px-5 py-3 text-sm font-semibold text-white hover:border-blue-500/50">
-              <i data-lucide="github" class="h-4 w-4"></i>
-              View on GitHub
-            </a>
-            <a href="https://blog.algomaster.io/" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 rounded-xl border border-slate-800 px-5 py-3 text-sm font-medium text-slate-300 hover:text-white">
-              Join Free Newsletter
-              <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
-            </a>
           </div>
           <dl class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div class="rounded-2xl border border-slate-800 bg-panel/70 p-4">
-              <dt class="text-xs uppercase tracking-wider text-slate-500">Problems</dt>
-              <dd class="mt-1 text-2xl font-bold text-white">36</dd>
+            <div class="stat-card rounded-2xl p-4">
+              <dt class="text-xs uppercase tracking-wider fg-muted">Problems</dt>
+              <dd class="mt-1 text-2xl font-bold" style="color: var(--accent)">36</dd>
             </div>
-            <div class="rounded-2xl border border-slate-800 bg-panel/70 p-4">
-              <dt class="text-xs uppercase tracking-wider text-slate-500">Patterns</dt>
-              <dd class="mt-1 text-2xl font-bold text-white">23</dd>
+            <div class="stat-card rounded-2xl p-4">
+              <dt class="text-xs uppercase tracking-wider fg-muted">Patterns</dt>
+              <dd class="mt-1 text-2xl font-bold" style="color: var(--accent-2)">23</dd>
             </div>
-            <div class="rounded-2xl border border-slate-800 bg-panel/70 p-4">
-              <dt class="text-xs uppercase tracking-wider text-slate-500">Diagrams</dt>
-              <dd class="mt-1 text-2xl font-bold text-white">36</dd>
+            <div class="stat-card rounded-2xl p-4">
+              <dt class="text-xs uppercase tracking-wider fg-muted">Diagrams</dt>
+              <dd class="mt-1 text-2xl font-bold" style="color: #0f766e">36</dd>
             </div>
-            <div class="rounded-2xl border border-slate-800 bg-panel/70 p-4">
-              <dt class="text-xs uppercase tracking-wider text-slate-500">Languages</dt>
-              <dd class="mt-1 text-2xl font-bold text-white">8</dd>
+            <div class="stat-card rounded-2xl p-4">
+              <dt class="text-xs uppercase tracking-wider fg-muted">Languages</dt>
+              <dd class="mt-1 text-2xl font-bold" style="color: #c026d3">8</dd>
             </div>
           </dl>
         </div>
         <div class="lg:col-span-5">
-          <div class="card overflow-hidden rounded-3xl p-3">
-            <img src="images/lld-repo-logo.png" alt="Low Level Design repository logo" class="mx-auto w-full max-w-md rounded-2xl" />
-            <img src="images/interview-template.png" alt="How to answer a Low Level Design interview problem template" class="mt-3 w-full rounded-2xl border border-slate-800" />
+          <div class="hero-photo overflow-hidden rounded-3xl p-3">
+            <img src="images/interview-template.png" alt="Low Level Design interview process: clarify requirements, identify entities, class design, implementation, and exception handling" class="w-full rounded-2xl" />
           </div>
         </div>
       </div>
     </section>
 
-    <section id="index" class="border-t border-slate-800/80">
+    <section id="index" class="border-t line">
       <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[260px_1fr] lg:px-6">
         <aside class="hidden lg:block">
-          <div class="sticky top-24 space-y-2 rounded-2xl border border-slate-800 bg-panel/60 p-3">
-            <p class="px-2 pb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">Quick index</p>
+          <div class="sidebar-box sticky top-24 space-y-2 rounded-2xl p-3">
+            <p class="fg-muted px-2 pb-2 text-[11px] font-semibold uppercase tracking-[0.16em]">Quick index</p>
             <div class="nav-desktop space-y-1"></div>
           </div>
         </aside>
@@ -196,12 +294,12 @@
         <div>
           <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 class="text-2xl font-bold text-white">Curriculum</h2>
-              <p id="resultCount" class="mt-1 text-sm text-slate-400">Browse every topic, diagram, and implementation in this repository.</p>
+              <h2 class="fg text-2xl font-bold">Curriculum</h2>
+              <p id="resultCount" class="fg-muted mt-1 text-sm">Browse every topic, diagram, and implementation in this repository.</p>
             </div>
             <div id="chipRow" class="flex flex-wrap gap-2"></div>
           </div>
-          <div id="empty" class="hidden rounded-2xl border border-dashed border-slate-700 p-10 text-center text-slate-400">
+          <div id="empty" class="fg-muted hidden rounded-2xl border border-dashed line p-10 text-center">
             No topics match that search.
           </div>
           <div id="sections"></div>
@@ -210,33 +308,33 @@
     </section>
   </main>
 
-  <footer class="border-t border-slate-800">
+  <footer class="site-footer border-t">
     <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between lg:px-6">
       <div>
-        <p class="font-semibold text-white">awesome-low-level-design</p>
-        <p class="mt-1 text-sm text-slate-400">Open source under the GNU General Public License v3.0.</p>
+        <p class="fg font-semibold">awesome-low-level-design</p>
+        <p class="fg-muted mt-1 text-sm">Open source under the GNU General Public License v3.0.</p>
         <div class="mt-3 flex flex-wrap gap-4 text-sm">
-          <a class="text-blue-300 hover:underline" href="https://github.com/amritanshuj/awesome-low-level-design" target="_blank" rel="noopener">GitHub repository</a>
-          <a class="text-blue-300 hover:underline" href="https://github.com/amritanshuj/awesome-low-level-design/blob/main/LICENSE" target="_blank" rel="noopener">GPL-3.0 license</a>
-          <a class="text-blue-300 hover:underline" href="https://github.com/amritanshuj/awesome-low-level-design/blob/main/README.md" target="_blank" rel="noopener">README</a>
+          <a class="site-link hover:underline" href="https://github.com/amritanshuj/awesome-low-level-design" target="_blank" rel="noopener">GitHub repository</a>
+          <a class="site-link hover:underline" href="https://github.com/amritanshuj/awesome-low-level-design/blob/main/LICENSE" target="_blank" rel="noopener">GPL-3.0 license</a>
+          <a class="site-link hover:underline" href="https://github.com/amritanshuj/awesome-low-level-design/blob/main/README.md" target="_blank" rel="noopener">README</a>
         </div>
       </div>
       <a href="https://github.com/amritanshuj/awesome-low-level-design" target="_blank" rel="noopener"
-         class="btn-primary inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white shadow-glow">
+         class="btn-primary inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold">
         <i data-lucide="star" class="h-4 w-4"></i>
         Star on GitHub
       </a>
     </div>
   </footer>
 
-  <dialog id="lightbox" class="w-[min(1100px,94vw)] rounded-2xl border border-slate-700 bg-ink p-3 text-white">
+  <dialog id="lightbox" class="w-[min(1100px,94vw)] rounded-2xl border p-3">
     <div class="mb-3 flex items-center justify-between gap-3">
       <p id="lightboxTitle" class="text-sm font-semibold"></p>
       <form method="dialog">
-        <button class="rounded-lg border border-slate-700 px-3 py-1.5 text-sm">Close</button>
+        <button class="btn-secondary rounded-lg px-3 py-1.5 text-sm">Close</button>
       </form>
     </div>
-    <img id="lightboxImg" alt="" class="max-h-[80vh] w-full rounded-xl object-contain bg-black" />
+    <img id="lightboxImg" alt="" class="max-h-[80vh] w-full rounded-xl object-contain" style="background: var(--thumb)" />
   </dialog>
 
   <script>
@@ -509,22 +607,22 @@
 
     function navHTML() {
       return NAV.map(n => `
-        <a href="#${n.id}" class="nav-link flex items-center gap-2 rounded-xl border border-transparent px-3 py-2 text-sm text-slate-300 hover:bg-slate-800/70 hover:text-white">
+        <a href="#${n.id}" class="nav-link flex items-center gap-2 rounded-xl px-3 py-2 text-sm">
           <span>${SECTION_META[n.id].emoji}</span>
           <span>${n.label}</span>
         </a>`).join("");
     }
 
     function badgeColor(badge) {
-      if (badge.includes("Easy")) return "bg-emerald-500/15 text-emerald-300 border-emerald-500/20";
-      if (badge.includes("Medium")) return "bg-amber-500/15 text-amber-300 border-amber-500/20";
-      if (badge.includes("Hard")) return "bg-rose-500/15 text-rose-300 border-rose-500/20";
-      if (badge.includes("Creational")) return "bg-blue-500/15 text-blue-300 border-blue-500/20";
-      if (badge.includes("Structural")) return "bg-violet-500/15 text-violet-300 border-violet-500/20";
-      if (badge.includes("Behavioral")) return "bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-500/20";
-      if (badge.includes("Concurrency")) return "bg-cyan-500/15 text-cyan-300 border-cyan-500/20";
-      if (badge.includes("SOLID") || badge.includes("Cheat")) return "bg-indigo-500/15 text-indigo-300 border-indigo-500/20";
-      return "bg-slate-500/15 text-slate-300 border-slate-500/20";
+      if (badge.includes("Easy")) return "bg-emerald-500/15 text-emerald-700 border-emerald-500/20";
+      if (badge.includes("Medium")) return "bg-amber-500/15 text-amber-700 border-amber-500/20";
+      if (badge.includes("Hard")) return "bg-rose-500/15 text-rose-700 border-rose-500/20";
+      if (badge.includes("Creational")) return "bg-blue-500/15 text-blue-700 border-blue-500/20";
+      if (badge.includes("Structural")) return "bg-violet-500/15 text-violet-700 border-violet-500/20";
+      if (badge.includes("Behavioral")) return "bg-fuchsia-500/15 text-fuchsia-700 border-fuchsia-500/20";
+      if (badge.includes("Concurrency")) return "bg-cyan-500/15 text-cyan-800 border-cyan-500/20";
+      if (badge.includes("SOLID") || badge.includes("Cheat")) return "bg-indigo-500/15 text-indigo-700 border-indigo-500/20";
+      return "bg-slate-500/10 text-slate-600 border-slate-400/30";
     }
 
     function matches(item) {
@@ -548,15 +646,15 @@
             <div class="mb-3 flex flex-wrap items-center gap-2">
               <span class="inline-flex rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${badgeColor(item.badge)}">${item.badge}</span>
             </div>
-            <h3 class="text-base font-semibold text-white">${item.title}</h3>
-            <p class="mt-2 flex-1 text-sm leading-6 text-slate-400">${item.desc}</p>
-            ${langs.length ? `<div class="mt-3 flex flex-wrap gap-1.5">${langs.map(l => `<a href="${l.href}" target="_blank" rel="noopener" class="rounded-md border border-slate-800 bg-[#0c111c] px-2 py-1 text-[11px] font-medium text-slate-300 hover:border-blue-500/40 hover:text-white">${l.label}</a>`).join("")}</div>` : ""}
+            <h3 class="fg text-base font-semibold">${item.title}</h3>
+            <p class="fg-muted mt-2 flex-1 text-sm leading-6">${item.desc}</p>
+            ${langs.length ? `<div class="mt-3 flex flex-wrap gap-1.5">${langs.map(l => `<a href="${l.href}" target="_blank" rel="noopener" class="lang-chip rounded-md px-2 py-1 text-[11px] font-medium">${l.label}</a>`).join("")}</div>` : ""}
             <div class="mt-4 flex flex-wrap gap-2">
-              <a href="${item.href}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 px-3 py-2 text-xs font-semibold text-white">
+              <a href="${item.href}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold">
                 ${item.action || "Open"}
                 <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
               </a>
-              ${item.diagram ? `<button type="button" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 hover:border-blue-500/50" data-lightbox="${item.diagram}" data-lightbox-title="${item.title}">${item.secondary || "View diagram"}</button>` : ""}
+              ${item.diagram ? `<button type="button" class="btn-secondary inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold" data-lightbox="${item.diagram}" data-lightbox-title="${item.title}">${item.secondary || "View diagram"}</button>` : ""}
             </div>
           </div>
         </article>`;
@@ -586,14 +684,14 @@
         return `
           <section id="${section}" class="mb-12 scroll-mt-28">
             <div class="mb-5">
-              <h2 class="text-xl font-bold text-white">${meta.emoji} ${meta.title}</h2>
-              <p class="mt-1 text-sm text-slate-400">${meta.blurb}</p>
+              <h2 class="fg text-xl font-bold">${meta.emoji} ${meta.title}</h2>
+              <p class="fg-muted mt-1 text-sm">${meta.blurb}</p>
             </div>
             ${keys.map(key => {
               const g = groups[key];
               return `
                 <div class="mb-8">
-                  <h3 class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">${g.group}</h3>
+                  <h3 class="fg-muted mb-3 text-xs font-semibold uppercase tracking-[0.14em]">${g.group}</h3>
                   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                     ${g.items.map(({item, idx}) => cardHTML(item, idx)).join("")}
                   </div>
@@ -628,18 +726,12 @@
     document.querySelector(".nav-desktop").innerHTML = navHTML();
     document.querySelector(".nav-mobile").innerHTML = navHTML();
     document.getElementById("chipRow").innerHTML = CHIPS.map(c => `
-      <button type="button" data-chip="${c.id}" class="chip rounded-full border border-slate-800 bg-panel px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-blue-500/40">${c.label}</button>
+      <button type="button" data-chip="${c.id}" class="chip rounded-full px-3 py-1.5 text-xs font-semibold">${c.label}</button>
     `).join("");
 
     function paintChips() {
       document.querySelectorAll("[data-chip]").forEach(btn => {
-        const on = btn.dataset.chip === activeChip;
-        btn.classList.toggle("bg-gradient-to-r", on);
-        btn.classList.toggle("from-blue-500", on);
-        btn.classList.toggle("to-violet-500", on);
-        btn.classList.toggle("text-white", on);
-        btn.classList.toggle("border-transparent", on);
-        btn.classList.toggle("text-slate-300", !on);
+        btn.classList.toggle("is-on", btn.dataset.chip === activeChip);
       });
     }
 
@@ -663,6 +755,16 @@
     document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
     overlay.addEventListener("click", closeDrawer);
     drawer.addEventListener("click", e => { if (e.target.closest("a")) closeDrawer(); });
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem("lld-theme", theme);
+      lucide.createIcons();
+    }
+    document.getElementById("themeBtn").addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      applyTheme(next);
+    });
 
     paintChips();
     render();
