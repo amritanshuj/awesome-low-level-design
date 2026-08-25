@@ -126,6 +126,18 @@
     .icon-btn:hover { background: var(--accent); color: #fff; border-color: transparent; }
     html[data-theme="dark"] .icon-moon { display: none; }
     html:not([data-theme="dark"]) .icon-sun { display: none; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+    .search-wrap { align-items: center; gap: 8px; width: 100%; }
+    .search-submit {
+      flex: none; height: 42px; padding: 0 14px; border-radius: 12px;
+      font-size: 13px; font-weight: 650;
+    }
+    mark {
+      background: color-mix(in srgb, var(--accent) 22%, transparent);
+      color: inherit;
+      border-radius: 3px;
+      padding: 0 2px;
+    }
     .search-input {
       width: 100%; border: 1px solid var(--border-strong); background: var(--panel);
       color: var(--text); border-radius: 12px;
@@ -196,31 +208,34 @@
       <button id="menuBtn" class="icon-btn lg:hidden" aria-label="Open navigation">
         <i data-lucide="menu" class="h-5 w-5"></i>
       </button>
-      <a href="#top" class="flex min-w-0 items-center gap-3">
-        <img src="images/lld-repo-logo.png" alt="awesome-low-level-design logo" class="h-9 w-auto rounded-md" />
+      <a href="#top" class="flex min-w-0 items-center gap-2">
+        <span class="text-xl leading-none" aria-hidden="true">💻</span>
         <span class="fg truncate text-sm font-semibold tracking-tight">Low Level Design Guide</span>
       </a>
-      <div class="relative ml-auto hidden min-w-0 flex-1 md:block md:max-w-md lg:max-w-lg">
-        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 fg-muted"></i>
-        <input id="searchDesktop" type="search" placeholder="Search topics, patterns, problems, languages…"
-          class="search-input py-2.5 pl-10 pr-3 text-sm" />
-      </div>
+      <form id="searchFormDesktop" class="search-wrap ml-auto hidden min-w-0 flex-1 md:flex md:max-w-xl lg:max-w-2xl" role="search">
+        <div class="relative min-w-0 flex-1">
+          <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 fg-muted"></i>
+          <input id="searchDesktop" type="search" name="q" placeholder="Search topics, patterns, problems, languages…"
+            class="search-input py-2.5 pl-10 pr-3 text-sm" autocomplete="off" />
+        </div>
+        <button type="submit" class="btn-primary search-submit inline-flex items-center gap-1.5">
+          Search
+        </button>
+      </form>
       <button id="themeBtn" class="icon-btn" type="button" aria-label="Toggle dark mode">
         <i data-lucide="moon" class="icon-moon h-4 w-4"></i>
         <i data-lucide="sun" class="icon-sun h-4 w-4"></i>
       </button>
-      <a href="https://github.com/amritanshuj/awesome-low-level-design" target="_blank" rel="noopener"
-         class="btn-secondary inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium">
-        <i data-lucide="github" class="h-4 w-4"></i>
-        <span class="hidden sm:inline">Star</span>
-      </a>
     </div>
     <div class="border-t line px-4 py-2 md:hidden">
-      <div class="relative">
-        <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 fg-muted"></i>
-        <input id="searchMobile" type="search" placeholder="Search topics and problems…"
-          class="search-input py-2.5 pl-10 pr-3 text-sm" />
-      </div>
+      <form id="searchFormMobile" class="search-wrap flex" role="search">
+        <div class="relative min-w-0 flex-1">
+          <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 fg-muted"></i>
+          <input id="searchMobile" type="search" name="q" placeholder="Search topics and problems…"
+            class="search-input py-2.5 pl-10 pr-3 text-sm" autocomplete="off" />
+        </div>
+        <button type="submit" class="btn-primary search-submit">Search</button>
+      </form>
     </div>
   </header>
 
@@ -300,7 +315,7 @@
             <div id="chipRow" class="flex flex-wrap gap-2"></div>
           </div>
           <div id="empty" class="fg-muted hidden rounded-2xl border border-dashed line p-10 text-center">
-            No topics match that search.
+            No topics match that search. Try another keyword, or pick a section from the quick index.
           </div>
           <div id="sections"></div>
         </div>
@@ -345,11 +360,11 @@
     const CONC = "https://algomaster.io/learn/concurrency-interview/";
 
     const NAV = [
-      { id: "oop", icon: "pin", label: "OOP & SOLID Principles" },
-      { id: "patterns", icon: "shapes", label: "Design Patterns" },
-      { id: "problems", icon: "building-2", label: "Real-World LLD Problems" },
-      { id: "languages", icon: "code-2", label: "Code & Implementations" },
-      { id: "interview", icon: "target", label: "Interview Prep & Cheat Sheets" }
+      { id: "oop", label: "OOP & SOLID Principles" },
+      { id: "patterns", label: "Design Patterns" },
+      { id: "problems", label: "Real-World LLD Problems" },
+      { id: "languages", label: "Code & Implementations" },
+      { id: "interview", label: "Interview Prep & Cheat Sheets" }
     ];
 
     const lang = (label, href) => ({ label, href });
@@ -586,11 +601,11 @@
     );
 
     const SECTION_META = {
-      oop: { emoji: "📌", title: "Object-Oriented Programming (OOP) & SOLID Principles", blurb: "Fundamentals, class relationships, and the principles that keep designs interview-ready." },
-      patterns: { emoji: "📐", title: "Design Patterns (Creational, Structural, Behavioral)", blurb: "Gang of Four patterns with Java, Python, C++, C#, Go, and JavaScript implementations." },
-      problems: { emoji: "🏗️", title: "Real-World LLD Problems", blurb: "Parking Lot, Elevator, Tic-Tac-Toe, Snake & Ladder, Movie Booking, and every other problem in this repo — plus concurrency." },
-      languages: { emoji: "📚", title: "Code Snippets & Language Implementations", blurb: "Jump straight into Java, C++, Python, C#, Go, TypeScript, JavaScript, and Rust." },
-      interview: { emoji: "🎯", title: "Interview Preparation Guide & Cheat Sheets", blurb: "Answer template, SOLID cheat sheets, courses, books, newsletter, and extra resources." }
+      oop: { emoji: "🧩", title: "Object-Oriented Programming (OOP) & SOLID Principles", blurb: "Fundamentals, class relationships, and the principles that keep designs interview-ready." },
+      patterns: { emoji: "⚙️", title: "Design Patterns (Creational, Structural, Behavioral)", blurb: "Gang of Four patterns with Java, Python, C++, C#, Go, and JavaScript implementations." },
+      problems: { emoji: "🖥️", title: "Real-World LLD Problems", blurb: "Parking Lot, Elevator, Tic-Tac-Toe, Snake & Ladder, Movie Booking, and every other problem in this repo — plus concurrency." },
+      languages: { emoji: "⌨️", title: "Code Snippets & Language Implementations", blurb: "Jump straight into Java, C++, Python, C#, Go, TypeScript, JavaScript, and Rust." },
+      interview: { emoji: "📋", title: "Interview Preparation Guide & Cheat Sheets", blurb: "Answer template, SOLID cheat sheets, courses, books, newsletter, and extra resources." }
     };
 
     const CHIPS = [
@@ -607,7 +622,7 @@
 
     function navHTML() {
       return NAV.map(n => `
-        <a href="#${n.id}" class="nav-link flex items-center gap-2 rounded-xl px-3 py-2 text-sm">
+        <a href="#${n.id}" data-section="${n.id}" class="nav-link flex items-center gap-2 rounded-xl px-3 py-2 text-sm">
           <span>${SECTION_META[n.id].emoji}</span>
           <span>${n.label}</span>
         </a>`).join("");
@@ -632,6 +647,15 @@
       return hay.includes(query);
     }
 
+    function highlight(text) {
+      if (!query) return text;
+      const src = String(text);
+      const lower = src.toLowerCase();
+      const i = lower.indexOf(query);
+      if (i < 0) return src;
+      return src.slice(0, i) + "<mark>" + src.slice(i, i + query.length) + "</mark>" + src.slice(i + query.length);
+    }
+
     function cardHTML(item, idx) {
       const langs = item.langs || [];
       const search = [item.title, item.desc, item.badge, item.group, langs.map(l => l.label).join(" ")].join(" ").toLowerCase();
@@ -646,7 +670,7 @@
             <div class="mb-3 flex flex-wrap items-center gap-2">
               <span class="inline-flex rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${badgeColor(item.badge)}">${item.badge}</span>
             </div>
-            <h3 class="fg text-base font-semibold">${item.title}</h3>
+            <h3 class="fg text-base font-semibold">${highlight(item.title)}</h3>
             <p class="fg-muted mt-2 flex-1 text-sm leading-6">${item.desc}</p>
             ${langs.length ? `<div class="mt-3 flex flex-wrap gap-1.5">${langs.map(l => `<a href="${l.href}" target="_blank" rel="noopener" class="lang-chip rounded-md px-2 py-1 text-[11px] font-medium">${l.label}</a>`).join("")}</div>` : ""}
             <div class="mt-4 flex flex-wrap gap-2">
@@ -674,12 +698,15 @@
 
       const shown = Object.values(groups).reduce((n, g) => n + g.items.length, 0);
       document.getElementById("empty").classList.toggle("hidden", shown !== 0);
-      document.getElementById("resultCount").textContent = shown + " topic" + (shown === 1 ? "" : "s") + " visible";
+      document.getElementById("resultCount").textContent = query
+        ? (shown + " result" + (shown === 1 ? "" : "s") + " for “" + query + "”")
+        : (shown + " topic" + (shown === 1 ? "" : "s") + " visible");
 
       const used = new Set();
       root.innerHTML = ["oop","patterns","problems","languages","interview"].map(section => {
+        if (activeChip !== "all" && section !== activeChip) return "";
         const keys = order.filter(k => k.startsWith(section + "::"));
-        if (!keys.length) return "";
+        if (!keys.length && activeChip === "all") return "";
         const meta = SECTION_META[section];
         return `
           <section id="${section}" class="mb-12 scroll-mt-28">
@@ -687,7 +714,7 @@
               <h2 class="fg text-xl font-bold">${meta.emoji} ${meta.title}</h2>
               <p class="fg-muted mt-1 text-sm">${meta.blurb}</p>
             </div>
-            ${keys.map(key => {
+            ${keys.length ? keys.map(key => {
               const g = groups[key];
               return `
                 <div class="mb-8">
@@ -696,12 +723,13 @@
                     ${g.items.map(({item, idx}) => cardHTML(item, idx)).join("")}
                   </div>
                 </div>`;
-            }).join("")}
+            }).join("") : `<p class="fg-muted mb-8 text-sm">No matching topics in this section.</p>`}
           </section>`;
       }).join("");
 
       lucide.createIcons();
       bindLightbox();
+      paintNav();
     }
 
     function bindLightbox() {
@@ -716,11 +744,49 @@
       });
     }
 
-    function setQuery(value) {
+    function syncSearchInputs(value, exceptId) {
+      ["searchDesktop", "searchMobile"].forEach(id => {
+        if (id === exceptId) return;
+        const el = document.getElementById(id);
+        if (el && el.value !== value) el.value = value;
+      });
+    }
+
+    function setQuery(value, exceptId) {
       query = value.trim().toLowerCase();
-      document.getElementById("searchDesktop").value = value;
-      document.getElementById("searchMobile").value = value;
+      syncSearchInputs(value, exceptId);
       render();
+    }
+
+    function scrollToResults() {
+      const target = document.getElementById("index");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function runSearch(fromId) {
+      const source = document.getElementById(fromId);
+      setQuery(source ? source.value : "", fromId);
+      scrollToResults();
+    }
+
+    function paintNav() {
+      document.querySelectorAll(".nav-link").forEach(link => {
+        const on = activeChip === "all" ? false : link.dataset.section === activeChip;
+        link.classList.toggle("active", on);
+      });
+    }
+
+    function goToSection(id) {
+      query = "";
+      syncSearchInputs("");
+      activeChip = id;
+      paintChips();
+      render();
+      history.replaceState(null, "", "#" + id);
+      requestAnimationFrame(() => {
+        const el = document.getElementById(id) || document.getElementById("index");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     }
 
     document.querySelector(".nav-desktop").innerHTML = navHTML();
@@ -741,10 +807,32 @@
       activeChip = btn.dataset.chip;
       paintChips();
       render();
+      document.getElementById("index").scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    ["searchDesktop","searchMobile"].forEach(id => {
-      document.getElementById(id).addEventListener("input", e => setQuery(e.target.value));
+    document.querySelectorAll("[data-section]").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        goToSection(link.dataset.section);
+        closeDrawer();
+      });
+    });
+
+    document.getElementById("searchFormDesktop").addEventListener("submit", e => {
+      e.preventDefault();
+      runSearch("searchDesktop");
+    });
+    document.getElementById("searchFormMobile").addEventListener("submit", e => {
+      e.preventDefault();
+      runSearch("searchMobile");
+    });
+    document.getElementById("searchDesktop").addEventListener("input", e => setQuery(e.target.value, "searchDesktop"));
+    document.getElementById("searchMobile").addEventListener("input", e => setQuery(e.target.value, "searchMobile"));
+    document.getElementById("searchDesktop").addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); runSearch("searchDesktop"); }
+    });
+    document.getElementById("searchMobile").addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); runSearch("searchMobile"); }
     });
 
     const drawer = document.getElementById("drawer");
@@ -767,7 +855,12 @@
     });
 
     paintChips();
-    render();
+    const initial = (location.hash || "").replace("#", "");
+    if (NAV.some(n => n.id === initial)) {
+      goToSection(initial);
+    } else {
+      render();
+    }
     lucide.createIcons();
   </script>
 </body>
